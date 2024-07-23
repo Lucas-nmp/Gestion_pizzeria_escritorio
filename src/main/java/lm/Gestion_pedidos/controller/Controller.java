@@ -53,7 +53,7 @@ public class Controller implements ActionListener{
     }
     
     private void openAddCategory() {
-        addCategory = new AddCategory(homepage);
+        
         addCategory.setLocationRelativeTo(null);
         addCategory.setResizable(false);
         fillTableCategory();
@@ -61,7 +61,7 @@ public class Controller implements ActionListener{
     }
     
     private void openViewProducts() {
-        manageProduct = new ManageProduct(homepage);
+        
         manageProduct.setLocationRelativeTo(null);
         manageProduct.setResizable(false);
         manageProduct.setVisible(true);
@@ -111,6 +111,13 @@ public class Controller implements ActionListener{
         this.manageProduct.getBtnDeleteIngredient().addActionListener(this);
         this.manageProduct.getBtnSaveProduct().addActionListener(this);
         
+        this.manageProduct.getEdtNameProduct().addActionListener((ActionEvent e) -> {
+            setNameProduct(manageProduct.getEdtNameProduct().getText()); 
+        });
+        
+        this.manageProduct.getEdtPriceProduct().addActionListener((ActionEvent e) -> {
+            setPriceProduct(manageProduct.getEdtPriceProduct().getText()); 
+        });
         
     }
     
@@ -123,6 +130,11 @@ public class Controller implements ActionListener{
         if (e.getSource() == homepage.getBtnCategory()) {
             openAddCategory();
         }
+        
+        if (e.getSource() == homepage.getBtnAddProduct()) {
+            openViewProducts();
+        }
+        
         
         if (e.getSource() == homepage.getBtnProduct()) {
             openViewProducts();
@@ -137,8 +149,8 @@ public class Controller implements ActionListener{
         }
         
         // Acciones del AddProduct
-        if (e.getSource() == homepage.getBtnAddProduct()) {
-            openViewProducts();
+        if (e.getSource() == manageProduct.getBtnSaveProduct()) {
+            saveProduct();
         }
         
     }
@@ -147,8 +159,13 @@ public class Controller implements ActionListener{
 
     private void saveCategory() {
         String nameCategory = addCategory.getCategoryName().getText();
-        Category category = new Category(null, nameCategory);
-        categoryService.addCategory(category); 
+        if (!nameCategory.isEmpty()) {
+            Category category = new Category(null, nameCategory);
+            categoryService.addCategory(category); 
+        } else {
+            JOptionPane.showMessageDialog(addCategory, "El nombre de la categoría no puede estar vacío");
+        }
+        
     }
     
     private void fillTableCategory() {
@@ -225,6 +242,28 @@ public class Controller implements ActionListener{
         }
         
     }
+
+    private void saveProduct() {
+        
+    }
+
+    private void setNameProduct(String text) {
+        if (text.isEmpty()) {
+            JOptionPane.showMessageDialog(manageProduct, "El nombre no puede estar vacío");
+        } else {
+            manageProduct.getNameTxt().setText(text);
+        }
+    }
+
+    private void setPriceProduct(String text) {
+        if (text.isEmpty()) {
+            JOptionPane.showMessageDialog(manageProduct, "El precio no puede estar vacío");
+        } else {
+            manageProduct.getPriceTxt().setText(text);
+        }
+    }
+    
+    
 
     
     

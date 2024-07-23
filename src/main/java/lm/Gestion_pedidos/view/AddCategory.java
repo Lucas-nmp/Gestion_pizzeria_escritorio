@@ -18,8 +18,8 @@ public class AddCategory extends javax.swing.JDialog {
      * Creates new form AddCategory
      */
     @Autowired
-    public AddCategory(JFrame parent) {
-        super(parent, "Añadir Categoría", true);
+    public AddCategory() {
+        
         initComponents();
     }
     

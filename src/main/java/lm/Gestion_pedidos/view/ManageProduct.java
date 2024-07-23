@@ -20,8 +20,7 @@ public class ManageProduct extends javax.swing.JDialog {
      * Creates new form ManageProduct
      */
     @Autowired
-    public ManageProduct(JFrame parent) {
-        super(parent, "Gestión de Productos", true);
+    public ManageProduct() { 
         initComponents();
     }
     
