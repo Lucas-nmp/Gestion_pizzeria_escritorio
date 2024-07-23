@@ -56,8 +56,6 @@ public class AddCategory extends javax.swing.JDialog {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        categoryName.setText("Nombre de la categoría");
-
         CategorySave.setText("Guardar");
 
         categoryTable.setModel(new javax.swing.table.DefaultTableModel(

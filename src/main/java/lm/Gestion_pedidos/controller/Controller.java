@@ -1,8 +1,11 @@
 package lm.Gestion_pedidos.controller;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Ingredient;
@@ -34,6 +37,7 @@ public class Controller implements ActionListener{
         homepage.setLocationRelativeTo(null);
         homepage.setResizable(false);
         homepage.setVisible(true); 
+        fillCategorys();
     }
     
     private void openAddCategory() {
@@ -49,6 +53,13 @@ public class Controller implements ActionListener{
         this.homepage = homepage;
         
         this.homepage.getBtnCategory().addActionListener(this);
+        
+        /*
+        para acciones con intro
+        this.managementPage.getInvoiceId().addActionListener((ActionEvent e) -> {
+            addInvoiceCustomer();
+        });
+        */
     }
     
     @Autowired
@@ -56,6 +67,12 @@ public class Controller implements ActionListener{
         this.addCategory = addCategory;
         
         this.addCategory.getCategorySave().addActionListener(this);
+        this.addCategory.getCategoryName().addActionListener((ActionEvent e) -> {
+            saveCategory();
+            fillTableCategory();
+            fillCategorys();
+            cleanCategory();
+        });
     }
     
     
@@ -72,6 +89,7 @@ public class Controller implements ActionListener{
         if (e.getSource() == addCategory.getCategorySave()) {
             saveCategory();
             fillTableCategory();
+            fillCategorys();
             cleanCategory();
         }
         
@@ -104,6 +122,24 @@ public class Controller implements ActionListener{
     
     private void cleanCategory(){
         addCategory.getCategoryName().setText("");
+    }
+
+    private void fillCategorys() {
+        List<Category> listCategorys = categoryService.getAllCategorys();
+        JComboBox listCategary = homepage.getCategorys();
+        listCategary.setPreferredSize(new Dimension(100, 25));
+        listCategary.setMaximumSize(new Dimension(100, 25));
+        if (listCategorys.isEmpty()) {
+            listCategary.removeAllItems();
+            listCategary.addItem("Añadir");
+        } else {
+            listCategary.removeAllItems();
+            listCategorys.forEach((category) -> {
+                String item = category.getCategoryId() + ", " + category.getName();
+                listCategary.addItem(item);
+            });
+        }
+        
     }
     
 }
