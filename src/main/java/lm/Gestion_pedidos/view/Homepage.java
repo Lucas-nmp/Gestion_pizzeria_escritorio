@@ -32,92 +32,217 @@ public class Homepage extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        companyName = new javax.swing.JLabel();
+        btnMain = new javax.swing.JButton();
+        btnCategory = new javax.swing.JButton();
+        btnProduct = new javax.swing.JButton();
+        btnIngredient = new javax.swing.JButton();
+        btnCustomer = new javax.swing.JButton();
+        btnStatistics = new javax.swing.JButton();
+        btnSettings = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        customerPhone = new javax.swing.JTextField();
+        customerAddres = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        customerName = new javax.swing.JLabel();
+        customerAlternativeAddres = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
+        jPanel5 = new javax.swing.JPanel();
+        Category = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        ProductTable = new javax.swing.JTable();
+        IngredientPrincipal = new javax.swing.JComboBox<>();
+        IngredientSecundary = new javax.swing.JComboBox<>();
+        ingredientThird = new javax.swing.JComboBox<>();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
+        jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
-        jLabel7 = new javax.swing.JLabel();
-        jButton9 = new javax.swing.JButton();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        ingredientRemove = new javax.swing.JButton();
+        ingredientAdd = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        orderTable = new javax.swing.JTable();
+        orderName = new javax.swing.JLabel();
+        orderPhone = new javax.swing.JLabel();
+        orderAddres = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setText("Nombre de la empresa");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 103, 1240, 10));
+        jPanel3.setBackground(new java.awt.Color(26, 44, 68));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setText("Inicio");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, -1, -1));
+        companyName.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        companyName.setForeground(new java.awt.Color(255, 255, 255));
+        companyName.setText("Nombre de la empresa");
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setText("Categorías");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, -1, -1));
+        btnMain.setBackground(new java.awt.Color(26, 44, 68));
+        btnMain.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnMain.setForeground(new java.awt.Color(255, 255, 255));
+        btnMain.setText("Inicio");
+        btnMain.setBorder(null);
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton3.setText("Productos");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 40, -1, -1));
+        btnCategory.setBackground(new java.awt.Color(26, 44, 68));
+        btnCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnCategory.setForeground(new java.awt.Color(255, 255, 255));
+        btnCategory.setText("Categorías");
+        btnCategory.setBorder(null);
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton4.setText("Ingredientes");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 40, -1, -1));
+        btnProduct.setBackground(new java.awt.Color(26, 44, 68));
+        btnProduct.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnProduct.setText("Productos");
+        btnProduct.setBorder(null);
 
-        jButton5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton5.setText("Clientes");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 40, -1, -1));
+        btnIngredient.setBackground(new java.awt.Color(26, 44, 68));
+        btnIngredient.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnIngredient.setForeground(new java.awt.Color(255, 255, 255));
+        btnIngredient.setText("Ingredientes");
+        btnIngredient.setBorder(null);
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 110, -1));
+        btnCustomer.setBackground(new java.awt.Color(26, 44, 68));
+        btnCustomer.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnCustomer.setForeground(new java.awt.Color(255, 255, 255));
+        btnCustomer.setText("Clientes");
+        btnCustomer.setBorder(null);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Dirección ");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
+        btnStatistics.setBackground(new java.awt.Color(26, 44, 68));
+        btnStatistics.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnStatistics.setForeground(new java.awt.Color(255, 255, 255));
+        btnStatistics.setText("Estadísticas");
+        btnStatistics.setBorder(null);
 
-        jButton6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton6.setText("Dirección Puntual");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 150, -1, -1));
+        btnSettings.setBackground(new java.awt.Color(26, 44, 68));
+        btnSettings.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSettings.setForeground(new java.awt.Color(255, 255, 255));
+        btnSettings.setText("Configuración");
+        btnSettings.setBorder(null);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        btnExit.setBackground(new java.awt.Color(26, 44, 68));
+        btnExit.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnExit.setForeground(new java.awt.Color(204, 0, 0));
+        btnExit.setText("Salir");
+        btnExit.setBorder(null);
 
-        jTable2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(companyName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                .addComponent(btnMain, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCustomer)
+                .addGap(18, 18, 18)
+                .addComponent(btnIngredient)
+                .addGap(18, 18, 18)
+                .addComponent(btnProduct)
+                .addGap(18, 18, 18)
+                .addComponent(btnCategory)
+                .addGap(18, 18, 18)
+                .addComponent(btnStatistics)
+                .addGap(18, 18, 18)
+                .addComponent(btnSettings)
+                .addGap(18, 18, 18)
+                .addComponent(btnExit)
+                .addGap(30, 30, 30))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(companyName)
+                    .addComponent(btnCustomer)
+                    .addComponent(btnMain)
+                    .addComponent(btnStatistics)
+                    .addComponent(btnCategory)
+                    .addComponent(btnProduct)
+                    .addComponent(btnIngredient)
+                    .addComponent(btnSettings)
+                    .addComponent(btnExit))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1330, 100));
+
+        jPanel4.setBackground(new java.awt.Color(71, 120, 190));
+
+        customerPhone.setBackground(new java.awt.Color(71, 120, 190));
+        customerPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        customerPhone.setForeground(new java.awt.Color(204, 204, 204));
+        customerPhone.setText("Teléfono");
+        customerPhone.setBorder(null);
+
+        customerAddres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        customerAddres.setForeground(new java.awt.Color(255, 255, 255));
+        customerAddres.setText("Dirección ");
+
+        customerName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        customerName.setForeground(new java.awt.Color(255, 255, 255));
+        customerName.setText("Nombre");
+
+        customerAlternativeAddres.setBackground(new java.awt.Color(71, 120, 190));
+        customerAlternativeAddres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        customerAlternativeAddres.setForeground(new java.awt.Color(204, 204, 204));
+        customerAlternativeAddres.setText("Dirección alternativa");
+        customerAlternativeAddres.setBorder(null);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(customerPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addComponent(customerAddres, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(73, 73, 73)
+                        .addComponent(customerName, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(customerAlternativeAddres, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                    .addComponent(jSeparator2))
+                .addGap(35, 35, 35))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(customerPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customerAddres)
+                    .addComponent(customerName)
+                    .addComponent(customerAlternativeAddres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1330, 120));
+
+        jPanel5.setBackground(new java.awt.Color(120, 168, 252));
+
+        Category.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        ProductTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ProductTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -128,111 +253,168 @@ public class Homepage extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane1.setViewportView(ProductTable);
 
-        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 110, 340, 310));
+        IngredientPrincipal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        IngredientPrincipal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Nombre");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        IngredientSecundary.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        IngredientSecundary.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("Teléfono");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, -1, -1));
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel6.setText("Dirección");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 250, 370, 430));
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Nombre");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 150, -1, -1));
-        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 1240, -1));
-
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 350, -1));
-
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, -1));
-
-        jComboBox2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 260, -1, -1));
-
-        jComboBox3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 320, -1, -1));
-
-        jComboBox4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, -1, -1));
+        ingredientThird.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ingredientThird.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox1.setText("Doble de queso");
-        jPanel1.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 450, -1, -1));
 
         jCheckBox2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox2.setText("Poco hecha");
-        jPanel1.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 500, -1, -1));
 
-        jCheckBox3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jCheckBox3.setText("Sin queso");
-        jPanel1.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 450, -1, -1));
-
-        jCheckBox4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jCheckBox4.setText("Muy hecha");
-        jPanel1.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 500, -1, -1));
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Observaciones");
 
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 570, 320, 110));
+        jCheckBox4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jCheckBox4.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox4.setText("Muy hecha");
 
-        jButton7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton7.setText("Añadir");
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 253, 130, 90));
+        jCheckBox3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jCheckBox3.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox3.setText("Sin queso");
 
-        jButton8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton8.setText("Quitar");
-        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 130, -1));
-        jPanel1.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 703, 1260, 10));
+        ingredientRemove.setBackground(new java.awt.Color(120, 168, 252));
+        ingredientRemove.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ingredientRemove.setForeground(new java.awt.Color(255, 0, 0));
+        ingredientRemove.setText("Quitar");
+        ingredientRemove.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel7.setText("Observaciones");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 550, -1, -1));
+        ingredientAdd.setBackground(new java.awt.Color(120, 168, 252));
+        ingredientAdd.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ingredientAdd.setForeground(new java.awt.Color(0, 0, 102));
+        ingredientAdd.setText("Añadir");
+        ingredientAdd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton9.setText("Estadísticas");
-        jPanel1.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 40, -1, -1));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jMenu1.setText("Opciones");
+        orderTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        orderTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(orderTable);
 
-        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jMenuItem1.setText("Configurar datos empresa");
-        jMenu1.add(jMenuItem1);
+        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 110, 340, 310));
 
-        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jMenuItem2.setText("Salir");
-        jMenu1.add(jMenuItem2);
+        orderName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        orderName.setText("Nombre");
+        jPanel2.add(orderName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
-        jMenuBar1.add(jMenu1);
+        orderPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        orderPhone.setText("Teléfono");
+        jPanel2.add(orderPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, -1, -1));
+
+        orderAddres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        orderAddres.setText("Dirección");
+        jPanel2.add(orderAddres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox1)
+                            .addComponent(jCheckBox2))
+                        .addGap(77, 77, 77)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox4)
+                            .addComponent(jCheckBox3)))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(IngredientPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(IngredientSecundary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(112, 112, 112)
+                            .addComponent(ingredientAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(ingredientThird, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ingredientRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(485, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addContainerGap(930, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 30, Short.MAX_VALUE)))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(IngredientPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(IngredientSecundary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ingredientAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ingredientThird, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ingredientRemove))
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBox1)
+                            .addComponent(jCheckBox3))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBox2)
+                            .addComponent(jCheckBox4))
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel7)
+                        .addGap(4, 4, 4)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGap(50, 50, 50)
+                            .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGap(36, 36, 36)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(47, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 1330, 510));
 
         setJMenuBar(jMenuBar1);
 
@@ -240,11 +422,11 @@ public class Homepage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1328, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -255,45 +437,46 @@ public class Homepage extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JComboBox<String> Category;
+    private javax.swing.JComboBox<String> IngredientPrincipal;
+    private javax.swing.JComboBox<String> IngredientSecundary;
+    private javax.swing.JTable ProductTable;
+    private javax.swing.JButton btnCategory;
+    private javax.swing.JButton btnCustomer;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnIngredient;
+    private javax.swing.JButton btnMain;
+    private javax.swing.JButton btnProduct;
+    private javax.swing.JButton btnSettings;
+    private javax.swing.JButton btnStatistics;
+    private javax.swing.JLabel companyName;
+    private javax.swing.JLabel customerAddres;
+    private javax.swing.JTextField customerAlternativeAddres;
+    private javax.swing.JLabel customerName;
+    private javax.swing.JTextField customerPhone;
+    private javax.swing.JButton ingredientAdd;
+    private javax.swing.JButton ingredientRemove;
+    private javax.swing.JComboBox<String> ingredientThird;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel orderAddres;
+    private javax.swing.JLabel orderName;
+    private javax.swing.JLabel orderPhone;
+    private javax.swing.JTable orderTable;
     // End of variables declaration//GEN-END:variables
 }
