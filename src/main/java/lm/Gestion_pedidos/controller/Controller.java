@@ -15,6 +15,7 @@ import lm.Gestion_pedidos.service.CategoryService;
 import lm.Gestion_pedidos.service.ProductService;
 import lm.Gestion_pedidos.view.AddCategory;
 import lm.Gestion_pedidos.view.Homepage;
+import lm.Gestion_pedidos.view.ManageProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -37,13 +38,14 @@ public class Controller implements ActionListener{
     
     private Homepage homepage;
     private AddCategory addCategory;
+    private ManageProduct manageProduct;
     
 
     public void viewHomePage() {
         homepage.setLocationRelativeTo(null);
         homepage.setResizable(false);
         homepage.setVisible(true); 
-        fillCategorys();
+        fillCategorys(homepage.getCategorys()); 
         fillTableProduct();
         
         
@@ -53,7 +55,15 @@ public class Controller implements ActionListener{
         addCategory.setLocationRelativeTo(null);
         addCategory.setResizable(false);
         fillTableCategory();
-        addCategory.setVisible(true);
+        addCategory.setVisible(true);  
+    }
+    
+    private void openViewProducts() {
+        manageProduct.setLocationRelativeTo(null);
+        manageProduct.setResizable(false);
+        manageProduct.setVisible(true);
+        
+        fillCategorys(manageProduct.getBoxCategory());
         
     }
     
@@ -62,6 +72,7 @@ public class Controller implements ActionListener{
         this.homepage = homepage;
         
         this.homepage.getBtnCategory().addActionListener(this);
+        this.homepage.getBtnProduct().addActionListener(this);
         
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
@@ -84,9 +95,16 @@ public class Controller implements ActionListener{
         this.addCategory.getCategoryName().addActionListener((ActionEvent e) -> {
             saveCategory();
             fillTableCategory();
-            fillCategorys();
+            fillCategorys(homepage.getCategorys()); 
             cleanCategory();
         });
+    }
+    
+    @Autowired
+    public void setManageProduct(ManageProduct manageProduct) {
+        this.manageProduct = manageProduct;
+        
+        
     }
     
     
@@ -99,12 +117,21 @@ public class Controller implements ActionListener{
             openAddCategory();
         }
         
+        if (e.getSource() == homepage.getBtnProduct()) {
+            openViewProducts();
+        }
+        
         // Acciones del AddCategory
         if (e.getSource() == addCategory.getCategorySave()) {
             saveCategory();
             fillTableCategory();
-            fillCategorys();
+            fillCategorys(homepage.getCategorys()); 
             cleanCategory();
+        }
+        
+        // Acciones del AddProduct
+        if (e.getSource() == homepage.getBtnAddProduct()) {
+            openViewProducts();
         }
         
     }
@@ -160,23 +187,24 @@ public class Controller implements ActionListener{
         addCategory.getCategoryName().setText("");
     }
 
-    private void fillCategorys() {
+    private void fillCategorys(JComboBox listCategory) {
         List<Category> listCategorys = categoryService.getAllCategorys();
-        JComboBox listCategary = homepage.getCategorys();
-        listCategary.setPreferredSize(new Dimension(100, 25));
-        listCategary.setMaximumSize(new Dimension(100, 25));
+        //JComboBox listCategory = homepage.getCategorys();
+        listCategory.setPreferredSize(new Dimension(100, 25));
+        listCategory.setMaximumSize(new Dimension(100, 25));
         if (listCategorys.isEmpty()) {
-            listCategary.removeAllItems();
-            listCategary.addItem("Añadir");
+            listCategory.removeAllItems();
+            listCategory.addItem("Añadir");
         } else {
-            listCategary.removeAllItems();
+            listCategory.removeAllItems();
             listCategorys.forEach((category) -> {
                 String item = category.getCategoryId() + ", " + category.getName();
-                listCategary.addItem(item);
+                listCategory.addItem(item);
             });
-        }
-        
+        } 
     }
+    
+    
 
     private void handleCategorySelection() {
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
@@ -189,5 +217,7 @@ public class Controller implements ActionListener{
         }
         
     }
+
+    
     
 }
