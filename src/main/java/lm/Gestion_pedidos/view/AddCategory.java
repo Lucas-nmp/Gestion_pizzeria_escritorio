@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package lm.Gestion_pedidos.view;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,8 @@ public class AddCategory extends javax.swing.JDialog {
      * Creates new form AddCategory
      */
     @Autowired
-    public AddCategory() {
+    public AddCategory(JFrame parent) {
+        super(parent, "Añadir Categoría", true);
         initComponents();
     }
     

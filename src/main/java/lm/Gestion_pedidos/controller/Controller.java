@@ -44,6 +44,7 @@ public class Controller implements ActionListener{
     public void viewHomePage() {
         homepage.setLocationRelativeTo(null);
         homepage.setResizable(false);
+        
         homepage.setVisible(true); 
         fillCategorys(homepage.getCategorys()); 
         fillTableProduct();
@@ -52,6 +53,7 @@ public class Controller implements ActionListener{
     }
     
     private void openAddCategory() {
+        addCategory = new AddCategory(homepage);
         addCategory.setLocationRelativeTo(null);
         addCategory.setResizable(false);
         fillTableCategory();
@@ -59,6 +61,7 @@ public class Controller implements ActionListener{
     }
     
     private void openViewProducts() {
+        manageProduct = new ManageProduct(homepage);
         manageProduct.setLocationRelativeTo(null);
         manageProduct.setResizable(false);
         manageProduct.setVisible(true);
@@ -76,7 +79,7 @@ public class Controller implements ActionListener{
         
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
-            fillTableProduct(); // para que llene la lista de productos cuando se selecciona una nueva categoría
+            
         });
         
         /*
@@ -103,6 +106,10 @@ public class Controller implements ActionListener{
     @Autowired
     public void setManageProduct(ManageProduct manageProduct) {
         this.manageProduct = manageProduct;
+        
+        this.manageProduct.getBtnAddIngredient().addActionListener(this);
+        this.manageProduct.getBtnDeleteIngredient().addActionListener(this);
+        this.manageProduct.getBtnSaveProduct().addActionListener(this);
         
         
     }
@@ -212,6 +219,7 @@ public class Controller implements ActionListener{
             // añadir un elemento a la tabla que diga qua añada categorias y productos
             //JOptionPane.showMessageDialog(homepage, selectedItem);
         } else {
+            fillTableProduct(); // para que llene la lista de productos cuando se selecciona una nueva categoría
             // mostrar la lista de productos de la categoría seleccionada
             //JOptionPane.showMessageDialog(homepage, "Añada Categorias y productos ");
         }
