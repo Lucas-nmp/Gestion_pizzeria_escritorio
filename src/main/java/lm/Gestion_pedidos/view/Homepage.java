@@ -2,6 +2,7 @@ package lm.Gestion_pedidos.view;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -62,6 +63,10 @@ public class Homepage extends javax.swing.JFrame {
     
     public JComboBox getCategorys() {
         return Category;
+    }
+    
+    public JTable getTableProducts() {
+        return ProductTable;
     }
 
     /**

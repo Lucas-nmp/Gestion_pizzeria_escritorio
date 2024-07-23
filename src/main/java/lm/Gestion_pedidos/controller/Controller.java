@@ -6,10 +6,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Ingredient;
+import lm.Gestion_pedidos.model.Product;
 import lm.Gestion_pedidos.service.CategoryService;
+import lm.Gestion_pedidos.service.ProductService;
 import lm.Gestion_pedidos.view.AddCategory;
 import lm.Gestion_pedidos.view.Homepage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class Controller implements ActionListener{
     @Autowired
     private CategoryService categoryService;
     
+    @Autowired
+    private ProductService productService;
+    
     private Homepage homepage;
     private AddCategory addCategory;
     
@@ -38,6 +44,9 @@ public class Controller implements ActionListener{
         homepage.setResizable(false);
         homepage.setVisible(true); 
         fillCategorys();
+        fillTableProduct();
+        
+        
     }
     
     private void openAddCategory() {
@@ -53,6 +62,11 @@ public class Controller implements ActionListener{
         this.homepage = homepage;
         
         this.homepage.getBtnCategory().addActionListener(this);
+        
+        this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
+            handleCategorySelection();
+            fillTableProduct(); // para que llene la lista de productos cuando se selecciona una nueva categoría
+        });
         
         /*
         para acciones con intro
@@ -105,8 +119,8 @@ public class Controller implements ActionListener{
     
     private void fillTableCategory() {
         DefaultTableModel model = new DefaultTableModel();
-        String[] cab = {"ID", "Nombre"};
-        model.setColumnIdentifiers(cab);
+        String[] headers = {"ID", "Nombre"};
+        model.setColumnIdentifiers(headers);
         addCategory.getCategoryTable().setModel(model);
         
         List<Category> listCategorys = categoryService.getAllCategorys();
@@ -116,7 +130,29 @@ public class Controller implements ActionListener{
                 category.getName()
             };
             model.addRow(categoryLine);
-        });
+        });   
+    }
+    
+    private void fillTableProduct() {
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"Nº", "Nombre", "Ingredientes"};
+        model.setColumnIdentifiers(headers);
+        homepage.getTableProducts().setModel(model);
+        
+        List<Product> listProducts = productService.findAllProducts();
+        if (listProducts.isEmpty()) {
+            JOptionPane.showMessageDialog(homepage, "Añada productos a la categoría");
+        } else {
+            listProducts.forEach((product) -> {
+                Object[] categoryLine = {
+                    product.getProductId(), 
+                    product.getName(), 
+                    null
+                    // crear un string con la lista de ingredientes obtenida por id desde ingredienteProducto    
+                };
+                model.addRow(categoryLine);
+            });   
+        }
         
     }
     
@@ -138,6 +174,18 @@ public class Controller implements ActionListener{
                 String item = category.getCategoryId() + ", " + category.getName();
                 listCategary.addItem(item);
             });
+        }
+        
+    }
+
+    private void handleCategorySelection() {
+        String selectedItem = (String) homepage.getCategorys().getSelectedItem();
+        if (selectedItem != null && !selectedItem.equals("Añadir")) {
+            // añadir un elemento a la tabla que diga qua añada categorias y productos
+            //JOptionPane.showMessageDialog(homepage, selectedItem);
+        } else {
+            // mostrar la lista de productos de la categoría seleccionada
+            //JOptionPane.showMessageDialog(homepage, "Añada Categorias y productos ");
         }
         
     }
