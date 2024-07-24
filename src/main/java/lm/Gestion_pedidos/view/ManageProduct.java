@@ -144,19 +144,19 @@ public class ManageProduct extends javax.swing.JDialog {
 
         manageProductCategory.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductCategory.setForeground(new java.awt.Color(255, 255, 255));
-        manageProductCategory.setText("jLabel5");
+        manageProductCategory.setText("Categoría");
 
         manageProductName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductName.setForeground(new java.awt.Color(255, 255, 255));
-        manageProductName.setText("jLabel6");
+        manageProductName.setText("Nombre");
 
         manageProductPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductPrice.setForeground(new java.awt.Color(255, 255, 255));
-        manageProductPrice.setText("jLabel7");
+        manageProductPrice.setText("Precio");
 
         manageProductIngredients.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductIngredients.setForeground(new java.awt.Color(255, 255, 255));
-        manageProductIngredients.setText("jLabel8");
+        manageProductIngredients.setText("Ingredientes");
 
         manageProductSaveProduct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductSaveProduct.setText("GuardarProducto");
@@ -219,9 +219,9 @@ public class ManageProduct extends javax.swing.JDialog {
                     .addComponent(manageProductName)
                     .addComponent(manageProductPrice)
                     .addComponent(manageProductIngredients))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(manageProductSaveProduct)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 220));

@@ -16,7 +16,7 @@ public class IngredientService {
     @Autowired
     IngredientRepository ingredientRepository;
     
-    public List<Ingredient> findAllIngredients() {
+    public List<Ingredient> getAllIngredients() {
         return ingredientRepository.findAll();
     }
     

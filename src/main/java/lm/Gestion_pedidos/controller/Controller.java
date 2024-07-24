@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -12,6 +13,7 @@ import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Ingredient;
 import lm.Gestion_pedidos.model.Product;
 import lm.Gestion_pedidos.service.CategoryService;
+import lm.Gestion_pedidos.service.IngredientService;
 import lm.Gestion_pedidos.service.ProductService;
 import lm.Gestion_pedidos.view.AddCategory;
 import lm.Gestion_pedidos.view.Homepage;
@@ -27,6 +29,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Controller implements ActionListener{
     
+    
+    private HashSet<String> listIngredientProducts = new HashSet<>();
+    
     @Autowired
     private ApplicationContext context;
     
@@ -36,6 +41,9 @@ public class Controller implements ActionListener{
     @Autowired
     private ProductService productService;
     
+    @Autowired
+    private IngredientService ingredientService;
+    
     private Homepage homepage;
     private AddCategory addCategory;
     private ManageProduct manageProduct;
@@ -44,10 +52,10 @@ public class Controller implements ActionListener{
     public void viewHomePage() {
         homepage.setLocationRelativeTo(null);
         homepage.setResizable(false);
-        
-        homepage.setVisible(true); 
+        fillIngredients(homepage.getIngredientModify());
         fillCategorys(homepage.getCategorys()); 
         fillTableProduct();
+        homepage.setVisible(true);
         
         
     }
@@ -57,6 +65,7 @@ public class Controller implements ActionListener{
         addCategory.setLocationRelativeTo(null);
         addCategory.setResizable(false);
         fillTableCategory();
+        addCategory.setModal(true);
         addCategory.setVisible(true);  
     }
     
@@ -64,9 +73,11 @@ public class Controller implements ActionListener{
         
         manageProduct.setLocationRelativeTo(null);
         manageProduct.setResizable(false);
+        manageProduct.setModal(true);
+        fillIngredients(manageProduct.getBoxIngredients());
+        fillCategorys(manageProduct.getBoxCategory());
         manageProduct.setVisible(true);
         
-        fillCategorys(manageProduct.getBoxCategory());
         
     }
     
@@ -153,9 +164,14 @@ public class Controller implements ActionListener{
             saveProduct();
         }
         
+        if (e.getSource() == manageProduct.getBtnAddIngredient()) {
+            addIngredientToProduct();
+        }
+        
+        if (e.getSource() == manageProduct.getBtnDeleteIngredient()) {
+            deleteIngredientFromProduct();
+        }        
     }
-
-    
 
     private void saveCategory() {
         String nameCategory = addCategory.getCategoryName().getText();
@@ -204,28 +220,43 @@ public class Controller implements ActionListener{
                 model.addRow(categoryLine);
             });   
         }
-        
     }
     
     private void cleanCategory(){
         addCategory.getCategoryName().setText("");
     }
 
-    private void fillCategorys(JComboBox listCategory) {
+    private void fillCategorys(JComboBox boxCategorys) {
         List<Category> listCategorys = categoryService.getAllCategorys();
         //JComboBox listCategory = homepage.getCategorys();
-        listCategory.setPreferredSize(new Dimension(100, 25));
-        listCategory.setMaximumSize(new Dimension(100, 25));
+        boxCategorys.setPreferredSize(new Dimension(100, 25));
+        boxCategorys.setMaximumSize(new Dimension(100, 25));
         if (listCategorys.isEmpty()) {
-            listCategory.removeAllItems();
-            listCategory.addItem("Añadir");
+            boxCategorys.removeAllItems();
+            boxCategorys.addItem("Añadir");
         } else {
-            listCategory.removeAllItems();
+            boxCategorys.removeAllItems();
             listCategorys.forEach((category) -> {
                 String item = category.getCategoryId() + ", " + category.getName();
-                listCategory.addItem(item);
+                boxCategorys.addItem(item);
             });
         } 
+    }
+    
+    private void fillIngredients(JComboBox boxIngredients) {
+        List<Ingredient> listIngredients = ingredientService.getAllIngredients();
+        boxIngredients.setPreferredSize(new Dimension(100, 25));
+        boxIngredients.setMaximumSize(new Dimension(100, 25));
+        if (listIngredients.isEmpty()) {
+            boxIngredients.removeAllItems();
+            boxIngredients.addItem("Añadir");
+        } else {
+            boxIngredients.removeAllItems();
+            listIngredients.forEach((ingredient) -> {
+                String item = ingredient.getIngredientId() + ", " + ingredient.getName();
+                boxIngredients.addItem(item);
+            });
+        }
     }
     
     
@@ -248,20 +279,43 @@ public class Controller implements ActionListener{
     }
 
     private void setNameProduct(String text) {
-        if (text.isEmpty()) {
-            JOptionPane.showMessageDialog(manageProduct, "El nombre no puede estar vacío");
-        } else {
-            manageProduct.getNameTxt().setText(text);
-        }
+        manageProduct.getNameTxt().setText(text);
     }
 
     private void setPriceProduct(String text) {
-        if (text.isEmpty()) {
-            JOptionPane.showMessageDialog(manageProduct, "El precio no puede estar vacío");
-        } else {
-            manageProduct.getPriceTxt().setText(text);
-        }
+        manageProduct.getPriceTxt().setText(text); 
     }
+
+    private void addIngredientToProduct() {
+        String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
+        
+        //Ingredient ingredient = (Ingredient) manageProduct.getBoxIngredients().getSelectedItem(); // creo que es mejor trabajar con String en lugar con ingredientes y luego buscarlos por el id
+        listIngredientProducts.add(ingredient);
+        updateIngredientsInProduct(listIngredientProducts);
+    }
+
+    private void deleteIngredientFromProduct() {
+        String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
+        //Ingredient ingredient = (Ingredient) manageProduct.getBoxIngredients().getSelectedItem();
+        listIngredientProducts.remove(ingredient);
+        updateIngredientsInProduct(listIngredientProducts);
+    }
+    
+    private void updateIngredientsInProduct(HashSet<String> listIngredientProducts) {
+        manageProduct.getIngredientsTxt().setText(listIngredientProducts.toString());
+        
+        /*
+        List<String> lista = new ArrayList<>();
+        listIngredientProducts.forEach(ingredient -> {
+            lista.add(ingredient.getName());
+        });
+        manageProduct.getIngredientsTxt().setText(String.join(", ", lista));
+        */
+    }
+    
+    
+    
+    
     
     
 
