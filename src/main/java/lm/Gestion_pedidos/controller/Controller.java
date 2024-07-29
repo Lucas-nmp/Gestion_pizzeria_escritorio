@@ -36,7 +36,7 @@ public class Controller implements ActionListener{
     
     
     private HashSet<String> listIngredientProducts = new HashSet<>();
-    private Ingredient ingredientSelectedToModify = new Ingredient();
+    private Ingredient ingredientSelectedToModify;
     
     @Autowired
     private ApplicationContext context;
@@ -80,6 +80,7 @@ public class Controller implements ActionListener{
         manageProduct.setModal(true);
         fillIngredients(manageProduct.getBoxIngredients());
         fillCategorys(manageProduct.getBoxCategory());
+        fillTableProduct();
         manageProduct.setVisible(true);  
     }
     
@@ -153,6 +154,7 @@ public class Controller implements ActionListener{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
+                    ingredientSelectedToModify = new Ingredient();
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
 
@@ -252,24 +254,24 @@ public class Controller implements ActionListener{
     
     private void fillTableProduct() {
         DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"Nº", "Nombre", "Ingredientes"};
+        String[] headers = {"Nº", "Nombre", "Ingredientes", "Precio"};
         model.setColumnIdentifiers(headers);
         homepage.getTableProducts().setModel(model);
+        manageProduct.getTableProducts().setModel(model);
         
         List<Product> listProducts = productService.findAllProducts();
-        if (listProducts.isEmpty()) {
-            JOptionPane.showMessageDialog(homepage, "Añada productos a la categoría");
-        } else {
-            listProducts.forEach((product) -> {
-                Object[] categoryLine = {
-                    product.getProductId(), 
-                    product.getName(), 
-                    null
-                    // crear un string con la lista de ingredientes obtenida por id desde ingredienteProducto    
-                };
-                model.addRow(categoryLine);
-            });   
-        }
+        
+        listProducts.forEach((product) -> {
+            Object[] categoryLine = {
+                product.getProductId(), 
+                product.getName(), 
+                null, 
+                product.getPrice()
+                // crear un string con la lista de ingredientes obtenida por id desde ingredienteProducto    
+            };
+            model.addRow(categoryLine);
+        });   
+        
     }
     
     private void fillTableIngredients() {
@@ -307,6 +309,7 @@ public class Controller implements ActionListener{
             boxCategorys.addItem("Añadir");
         } else {
             boxCategorys.removeAllItems();
+            boxCategorys.addItem("Seleccionar");
             listCategorys.forEach((category) -> {
                 String item = category.getCategoryId() + ", " + category.getName();
                 boxCategorys.addItem(item);
@@ -360,22 +363,30 @@ public class Controller implements ActionListener{
 
     private void addIngredientToProduct() {
         String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
-        
-        //Ingredient ingredient = (Ingredient) manageProduct.getBoxIngredients().getSelectedItem(); // creo que es mejor trabajar con String en lugar con ingredientes y luego buscarlos por el id
-        listIngredientProducts.add(ingredient);
-        updateIngredientsInProduct(listIngredientProducts);
+        if (ingredient.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
+        } else {
+            listIngredientProducts.add(ingredient);
+            updateIngredientsInProduct(listIngredientProducts);
+        }
     }
 
     private void deleteIngredientFromProduct() {
         String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
-        //Ingredient ingredient = (Ingredient) manageProduct.getBoxIngredients().getSelectedItem();
-        listIngredientProducts.remove(ingredient);
-        updateIngredientsInProduct(listIngredientProducts);
+        if (ingredient.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
+        } else {
+            listIngredientProducts.remove(ingredient);
+            updateIngredientsInProduct(listIngredientProducts);
+        }
+
+        
     }
     
     private void updateIngredientsInProduct(HashSet<String> listIngredientProducts) {
         manageProduct.getIngredientsTxt().setText(listIngredientProducts.toString());
         
+        // añadir solo el nombre no el id, el id usarlo para otra cosa y volver a seleccionar el primer elemento del box selector, también en el de categoría
         // tal vez podría hacer una lista con los id de los ingredientes separando el id y el nombre, el id esta en el box de ingredientes con una , 
         // separarlo con un split y añadirlo a una lista de int que despues puedo usar para buscar los ingredientes y añadirlos a la entidad productIngredient
         
@@ -389,6 +400,15 @@ public class Controller implements ActionListener{
     }
 
     private void deleteIngredient() {
+        if (ingredientSelectedToModify != null) {
+            ingredientService.deleteIngredient(ingredientSelectedToModify);
+            fillTableIngredients();
+            cleanDataIngredient();
+            fillIngredients(homepage.getIngredientModify());
+            ingredientSelectedToModify = null;
+        } else {
+            JOptionPane.showMessageDialog(manageIngredient, "Seleccione un ingrediente");
+        }
         
     }
 
@@ -417,6 +437,7 @@ public class Controller implements ActionListener{
                 fillTableIngredients();
                 cleanDataIngredient();
                 fillIngredients(homepage.getIngredientModify());
+                ingredientSelectedToModify = null;
             }
         } else {
             JOptionPane.showMessageDialog(manageIngredient, "Tiene que escribir el nombre y el precio del ingrediente");
@@ -426,6 +447,7 @@ public class Controller implements ActionListener{
     private void cleanDataIngredient() {
         manageIngredient.getEdtNameIngredient().setText("");
         manageIngredient.getEdtPriceIngredient().setText("");
+        
     }
 
         
