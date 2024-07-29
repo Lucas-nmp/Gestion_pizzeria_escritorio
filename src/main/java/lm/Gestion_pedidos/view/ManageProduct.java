@@ -32,6 +32,10 @@ public class ManageProduct extends javax.swing.JDialog {
         return manageProductSaveProduct;
     }
     
+    public JButton getBtnDeleteProduct() {
+        return manageProductDeleteProduct;
+    }
+    
     public JButton getBtnDeleteIngredient() {
         return manageProductDeleteIngredient;
     }
@@ -98,6 +102,7 @@ public class ManageProduct extends javax.swing.JDialog {
         manageProductPrice = new javax.swing.JLabel();
         manageProductIngredients = new javax.swing.JLabel();
         manageProductSaveProduct = new javax.swing.JButton();
+        manageProductDeleteProduct = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         manageProductTable = new javax.swing.JTable();
@@ -161,15 +166,22 @@ public class ManageProduct extends javax.swing.JDialog {
         manageProductSaveProduct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductSaveProduct.setText("GuardarProducto");
 
+        manageProductDeleteProduct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageProductDeleteProduct.setText("Eliminar Producto");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(manageProductSaveProduct)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(manageProductSaveProduct)
+                        .addGap(33, 33, 33)
+                        .addComponent(manageProductDeleteProduct))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(manageProductCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1)
@@ -219,9 +231,11 @@ public class ManageProduct extends javax.swing.JDialog {
                     .addComponent(manageProductName)
                     .addComponent(manageProductPrice)
                     .addComponent(manageProductIngredients))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(manageProductSaveProduct)
-                .addGap(21, 21, 21))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(manageProductSaveProduct)
+                    .addComponent(manageProductDeleteProduct))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 220));
@@ -280,6 +294,7 @@ public class ManageProduct extends javax.swing.JDialog {
     private javax.swing.JLabel manageProductCategory;
     private javax.swing.JComboBox<String> manageProductCategorysBox;
     private javax.swing.JButton manageProductDeleteIngredient;
+    private javax.swing.JButton manageProductDeleteProduct;
     private javax.swing.JTextField manageProductEdtName;
     private javax.swing.JTextField manageProductEdtPrice;
     private javax.swing.JLabel manageProductIngredients;

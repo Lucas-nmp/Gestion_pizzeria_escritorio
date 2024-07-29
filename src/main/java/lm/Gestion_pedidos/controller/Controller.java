@@ -37,6 +37,7 @@ public class Controller implements ActionListener{
     
     private HashSet<String> listIngredientProducts = new HashSet<>();
     private Ingredient ingredientSelectedToModify;
+    private Category categorySelectedToModify;
     
     @Autowired
     private ApplicationContext context;
@@ -116,7 +117,7 @@ public class Controller implements ActionListener{
     @Autowired
     public void setAddCategory(AddCategory addCategory) {
         this.addCategory = addCategory;
-        
+        this.addCategory.getDeleteCategory().addActionListener(this);
         this.addCategory.getCategorySave().addActionListener(this);
         this.addCategory.getCategoryName().addActionListener((ActionEvent e) -> {
             saveCategory();
@@ -124,6 +125,25 @@ public class Controller implements ActionListener{
             fillCategorys(homepage.getCategorys()); 
             cleanCategory();
         });
+        
+        this.addCategory.getCategoryTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 1) {
+                    categorySelectedToModify = new Category();
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    Long idCategory = (Long) target.getValueAt(row, 0);
+                    String nameCategory = (String) target.getValueAt(row, 1);
+                    addCategory.getCategoryName().setText(nameCategory);
+                    categorySelectedToModify.setCategoryId(idCategory);
+                    categorySelectedToModify.setName(nameCategory);
+                }
+            }
+            
+        });
+        
+        // TODO seleccionar categoría de la tabla y permitir eliminarla o modificarla
     }
     
     @Autowired
@@ -141,6 +161,8 @@ public class Controller implements ActionListener{
         this.manageProduct.getEdtPriceProduct().addActionListener((ActionEvent e) -> {
             setPriceProduct(manageProduct.getEdtPriceProduct().getText()); 
         }); 
+        
+        //TODO seleccionar producto de la tabla y permitir eliminarlo y editarlo
     }
     
     @Autowired
@@ -149,6 +171,11 @@ public class Controller implements ActionListener{
         
         this.manageIngredient.getBtnSaveIngredient().addActionListener(this);
         this.manageIngredient.getBtnDeleteIngredient().addActionListener(this);
+        
+        //permite guardar un ingrediente con la tecla enter desde el textField de precio
+        this.manageIngredient.getEdtPriceIngredient().addActionListener((ActionEvent e) -> {
+            saveIngredient();
+        });
         
         this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
             @Override
@@ -202,6 +229,10 @@ public class Controller implements ActionListener{
             cleanCategory();
         }
         
+        if (e.getSource() == addCategory.getDeleteCategory()) {
+            deleteCategory();
+        }
+        
         // Acciones del AddProduct
         if (e.getSource() == manageProduct.getBtnSaveProduct()) {
             saveProduct();
@@ -228,10 +259,36 @@ public class Controller implements ActionListener{
     private void saveCategory() {
         String nameCategory = addCategory.getCategoryName().getText();
         if (!nameCategory.isEmpty()) {
-            Category category = new Category(null, nameCategory);
-            categoryService.addCategory(category); 
+            if (categorySelectedToModify == null) {
+                Category category = new Category(null, nameCategory);
+                categoryService.addCategory(category); 
+                fillCategorys(homepage.getCategorys());
+                fillTableCategory();
+                cleanCategory();
+            } else {
+                categorySelectedToModify.setName(nameCategory);
+                categoryService.addCategory(categorySelectedToModify);
+                fillCategorys(homepage.getCategorys());
+                fillTableCategory();
+                cleanCategory();
+                categorySelectedToModify = null;
+            }
+            
         } else {
             JOptionPane.showMessageDialog(addCategory, "El nombre de la categoría no puede estar vacío");
+        }  
+    }
+    
+    
+    private void deleteCategory() {
+        if (categorySelectedToModify != null) {
+            categoryService.deleteCategory(categorySelectedToModify);
+            fillTableCategory();
+            fillCategorys(homepage.getCategorys());
+            cleanCategory();
+            categorySelectedToModify = null;
+        } else {
+            JOptionPane.showMessageDialog(addCategory, "Seleccione una Categoría de la tabla");
         }
         
     }
@@ -449,6 +506,8 @@ public class Controller implements ActionListener{
         manageIngredient.getEdtPriceIngredient().setText("");
         
     }
+
+    
 
         
         
