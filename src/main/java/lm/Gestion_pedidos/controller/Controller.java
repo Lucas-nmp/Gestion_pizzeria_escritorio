@@ -17,6 +17,7 @@ import lm.Gestion_pedidos.service.IngredientService;
 import lm.Gestion_pedidos.service.ProductService;
 import lm.Gestion_pedidos.view.AddCategory;
 import lm.Gestion_pedidos.view.Homepage;
+import lm.Gestion_pedidos.view.ManageIngredient;
 import lm.Gestion_pedidos.view.ManageProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -47,6 +48,7 @@ public class Controller implements ActionListener{
     private Homepage homepage;
     private AddCategory addCategory;
     private ManageProduct manageProduct;
+    private ManageIngredient manageIngredient;
     
 
     public void viewHomePage() {
@@ -55,9 +57,7 @@ public class Controller implements ActionListener{
         fillIngredients(homepage.getIngredientModify());
         fillCategorys(homepage.getCategorys()); 
         fillTableProduct();
-        homepage.setVisible(true);
-        
-        
+        homepage.setVisible(true);  
     }
     
     private void openAddCategory() {
@@ -70,15 +70,19 @@ public class Controller implements ActionListener{
     }
     
     private void openViewProducts() {
-        
         manageProduct.setLocationRelativeTo(null);
         manageProduct.setResizable(false);
         manageProduct.setModal(true);
         fillIngredients(manageProduct.getBoxIngredients());
         fillCategorys(manageProduct.getBoxCategory());
-        manageProduct.setVisible(true);
-        
-        
+        manageProduct.setVisible(true);  
+    }
+    
+    private void openViewIngredients() {
+        manageIngredient.setLocationRelativeTo(null);
+        manageIngredient.setResizable(false);
+        manageIngredient.setModal(true);
+        manageIngredient.setVisible(true);
     }
     
     @Autowired
@@ -87,6 +91,7 @@ public class Controller implements ActionListener{
         
         this.homepage.getBtnCategory().addActionListener(this);
         this.homepage.getBtnProduct().addActionListener(this);
+        this.homepage.getBtnIngredient().addActionListener(this);
         
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
@@ -128,8 +133,15 @@ public class Controller implements ActionListener{
         
         this.manageProduct.getEdtPriceProduct().addActionListener((ActionEvent e) -> {
             setPriceProduct(manageProduct.getEdtPriceProduct().getText()); 
-        });
+        }); 
+    }
+    
+    @Autowired
+    public void setManageIngredient(ManageIngredient manageIngredient) {
+        this.manageIngredient = manageIngredient;
         
+        this.manageIngredient.getBtnSaveIngredient().addActionListener(this);
+        this.manageIngredient.getBtnDeleteIngredient().addActionListener(this);
     }
     
     
@@ -151,6 +163,10 @@ public class Controller implements ActionListener{
             openViewProducts();
         }
         
+        if (e.getSource() == homepage.getBtnIngredient()) {
+            openViewIngredients();
+        }
+        
         // Acciones del AddCategory
         if (e.getSource() == addCategory.getCategorySave()) {
             saveCategory();
@@ -170,7 +186,16 @@ public class Controller implements ActionListener{
         
         if (e.getSource() == manageProduct.getBtnDeleteIngredient()) {
             deleteIngredientFromProduct();
-        }        
+        }    
+        
+        // Acciones del ManageIngredient
+        if (e.getSource() == manageIngredient.getBtnDeleteIngredient()) {
+            deleteIngredient();
+        }
+        
+        if (e.getSource() == manageIngredient.getBtnSaveIngredient()) {
+            saveIngredient();
+        }
     }
 
     private void saveCategory() {
@@ -275,7 +300,7 @@ public class Controller implements ActionListener{
     }
 
     private void saveProduct() {
-        
+        // al guardar un producto hay que guardar la lista de ingredientes en productIngredient con el id del producto
     }
 
     private void setNameProduct(String text) {
@@ -304,6 +329,9 @@ public class Controller implements ActionListener{
     private void updateIngredientsInProduct(HashSet<String> listIngredientProducts) {
         manageProduct.getIngredientsTxt().setText(listIngredientProducts.toString());
         
+        // tal vez podría hacer una lista con los id de los ingredientes separando el id y el nombre, el id esta en el box de ingredientes con una , 
+        // separarlo con un split y añadirlo a una lista de int que despues puedo usar para buscar los ingredientes y añadirlos a la entidad productIngredient
+        
         /*
         List<String> lista = new ArrayList<>();
         listIngredientProducts.forEach(ingredient -> {
@@ -311,6 +339,32 @@ public class Controller implements ActionListener{
         });
         manageProduct.getIngredientsTxt().setText(String.join(", ", lista));
         */
+    }
+
+    private void deleteIngredient() {
+        
+    }
+
+    
+    private void saveIngredient() {
+        // detectar si hay id o no para guardar nuevo ingrediente o modificar uno existente
+        String name = manageIngredient.getEdtNameIngredient().toString();
+        Long price = null;
+        try {
+            price =Long.parseLong(manageIngredient.getEdtPriceIngredient().toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(manageIngredient, "El precio tiene que ser númerico");
+        }
+        if (price != null && !name.isEmpty()) {
+            Ingredient ingredient = new Ingredient(null, name, price);
+            ingredientService.addModifyIngredient(ingredient);
+        } else {
+            JOptionPane.showMessageDialog(manageIngredient, "Tiene que escribir el nombre y el precio del ingrediente");
+        }
+        
+        
+        
+        
     }
     
     

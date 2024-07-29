@@ -25,6 +25,7 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ingredientId;
     private String name;
+    private Long price;
     
 
 }
