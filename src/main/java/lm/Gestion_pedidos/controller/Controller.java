@@ -3,11 +3,14 @@ package lm.Gestion_pedidos.controller;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Ingredient;
@@ -32,6 +35,7 @@ public class Controller implements ActionListener{
     
     
     private HashSet<String> listIngredientProducts = new HashSet<>();
+    private Ingredient ingredientSelectedToModify;
     
     @Autowired
     private ApplicationContext context;
@@ -142,6 +146,39 @@ public class Controller implements ActionListener{
         
         this.manageIngredient.getBtnSaveIngredient().addActionListener(this);
         this.manageIngredient.getBtnDeleteIngredient().addActionListener(this);
+        
+        this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int row = target.getSelectedRow();
+                
+                Long idIngredient = (Long) target.getValueAt(row, 0);
+                String nameIngredient = (String) target.getValueAt(row, 1);
+                Long priceIngredient = (Long) target.getValueAt(row, 2);
+                ingredientSelectedToModify.setIngredientId(idIngredient);
+                ingredientSelectedToModify.setName(nameIngredient);
+                ingredientSelectedToModify.setPrice(priceIngredient);
+            }
+            
+        });
+        
+        /*
+        this.lookFor.getLookForTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 1) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    
+                    newCustomer = customerService.getCustomerById((int) target.getValueAt(row, 0));
+                    
+                    
+                }
+            }
+            
+        });
+        */
     }
     
     
@@ -347,25 +384,35 @@ public class Controller implements ActionListener{
 
     
     private void saveIngredient() {
-        // detectar si hay id o no para guardar nuevo ingrediente o modificar uno existente
-        String name = manageIngredient.getEdtNameIngredient().toString();
+        String name = manageIngredient.getEdtNameIngredient().getText();
         Long price = null;
         try {
-            price =Long.parseLong(manageIngredient.getEdtPriceIngredient().toString());
+            price = Long.valueOf(manageIngredient.getEdtPriceIngredient().getText());
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(manageIngredient, "El precio tiene que ser númerico");
+            JOptionPane.showMessageDialog(manageIngredient, "El precio tiene que ser numérico");
+            return;
         }
+
         if (price != null && !name.isEmpty()) {
-            Ingredient ingredient = new Ingredient(null, name, price);
-            ingredientService.addModifyIngredient(ingredient);
+            if (ingredientSelectedToModify == null) {
+                Ingredient ingredient = new Ingredient(null, name, price);
+                ingredientService.addModifyIngredient(ingredient);
+            } else {
+                ingredientSelectedToModify.setName(name);
+                ingredientSelectedToModify.setPrice(price);
+                ingredientService.addModifyIngredient(ingredientSelectedToModify);
+            }
         } else {
             JOptionPane.showMessageDialog(manageIngredient, "Tiene que escribir el nombre y el precio del ingrediente");
         }
-        
-        
-        
-        
     }
+
+        
+        
+        
+        
+        
+    
     
     
     
