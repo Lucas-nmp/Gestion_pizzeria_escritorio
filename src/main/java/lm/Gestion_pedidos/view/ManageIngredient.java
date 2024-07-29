@@ -38,7 +38,7 @@ public class ManageIngredient extends javax.swing.JDialog {
     }
     
     public JTable getTableIngredient() {
-        return getTableIngredient();
+        return manageIngredientTable;
     }
 
     /**

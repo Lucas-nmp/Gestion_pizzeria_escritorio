@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +36,7 @@ public class Controller implements ActionListener{
     
     
     private HashSet<String> listIngredientProducts = new HashSet<>();
-    private Ingredient ingredientSelectedToModify;
+    private Ingredient ingredientSelectedToModify = new Ingredient();
     
     @Autowired
     private ApplicationContext context;
@@ -86,6 +87,7 @@ public class Controller implements ActionListener{
         manageIngredient.setLocationRelativeTo(null);
         manageIngredient.setResizable(false);
         manageIngredient.setModal(true);
+        fillTableIngredients();
         manageIngredient.setVisible(true);
     }
     
@@ -150,35 +152,21 @@ public class Controller implements ActionListener{
         this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JTable target = (JTable) e.getSource();
-                int row = target.getSelectedRow();
-                
-                Long idIngredient = (Long) target.getValueAt(row, 0);
-                String nameIngredient = (String) target.getValueAt(row, 1);
-                Long priceIngredient = (Long) target.getValueAt(row, 2);
-                ingredientSelectedToModify.setIngredientId(idIngredient);
-                ingredientSelectedToModify.setName(nameIngredient);
-                ingredientSelectedToModify.setPrice(priceIngredient);
-            }
-            
-        });
-        
-        /*
-        this.lookFor.getLookForTable().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 1) {
+                if (e.getClickCount() == 1) {
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
-                    
-                    newCustomer = customerService.getCustomerById((int) target.getValueAt(row, 0));
-                    
-                    
-                }
-            }
-            
+
+                    Long idIngredient = (Long) target.getValueAt(row, 0);
+                    String nameIngredient = (String) target.getValueAt(row, 1);
+                    BigDecimal priceIngredient = (BigDecimal) target.getValueAt(row, 2);
+                    manageIngredient.getEdtNameIngredient().setText(nameIngredient);
+                    manageIngredient.getEdtPriceIngredient().setText(priceIngredient.toString());
+                    ingredientSelectedToModify.setIngredientId(idIngredient);
+                    ingredientSelectedToModify.setName(nameIngredient);
+                    ingredientSelectedToModify.setPrice(priceIngredient);
+                }  
+            }            
         });
-        */
     }
     
     
@@ -284,6 +272,27 @@ public class Controller implements ActionListener{
         }
     }
     
+    private void fillTableIngredients() {
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"Nº", "Ingrediente", "Precio"};
+        model.setColumnIdentifiers(headers);
+        manageIngredient.getTableIngredient().setModel(model);
+        
+        List<Ingredient> listIngredients = ingredientService.getAllIngredients();
+        if (listIngredients.isEmpty()) {
+            //JOptionPane.showMessageDialog(homepage, "Añada ingredientes a la categoría");
+        } else {
+            listIngredients.forEach((ingredient) -> {
+                Object[] ingredientLine = {
+                    ingredient.getIngredientId(), 
+                    ingredient.getName(), 
+                    ingredient.getPrice()
+                };
+                model.addRow(ingredientLine);
+            });   
+        }
+    }
+    
     private void cleanCategory(){
         addCategory.getCategoryName().setText("");
     }
@@ -307,13 +316,14 @@ public class Controller implements ActionListener{
     
     private void fillIngredients(JComboBox boxIngredients) {
         List<Ingredient> listIngredients = ingredientService.getAllIngredients();
-        boxIngredients.setPreferredSize(new Dimension(100, 25));
-        boxIngredients.setMaximumSize(new Dimension(100, 25));
+        boxIngredients.setPreferredSize(new Dimension(120, 25));
+        boxIngredients.setMaximumSize(new Dimension(120, 25));
         if (listIngredients.isEmpty()) {
             boxIngredients.removeAllItems();
             boxIngredients.addItem("Añadir");
         } else {
             boxIngredients.removeAllItems();
+            boxIngredients.addItem("Seleccionar");
             listIngredients.forEach((ingredient) -> {
                 String item = ingredient.getIngredientId() + ", " + ingredient.getName();
                 boxIngredients.addItem(item);
@@ -385,9 +395,9 @@ public class Controller implements ActionListener{
     
     private void saveIngredient() {
         String name = manageIngredient.getEdtNameIngredient().getText();
-        Long price = null;
+        BigDecimal price = null;
         try {
-            price = Long.valueOf(manageIngredient.getEdtPriceIngredient().getText());
+            price = new BigDecimal(manageIngredient.getEdtPriceIngredient().getText().replace(',', '.'));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(manageIngredient, "El precio tiene que ser numérico");
             return;
@@ -397,14 +407,25 @@ public class Controller implements ActionListener{
             if (ingredientSelectedToModify == null) {
                 Ingredient ingredient = new Ingredient(null, name, price);
                 ingredientService.addModifyIngredient(ingredient);
+                fillTableIngredients();
+                cleanDataIngredient();
+                fillIngredients(homepage.getIngredientModify());
             } else {
                 ingredientSelectedToModify.setName(name);
                 ingredientSelectedToModify.setPrice(price);
                 ingredientService.addModifyIngredient(ingredientSelectedToModify);
+                fillTableIngredients();
+                cleanDataIngredient();
+                fillIngredients(homepage.getIngredientModify());
             }
         } else {
             JOptionPane.showMessageDialog(manageIngredient, "Tiene que escribir el nombre y el precio del ingrediente");
         }
+    }
+
+    private void cleanDataIngredient() {
+        manageIngredient.getEdtNameIngredient().setText("");
+        manageIngredient.getEdtPriceIngredient().setText("");
     }
 
         

@@ -421,8 +421,8 @@
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="boxIngredientModify" min="-2" pref="120" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                              <Component id="boxIngredientModify" min="-2" pref="141" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="ingredientRemove" min="-2" pref="130" max="-2" attributes="0"/>
                                   <Component id="productAdd" min="-2" pref="130" max="-2" attributes="0"/>
