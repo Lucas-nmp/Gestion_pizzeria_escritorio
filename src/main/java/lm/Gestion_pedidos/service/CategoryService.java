@@ -29,5 +29,9 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
     
+    public Category findCategoryByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+    
     
 }
