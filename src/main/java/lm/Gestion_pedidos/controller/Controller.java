@@ -326,7 +326,7 @@ public class Controller implements ActionListener{
     // llenar sólo la tabla de el manageProduct, la tabla del homePage se tiene que llenar al seleccionar la categoría y según sea esta 
     private void fillTableProduct() {
         DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"Nº", "Nombre", "Ingredientes", "Precio"};
+        String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
         model.setColumnIdentifiers(headers);
         homepage.getTableProducts().setModel(model);
         manageProduct.getTableProducts().setModel(model);
@@ -334,17 +334,50 @@ public class Controller implements ActionListener{
         List<Product> listProducts = productService.findAllProducts();
         
         listProducts.forEach((product) -> {
-            Object[] categoryLine = {
+            HashSet<String> ingredientList = obtenerListaIngredientes(product.getProductId());
+            Object[] productLine = {
                 product.getProductId(), 
                 product.getName(), 
-                null, 
+                String.join(", ", ingredientList), 
                 product.getPrice()
-                // crear un string con la lista de ingredientes obtenida por id desde ingredienteProducto    
+                   
             };
-            model.addRow(categoryLine);
+            model.addRow(productLine);
         });   
         
+        columnWidthProductHomepage(homepage.getTableProducts());
+        columnWidthProductManageProduct(manageProduct.getTableProducts());
     }
+    
+    private HashSet<String> obtenerListaIngredientes(Long productId) {
+        List<Long> listIdsIngredients = productIngredientService.findIngredientIdsByProductId(productId);
+        HashSet<String> listNameIngredients = new HashSet<>();
+        
+        listIdsIngredients.forEach((id) -> {
+            Ingredient ingredient = ingredientService.findIngredientById(id);
+            String nameIngredient = ingredient.getName();
+            listNameIngredients.add(nameIngredient);
+        });
+        return listNameIngredients;
+    }
+    
+    private void columnWidthProductHomepage(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático de tamaño
+        table.getColumnModel().getColumn(0).setPreferredWidth(30); 
+        table.getColumnModel().getColumn(1).setPreferredWidth(90); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(306); 
+        table.getColumnModel().getColumn(3).setPreferredWidth(50); 
+    }
+    
+    private void columnWidthProductManageProduct(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático de tamaño
+        table.getColumnModel().getColumn(0).setPreferredWidth(30); 
+        table.getColumnModel().getColumn(1).setPreferredWidth(100); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(782); 
+        table.getColumnModel().getColumn(3).setPreferredWidth(55); 
+    }
+    
+    
     
     private void fillTableIngredients() {
         DefaultTableModel model = new DefaultTableModel();
@@ -509,7 +542,7 @@ public class Controller implements ActionListener{
             }
             String nameIngredient = idNameIngredient[1];
             listIngredientsProduct.remove(nameIngredient);
-            listIdIngredientsInProduct.remove(idInt);
+                listIdIngredientsInProduct.remove(idInt);
             updateIngredientsInProduct(listIngredientsProduct);
         }
 
@@ -517,7 +550,7 @@ public class Controller implements ActionListener{
     }
     
     private void updateIngredientsInProduct(HashSet<String> listIngredientProducts) {
-        manageProduct.getIngredientsTxt().setText(listIngredientProducts.toString());
+        manageProduct.getIngredientsTxt().setText(String.join(", ", listIngredientProducts));
         manageProduct.getBoxIngredients().setSelectedIndex(0);
     }
 
@@ -575,6 +608,8 @@ public class Controller implements ActionListener{
     private void setCategory(String string) {
         manageProduct.getCategoryTxt().setText(string);
     }
+
+    
 
     
 
