@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -46,6 +47,7 @@ public class Controller implements ActionListener{
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
     private Ingredient ingredientSelectedToModify;
     private Category categorySelectedToModify;
+    private Product productSelectedToModify;
     
     @Autowired
     private ApplicationContext context;
@@ -116,13 +118,6 @@ public class Controller implements ActionListener{
             handleCategorySelection();
             
         });
-        
-        /*
-        para acciones con intro
-        this.managementPage.getInvoiceId().addActionListener((ActionEvent e) -> {
-            addInvoiceCustomer();
-        });
-        */
     }
     
     @Autowired
@@ -155,6 +150,7 @@ public class Controller implements ActionListener{
         });
         
         // TODO seleccionar categoría de la tabla y permitir eliminarla o modificarla
+        
     }
     
     @Autowired
@@ -193,6 +189,72 @@ public class Controller implements ActionListener{
     });
         
         //TODO: seleccionar producto de la tabla y permitir eliminarlo y editarlo
+        this.manageProduct.getTableProducts().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    listIngredientsProduct.clear();
+                    productSelectedToModify = new Product();
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    
+                    Long id = (Long) target.getValueAt(row, 0);
+                    String name = (String) target.getValueAt(row, 1);
+                    String ingredients = (String) target.getValueAt(row, 2);
+                    BigDecimal price = (BigDecimal) target.getValueAt(row, 3);
+                    
+                    // Buscar el producto para ver su categoría
+                    Product product = productService.findProductById(id);
+                    
+                    //Añadir a la lista de ingredientes para poder modificarlos
+                    Arrays.stream(ingredients.split(",")).map(String::trim).forEach(listIngredientsProduct::add);
+                    
+                    // Añadir a los campos de texto
+                    manageProduct.getCategoryTxt().setText(product.getCategory().getName());
+                    manageProduct.getNameTxt().setText(name);
+                    manageProduct.getPriceTxt().setText(price.toString());
+                    updateIngredientsInProduct(listIngredientsProduct);
+                    
+                    
+                    
+                    // Añadir al producto para Modificarlo
+                    productSelectedToModify.setProductId(id);
+                    productSelectedToModify.setName(name);
+                    productSelectedToModify.setPrice(price);
+                    productSelectedToModify.setCategory(categoryService.findCategoryByName(manageProduct.getCategoryTxt().getText()));
+                    
+                    // falta añadir los id de los ingredientes a la lista para poder modificar el productoIngredient y modificar el método para 
+                    // guardar productos para que verifique si hay un producto seleccionado o no
+                    
+                            
+                    
+                }
+            }
+            
+        });
+        
+        /*
+        this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    ingredientSelectedToModify = new Ingredient();
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+
+                    Long idIngredient = (Long) target.getValueAt(row, 0);
+                    String nameIngredient = (String) target.getValueAt(row, 1);
+                    BigDecimal priceIngredient = (BigDecimal) target.getValueAt(row, 2);
+                    manageIngredient.getEdtNameIngredient().setText(nameIngredient);
+                    manageIngredient.getEdtPriceIngredient().setText(priceIngredient.toString());
+                    ingredientSelectedToModify.setIngredientId(idIngredient);
+                    ingredientSelectedToModify.setName(nameIngredient);
+                    ingredientSelectedToModify.setPrice(priceIngredient);
+                }  
+            }            
+        });
+        */
+        
         
     }
     
@@ -356,7 +418,7 @@ public class Controller implements ActionListener{
         List<Product> listProducts = productService.findAllProducts();
         
         listProducts.forEach((product) -> {
-            HashSet<String> ingredientList = obtenerListaIngredientes(product.getProductId());
+            HashSet<String> ingredientList = getIngredientsInProductById(product.getProductId());
             Object[] productLine = {
                 product.getProductId(), 
                 product.getName(), 
@@ -371,7 +433,7 @@ public class Controller implements ActionListener{
         columnWidthProductManageProduct(manageProduct.getTableProducts());
     }
     
-    private HashSet<String> obtenerListaIngredientes(Long productId) {
+    private HashSet<String> getIngredientsInProductById(Long productId) {
         List<Long> listIdsIngredients = productIngredientService.findIngredientIdsByProductId(productId);
         HashSet<String> listNameIngredients = new HashSet<>();
         
@@ -436,7 +498,7 @@ public class Controller implements ActionListener{
             boxCategorys.addItem("Añadir");
         } else {
             boxCategorys.removeAllItems();
-            boxCategorys.addItem("Seleccionar");
+            boxCategorys.addItem("Seleccionar"); // Mejor será que aparezca seleccionado la primera categoría(la más usada) y con los productos en la lista 
             listCategorys.forEach((category) -> {
                 //String item = category.getCategoryId() + ", " + category.getName();
                 String item = category.getName();
@@ -533,42 +595,40 @@ public class Controller implements ActionListener{
 
     private void addIngredientToProduct() {
         String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
-        Long idInt = null;
         if (ingredient.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
-        } else {
-            String[] idNameIngredient = ingredient.split(",");
-            String id = idNameIngredient[0];
-            try {
-                idInt = Long.valueOf(id);
-            } catch (NumberFormatException e) {
-            }
-            String nameIngredient = idNameIngredient[1];
-            listIngredientsProduct.add(nameIngredient);
-            listIdIngredientsInProduct.add(idInt);
+            return;
+        }
+
+        String[] idNameIngredient = ingredient.split(",");
+        Long id = Long.valueOf(idNameIngredient[0].trim());
+        String nameIngredient = idNameIngredient[1].trim();
+        
+        if (listIngredientsProduct.add(nameIngredient)) {
+            listIdIngredientsInProduct.add(id);
             updateIngredientsInProduct(listIngredientsProduct);
+        } else {
+            JOptionPane.showMessageDialog(manageProduct, "El ingrediente ya está en la lista");
         }
     }
 
     private void deleteIngredientFromProduct() {
         String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
-        int idInt = 0;
         if (ingredient.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
-        } else {
-            String[] idNameIngredient = ingredient.split(",");
-            String id = idNameIngredient[0];
-            try {
-                idInt = Integer.parseInt(id);
-            } catch (NumberFormatException e) {
-            }
-            String nameIngredient = idNameIngredient[1];
-            listIngredientsProduct.remove(nameIngredient);
-                listIdIngredientsInProduct.remove(idInt);
-            updateIngredientsInProduct(listIngredientsProduct);
+            return;
         }
 
+        String[] idNameIngredient = ingredient.split(",");
+        Long id = Long.valueOf(idNameIngredient[0].trim());
+        String nameIngredient = idNameIngredient[1].trim();
         
+        if (listIngredientsProduct.remove(nameIngredient)) {
+            listIdIngredientsInProduct.remove(id);
+            updateIngredientsInProduct(listIngredientsProduct);
+        } else {
+            JOptionPane.showMessageDialog(manageProduct, "El ingrediente no está en la lista");
+        }
     }
     
     private void updateIngredientsInProduct(HashSet<String> listIngredientProducts) {
