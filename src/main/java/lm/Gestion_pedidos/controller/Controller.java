@@ -3,6 +3,8 @@ package lm.Gestion_pedidos.controller;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -167,8 +169,22 @@ public class Controller implements ActionListener{
             setNameProduct(manageProduct.getEdtNameProduct().getText()); 
         });
         
+        this.manageProduct.getEdtNameProduct().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                setNameProduct(manageProduct.getEdtNameProduct().getText()); 
+            }
+        });
+                
         this.manageProduct.getEdtPriceProduct().addActionListener((ActionEvent e) -> {
             setPriceProduct(manageProduct.getEdtPriceProduct().getText()); 
+        });
+        
+        this.manageProduct.getEdtPriceProduct().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                setPriceProduct(manageProduct.getEdtPriceProduct().getText());
+            }
         });
         
         // desde el comboBox activar al seleccionar una categoría
@@ -177,6 +193,7 @@ public class Controller implements ActionListener{
     });
         
         //TODO: seleccionar producto de la tabla y permitir eliminarlo y editarlo
+        
     }
     
     @Autowired
@@ -189,6 +206,11 @@ public class Controller implements ActionListener{
         //permite guardar un ingrediente con la tecla enter desde el textField de precio
         this.manageIngredient.getEdtPriceIngredient().addActionListener((ActionEvent e) -> {
             saveIngredient();
+            this.manageIngredient.getEdtNameIngredient().requestFocus();
+        });
+        
+        this.manageIngredient.getEdtNameIngredient().addActionListener((ActionEvent e) -> {
+            this.manageIngredient.getEdtPriceIngredient().requestFocus();
         });
         
         this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
@@ -365,7 +387,7 @@ public class Controller implements ActionListener{
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático de tamaño
         table.getColumnModel().getColumn(0).setPreferredWidth(30); 
         table.getColumnModel().getColumn(1).setPreferredWidth(90); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(306); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(426); 
         table.getColumnModel().getColumn(3).setPreferredWidth(50); 
     }
     
