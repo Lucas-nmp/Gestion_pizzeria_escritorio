@@ -33,5 +33,9 @@ public class IngredientService {
         ingredientRepository.save(ingredient);
     }
     
+    public Ingredient findIngredientByName(String name) {
+        return ingredientRepository.findByName(name);
+    }
+    
     
 }

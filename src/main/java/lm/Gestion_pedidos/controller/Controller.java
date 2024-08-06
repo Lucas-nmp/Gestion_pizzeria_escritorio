@@ -8,9 +8,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -215,47 +218,25 @@ public class Controller implements ActionListener{
                     manageProduct.getPriceTxt().setText(price.toString());
                     updateIngredientsInProduct(listIngredientsProduct);
                     
-                    
-                    
                     // Añadir al producto para Modificarlo
                     productSelectedToModify.setProductId(id);
-                    productSelectedToModify.setName(name);
-                    productSelectedToModify.setPrice(price);
-                    productSelectedToModify.setCategory(categoryService.findCategoryByName(manageProduct.getCategoryTxt().getText()));
                     
-                    // falta añadir los id de los ingredientes a la lista para poder modificar el productoIngredient y modificar el método para 
-                    // guardar productos para que verifique si hay un producto seleccionado o no
                     
-                            
+                    listIdIngredientsInProduct = updateIdIngredientesInProduct(listIngredientsProduct);
                     
+                    
+  
                 }
-            }
-            
-        });
-        
-        /*
-        this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1) {
-                    ingredientSelectedToModify = new Ingredient();
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-
-                    Long idIngredient = (Long) target.getValueAt(row, 0);
-                    String nameIngredient = (String) target.getValueAt(row, 1);
-                    BigDecimal priceIngredient = (BigDecimal) target.getValueAt(row, 2);
-                    manageIngredient.getEdtNameIngredient().setText(nameIngredient);
-                    manageIngredient.getEdtPriceIngredient().setText(priceIngredient.toString());
-                    ingredientSelectedToModify.setIngredientId(idIngredient);
-                    ingredientSelectedToModify.setName(nameIngredient);
-                    ingredientSelectedToModify.setPrice(priceIngredient);
-                }  
-            }            
-        });
-        */
-        
-        
+            }  
+        });    
+    }
+    
+    private HashSet<Long> updateIdIngredientesInProduct(HashSet<String> listIngredientsProduct) {
+        for (String nameIngredient : listIngredientsProduct) {
+            Ingredient i = ingredientService.findIngredientByName(nameIngredient);
+            listIdIngredientsInProduct.add(i.getIngredientId());
+        }
+        return listIdIngredientsInProduct;
     }
     
     @Autowired
@@ -267,7 +248,7 @@ public class Controller implements ActionListener{
         
         //permite guardar un ingrediente con la tecla enter desde el textField de precio
         this.manageIngredient.getEdtPriceIngredient().addActionListener((ActionEvent e) -> {
-            saveIngredient();
+            saveOrModifyIngredient();
             this.manageIngredient.getEdtNameIngredient().requestFocus();
         });
         
@@ -333,7 +314,7 @@ public class Controller implements ActionListener{
         
         // Acciones del ManageProduct
         if (e.getSource() == manageProduct.getBtnSaveProduct()) {
-            saveProduct();
+            saveOrModifyProduct();
         }
         
         if (e.getSource() == manageProduct.getBtnAddIngredient()) {
@@ -350,7 +331,7 @@ public class Controller implements ActionListener{
         }
         
         if (e.getSource() == manageIngredient.getBtnSaveIngredient()) {
-            saveIngredient();
+            saveOrModifyIngredient();
         }
     }
 
@@ -538,40 +519,170 @@ public class Controller implements ActionListener{
         }
         
     }
-
-    private void saveProduct() {
+    
+    private void saveOrModifyProduct() {
         String categoryName = manageProduct.getCategoryTxt().getText();
         String name = manageProduct.getNameTxt().getText();
         String price = manageProduct.getPriceTxt().getText();
+        String ingredients = manageProduct.getIngredientsTxt().getText();
         BigDecimal priceB = null;
+
         if (categoryName.equals("Seleccionar") || categoryName.equals("Añadir")) {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione una categoría de producto");
-        } else if(name.equals("Nombre") || name.isEmpty()) {
+        } else if (name.equals("Nombre") || name.isEmpty()) {
             JOptionPane.showMessageDialog(manageProduct, "Escriba el nombre del producto");
-        } else if(price.equals("Precio") || price.isEmpty()) {
+        } else if (price.equals("Precio") || price.isEmpty()) {
             JOptionPane.showMessageDialog(manageProduct, "Escriba el precio del producto");
-        } else if(listIdIngredientsInProduct.isEmpty() || listIdIngredientsInProduct == null) {
+        } else if (listIdIngredientsInProduct.isEmpty()) {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione al menos un ingrediente");
         } else {
-            JOptionPane.showMessageDialog(manageProduct, categoryName + name + price + listIdIngredientsInProduct.toString());
             try {
                 priceB = new BigDecimal(price);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(manageProduct, "El precio no tiene el formato correcto");
+                return; // Terminate if price is invalid
             }
+
             Category category = categoryService.findCategoryByName(categoryName);
-            Product product = new Product(null, name, priceB, category, null );
-            productService.saveModifyProduct(product);
+
+            if (productSelectedToModify != null) {
+                // Actualizar un producto existente
+                productSelectedToModify.setName(name);
+                productSelectedToModify.setPrice(priceB);
+                productSelectedToModify.setCategory(category);
+                List<Long> listId = getIdIngredients(ingredients);
+                JOptionPane.showMessageDialog(manageProduct, "Producto modificado" + String.join(",", listId.toString()));
+                // tengo la lista de ids modificada, habría que compararla con la lista actual o eliminarla y añadir la nueva directamente
+ 
+                productService.saveModifyProduct(productSelectedToModify);
             
-            for (Long id : listIdIngredientsInProduct) {
+            } else {
+                // Crear un nuevo producto
+                Product product = new Product();
+                product.setName(name);
+                product.setPrice(priceB);
+                product.setCategory(category);
+                productService.saveModifyProduct(product);
+
+                for (Long id : listIdIngredientsInProduct) {
+                    Ingredient ingredient = ingredientService.findIngredientById(id);
+                    ProductIngredient productIngredient = new ProductIngredient(null, product, ingredient);
+                    productIngredientService.saveProductIngredient(productIngredient);
+                }
+                JOptionPane.showMessageDialog(manageProduct, "Producto añadido");
+            }
+
+            fillTableProduct();
+            clearProduct();
+        }
+    }
+    
+    private List<Long> getIdIngredients(String ingredients) {
+        List<Long> listId = new ArrayList<>();
+        String[] nameIngredients = ingredients.split(", ");
+        for (String name : nameIngredients) {
+            Ingredient i = ingredientService.findIngredientByName(name);
+            listId.add(i.getIngredientId());
+        }
+        return listId;
+    }
+
+    
+    /*
+    private void saveOrModifyProduct() {
+        String categoryName = manageProduct.getCategoryTxt().getText();
+        String name = manageProduct.getNameTxt().getText();
+        String price = manageProduct.getPriceTxt().getText();
+
+        if (!validateInputs(categoryName, name, price)) {
+            return;
+        }
+
+        BigDecimal priceB = convertToBigDecimal(price);
+        if (priceB == null) {
+            JOptionPane.showMessageDialog(manageProduct, "El precio no tiene el formato correcto");
+            return;
+        }
+
+        Category category = categoryService.findCategoryByName(categoryName);
+
+        if (productSelectedToModify != null) {
+            updateExistingProduct(productSelectedToModify, name, priceB, category);
+        } else {
+            createNewProduct(name, priceB, category);
+        }
+
+        fillTableProduct();
+        clearProduct();
+    }
+
+    private boolean validateInputs(String categoryName, String name, String price) {
+        if (categoryName.equals("Seleccionar") || categoryName.equals("Añadir")) {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione una categoría de producto");
+            return false;
+        } else if (name.equals("Nombre") || name.isEmpty()) {
+            JOptionPane.showMessageDialog(manageProduct, "Escriba el nombre del producto");
+            return false;
+        } else if (price.equals("Precio") || price.isEmpty()) {
+            JOptionPane.showMessageDialog(manageProduct, "Escriba el precio del producto");
+            return false;
+        } else if (listIdIngredientsInProduct.isEmpty()) {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione al menos un ingrediente");
+            return false;
+        }
+        return true;
+    }
+
+    private BigDecimal convertToBigDecimal(String price) {
+        try {
+            return new BigDecimal(price);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private void updateExistingProduct(Product product, String name, BigDecimal price, Category category) {
+        product.setName(name);
+        product.setPrice(price);
+        product.setCategory(category);
+        productService.saveModifyProduct(product);
+        updateProductIngredients(product);
+    }
+
+    private void createNewProduct(String name, BigDecimal price, Category category) {
+        Product product = new Product(null, name, price, category, null);
+        productService.saveModifyProduct(product);
+        updateProductIngredients(product);
+    }
+
+    private void updateProductIngredients(Product product) {
+        
+        List<ProductIngredient> existingIngredients = productIngredientService.findByProduct(product);
+
+        // Convertimos las listas a sets para una comparación más sencilla
+        Set<Long> existingIngredientIds = existingIngredients.stream()
+            .map(pi -> pi.getIngredient().getIngredientId())
+            .collect(Collectors.toSet());
+
+        Set<Long> newIngredientIds = new HashSet<>(listIdIngredientsInProduct);
+
+        // Ingredientes a eliminar
+        existingIngredients.stream()
+            .filter(pi -> !newIngredientIds.contains(pi.getIngredient().getIngredientId()))
+            .forEach(pi -> productIngredientService.deleteProductIngredient(pi));
+
+        // Ingredientes a añadir
+        newIngredientIds.stream()
+            .filter(id -> !existingIngredientIds.contains(id))
+            .forEach(id -> {
                 Ingredient ingredient = ingredientService.findIngredientById(id);
                 ProductIngredient productIngredient = new ProductIngredient(null, product, ingredient);
                 productIngredientService.saveProductIngredient(productIngredient);
-            }
-            fillTableProduct();
-            clearProduct();
-        }  
+            });
+            
     }
+    */
+    
     
     private void clearProduct(){
         manageProduct.getBoxCategory().setSelectedIndex(0);
@@ -650,7 +761,7 @@ public class Controller implements ActionListener{
     }
 
     
-    private void saveIngredient() {
+    private void saveOrModifyIngredient() {
         String name = manageIngredient.getEdtNameIngredient().getText();
         BigDecimal price = null;
         try {
@@ -662,7 +773,9 @@ public class Controller implements ActionListener{
 
         if (price != null && !name.isEmpty()) {
             if (ingredientSelectedToModify == null) {
-                Ingredient ingredient = new Ingredient(null, name, price);
+                Ingredient ingredient = new Ingredient();
+                ingredient.setName(name);
+                ingredient.setPrice(price);
                 ingredientService.addModifyIngredient(ingredient);
                 fillTableIngredients();
                 cleanDataIngredient();
@@ -690,6 +803,8 @@ public class Controller implements ActionListener{
     private void setCategory(String string) {
         manageProduct.getCategoryTxt().setText(string);
     }
+
+    
 
     
 

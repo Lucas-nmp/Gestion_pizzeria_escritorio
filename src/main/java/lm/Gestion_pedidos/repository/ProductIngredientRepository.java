@@ -1,6 +1,8 @@
 package lm.Gestion_pedidos.repository;
 
 import java.util.List;
+import lm.Gestion_pedidos.model.Ingredient;
+import lm.Gestion_pedidos.model.Product;
 import lm.Gestion_pedidos.model.ProductIngredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +16,12 @@ public interface ProductIngredientRepository extends JpaRepository<ProductIngred
     
      @Query("SELECT pi.ingredient.ingredientId FROM ProductIngredient pi WHERE pi.product.productId = :productId")
     List<Long> findIngredientIdsByProductId(@Param("productId") Long productId);
+    
+     @Query("SELECT pi FROM ProductIngredient pi WHERE pi.product.id = :productId")
+    List<ProductIngredient> findByProductId(@Param("productId") Long productId);
+
+    void deleteByProductAndIngredient(Product product, Ingredient ingredient);
+    
+    
     
 }
