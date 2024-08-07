@@ -34,10 +34,6 @@ public class ProductIngredientService {
     public void deleteProductIngredient(ProductIngredient productIngredient) {
         productIngredientRepository.delete(productIngredient);
     }
-
-    public void deleteByProductAndIngredient(Product product, Ingredient ingredient) {
-        productIngredientRepository.deleteByProductAndIngredient(product, ingredient);
-    }
     
     @Transactional
     public void deleteAll(List<ProductIngredient> productIngredients) {

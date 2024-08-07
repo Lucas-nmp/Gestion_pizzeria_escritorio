@@ -98,6 +98,7 @@ public class Controller implements ActionListener{
         fillIngredients(manageProduct.getBoxIngredients());
         fillCategorys(manageProduct.getBoxCategory());
         fillTableProduct();
+        clearProduct();
         manageProduct.setVisible(true);  
     }
     
@@ -551,11 +552,19 @@ public class Controller implements ActionListener{
                 productSelectedToModify.setPrice(priceB);
                 productSelectedToModify.setCategory(category);
                 List<Long> listId = getIdIngredients(ingredients);
-                JOptionPane.showMessageDialog(manageProduct, "Producto modificado" + String.join(",", listId.toString()));
-                // tengo la lista de ids modificada, habría que compararla con la lista actual o eliminarla y añadir la nueva directamente
+                List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(productSelectedToModify);
+                productIngredientService.deleteAll(listProductIngredient);
+                
+                
+                for (Long id : listId) {
+                    Ingredient ingredient = ingredientService.findIngredientById(id);
+                    ProductIngredient productIngredient = new ProductIngredient(null, productSelectedToModify, ingredient);
+                    productIngredientService.saveProductIngredient(productIngredient);
+                }
  
                 productService.saveModifyProduct(productSelectedToModify);
-            
+                
+                JOptionPane.showMessageDialog(manageProduct, "Producto modificado" + String.join(",", listId.toString()));
             } else {
                 // Crear un nuevo producto
                 Product product = new Product();
@@ -691,6 +700,7 @@ public class Controller implements ActionListener{
         manageProduct.getNameTxt().setText("Nombre");
         manageProduct.getPriceTxt().setText("Precio");
         manageProduct.getIngredientsTxt().setText("Ingredientes");
+        productSelectedToModify = null;
         listIdIngredientsInProduct.clear();
         listIngredientsProduct.clear();
         
@@ -763,7 +773,7 @@ public class Controller implements ActionListener{
     
     private void saveOrModifyIngredient() {
         String name = manageIngredient.getEdtNameIngredient().getText();
-        BigDecimal price = null;
+        BigDecimal price;
         try {
             price = new BigDecimal(manageIngredient.getEdtPriceIngredient().getText().replace(',', '.'));
         } catch (NumberFormatException e) {
@@ -771,7 +781,7 @@ public class Controller implements ActionListener{
             return;
         }
 
-        if (price != null && !name.isEmpty()) {
+        if (!name.isEmpty()) {
             if (ingredientSelectedToModify == null) {
                 Ingredient ingredient = new Ingredient();
                 ingredient.setName(name);
