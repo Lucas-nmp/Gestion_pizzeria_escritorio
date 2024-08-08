@@ -118,12 +118,10 @@ public class Controller implements ActionListener{
     public void setHomepage(Homepage homepage) {
         this.homepage = homepage;
         
-        this.homepage.getBtnCategory().addActionListener(this);
-        this.homepage.getBtnProduct().addActionListener(this);
-        this.homepage.getBtnIngredient().addActionListener(this);
-        
-        //this.homepage.getBtnProduct().addActionListener(e -> openManageProduct());  con este codigo me ahorraría todo la parte del action Listener
-        
+        this.homepage.getBtnCategory().addActionListener(e -> openAddCategory());
+        this.homepage.getBtnProduct().addActionListener(e -> openViewProducts());
+        this.homepage.getBtnIngredient().addActionListener(e -> openViewIngredients());
+          
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
             
@@ -289,23 +287,7 @@ public class Controller implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        // Acciones del homepage
-        if (e.getSource() == homepage.getBtnCategory()) {
-            openAddCategory();
-        }
         
-        if (e.getSource() == homepage.getBtnAddProduct()) {
-            openViewProducts();
-        }
-        
-        
-        if (e.getSource() == homepage.getBtnProduct()) {
-            openViewProducts();
-        }
-        
-        if (e.getSource() == homepage.getBtnIngredient()) {
-            openViewIngredients();
-        }
         
         // Acciones del AddCategory
         if (e.getSource() == addCategory.getCategorySave()) {

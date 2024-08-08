@@ -53,9 +53,7 @@ public class Homepage extends javax.swing.JFrame {
         return btnProduct;
     }
     
-    public JButton getBtnAddProduct() {
-        return productAdd;
-    }
+
     
     public JButton getBtnRemoveIngredient() {
         return ingredientRemove;
@@ -113,7 +111,7 @@ public class Homepage extends javax.swing.JFrame {
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
         ingredientRemove = new javax.swing.JButton();
-        productAdd = new javax.swing.JButton();
+        ingredientAdd = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         orderTable = new javax.swing.JTable();
@@ -351,11 +349,11 @@ public class Homepage extends javax.swing.JFrame {
         ingredientRemove.setText("Quitar ingrediente");
         ingredientRemove.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        productAdd.setBackground(new java.awt.Color(120, 168, 252));
-        productAdd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        productAdd.setForeground(new java.awt.Color(0, 0, 102));
-        productAdd.setText("Añadir ingrediente");
-        productAdd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ingredientAdd.setBackground(new java.awt.Color(120, 168, 252));
+        ingredientAdd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ingredientAdd.setForeground(new java.awt.Color(0, 0, 102));
+        ingredientAdd.setText("Añadir ingrediente");
+        ingredientAdd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -437,7 +435,7 @@ public class Homepage extends javax.swing.JFrame {
                         .addComponent(boxIngredientModify, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(productAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ingredientAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ingredientRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,7 +474,7 @@ public class Homepage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(boxIngredientModify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(productAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ingredientAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ingredientRemove)
                 .addGap(29, 29, 29)
@@ -545,6 +543,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JTextField customerPhone;
     private javax.swing.JButton homepageBtnAdd;
     private javax.swing.JButton homepageBtnAdd2;
+    private javax.swing.JButton ingredientAdd;
     private javax.swing.JButton ingredientRemove;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
@@ -570,7 +569,6 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JLabel orderName;
     private javax.swing.JLabel orderPhone;
     private javax.swing.JTable orderTable;
-    private javax.swing.JButton productAdd;
     private javax.swing.JLabel totalPrice;
     // End of variables declaration//GEN-END:variables
 }
