@@ -2,6 +2,7 @@
 package lm.Gestion_pedidos.service;
 
 import java.util.List;
+import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Product;
 import lm.Gestion_pedidos.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,9 @@ public class ProductService {
     
     public void deleteProduct(Product product) {
         productRepository.delete(product);
+    }
+    
+    public List<Product> getProductByCategory(Category category) {
+        return productRepository.findByCategory(category);
     }
 }

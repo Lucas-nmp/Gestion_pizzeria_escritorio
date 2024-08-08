@@ -78,7 +78,11 @@ public class Controller implements ActionListener{
         homepage.setResizable(false);
         fillIngredients(homepage.getIngredientModify());
         fillCategorys(homepage.getCategorys()); 
-        fillTableProduct();
+        homepage.getCategorys().setSelectedIndex(1);
+        String selectedItem = (String) homepage.getCategorys().getSelectedItem();
+        Category category = categoryService.findCategoryByName(selectedItem);
+        
+        fillTableProduct(category);
         homepage.setVisible(true);  
     }
     
@@ -98,7 +102,7 @@ public class Controller implements ActionListener{
         fillIngredients(manageProduct.getBoxIngredients());
         fillCategorys(manageProduct.getBoxCategory());
         fillTableProduct();
-        clearProduct();
+        clearViewProduct();
         manageProduct.setVisible(true);  
     }
     
@@ -117,6 +121,8 @@ public class Controller implements ActionListener{
         this.homepage.getBtnCategory().addActionListener(this);
         this.homepage.getBtnProduct().addActionListener(this);
         this.homepage.getBtnIngredient().addActionListener(this);
+        
+        //this.homepage.getBtnProduct().addActionListener(e -> openManageProduct());  con este codigo me ahorraría todo la parte del action Listener
         
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
@@ -389,13 +395,49 @@ public class Controller implements ActionListener{
         });   
     }
     
-    // llenar sólo la tabla de el manageProduct, la tabla del homePage se tiene que llenar al seleccionar la categoría y según sea esta 
-    private void fillTableProduct() {
-        DefaultTableModel model = new DefaultTableModel();
+    private void handleCategorySelection() {
+        String selectedItem = (String) homepage.getCategorys().getSelectedItem();
+        
+        if (selectedItem != null && !selectedItem.equals("Añadir")) {
+            Category category = categoryService.findCategoryByName(selectedItem);
+            fillTableProduct(category);  
+        }
+    }
+    
+    private void fillHeadersTableProducts(DefaultTableModel model) {
         String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
         model.setColumnIdentifiers(headers);
         homepage.getTableProducts().setModel(model);
         manageProduct.getTableProducts().setModel(model);
+    }
+    
+    private void fillTableProduct(Category category) {
+        DefaultTableModel model = new DefaultTableModel();
+        fillHeadersTableProducts(model);
+        
+        List<Product> listProducts = productService.getProductByCategory(category);
+        
+        listProducts.forEach((product) -> {
+            HashSet<String> ingredientList = getIngredientsInProductById(product.getProductId());
+            Object[] productLine = {
+                product.getProductId(), 
+                product.getName(), 
+                String.join(", ", ingredientList), 
+                product.getPrice()
+                   
+            };
+            model.addRow(productLine);
+        });   
+        
+        columnWidthProductHomepage(homepage.getTableProducts());
+        columnWidthProductManageProduct(manageProduct.getTableProducts());
+    
+    }
+    
+
+    private void fillTableProduct() {
+        DefaultTableModel model = new DefaultTableModel();
+        fillHeadersTableProducts(model);
         
         List<Product> listProducts = productService.findAllProducts();
         
@@ -436,7 +478,7 @@ public class Controller implements ActionListener{
     }
     
     private void columnWidthProductManageProduct(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático de tamaño
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30); 
         table.getColumnModel().getColumn(1).setPreferredWidth(100); 
         table.getColumnModel().getColumn(2).setPreferredWidth(782); 
@@ -507,26 +549,13 @@ public class Controller implements ActionListener{
     }
     
     
-
-    private void handleCategorySelection() {
-        String selectedItem = (String) homepage.getCategorys().getSelectedItem();
-        if (selectedItem != null && !selectedItem.equals("Añadir")) {
-            // añadir un elemento a la tabla que diga qua añada categorias y productos
-            //JOptionPane.showMessageDialog(homepage, selectedItem);
-        } else {
-            fillTableProduct(); // para que llene la lista de productos cuando se selecciona una nueva categoría
-            // mostrar la lista de productos de la categoría seleccionada
-            //JOptionPane.showMessageDialog(homepage, "Añada Categorias y productos ");
-        }
-        
-    }
     
     private void saveOrModifyProduct() {
         String categoryName = manageProduct.getCategoryTxt().getText();
         String name = manageProduct.getNameTxt().getText();
         String price = manageProduct.getPriceTxt().getText();
         String ingredients = manageProduct.getIngredientsTxt().getText();
-        BigDecimal priceB = null;
+        BigDecimal priceB;
 
         if (categoryName.equals("Seleccionar") || categoryName.equals("Añadir")) {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione una categoría de producto");
@@ -564,7 +593,7 @@ public class Controller implements ActionListener{
  
                 productService.saveModifyProduct(productSelectedToModify);
                 
-                JOptionPane.showMessageDialog(manageProduct, "Producto modificado" + String.join(",", listId.toString()));
+                JOptionPane.showMessageDialog(manageProduct, "Producto modificado");
             } else {
                 // Crear un nuevo producto
                 Product product = new Product();
@@ -572,7 +601,7 @@ public class Controller implements ActionListener{
                 product.setPrice(priceB);
                 product.setCategory(category);
                 productService.saveModifyProduct(product);
-
+                             
                 for (Long id : listIdIngredientsInProduct) {
                     Ingredient ingredient = ingredientService.findIngredientById(id);
                     ProductIngredient productIngredient = new ProductIngredient(null, product, ingredient);
@@ -582,7 +611,7 @@ public class Controller implements ActionListener{
             }
 
             fillTableProduct();
-            clearProduct();
+            clearViewProduct();
         }
     }
     
@@ -693,7 +722,7 @@ public class Controller implements ActionListener{
     */
     
     
-    private void clearProduct(){
+    private void clearViewProduct(){
         manageProduct.getBoxCategory().setSelectedIndex(0);
         manageProduct.getEdtNameProduct().setText("");
         manageProduct.getEdtPriceProduct().setText("");
