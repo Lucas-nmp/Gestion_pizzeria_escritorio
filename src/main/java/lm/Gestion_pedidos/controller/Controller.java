@@ -7,6 +7,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +45,7 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Component
-public class Controller implements ActionListener{
+public class Controller {
     
     
     private HashSet<String> listIngredientsProduct = new HashSet<>();
@@ -103,6 +105,15 @@ public class Controller implements ActionListener{
         fillCategorys(manageProduct.getBoxCategory());
         fillTableProduct();
         clearViewProduct();
+        manageProduct.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                homepage.getCategorys().setSelectedIndex(1);
+                String selectedItem = (String) homepage.getCategorys().getSelectedItem();
+                Category category = categoryService.findCategoryByName(selectedItem);
+            }
+        
+        });
         manageProduct.setVisible(true);  
     }
     
@@ -131,8 +142,14 @@ public class Controller implements ActionListener{
     @Autowired
     public void setAddCategory(AddCategory addCategory) {
         this.addCategory = addCategory;
-        this.addCategory.getDeleteCategory().addActionListener(this);
-        this.addCategory.getCategorySave().addActionListener(this);
+        this.addCategory.getDeleteCategory().addActionListener(e -> deleteCategory());
+        this.addCategory.getCategorySave().addActionListener(e -> {
+            saveCategory();
+            fillTableCategory();
+            fillCategorys(homepage.getCategorys()); 
+            cleanCategory();    
+        });
+        
         this.addCategory.getCategoryName().addActionListener((ActionEvent e) -> {
             saveCategory();
             fillTableCategory();
@@ -165,9 +182,9 @@ public class Controller implements ActionListener{
     public void setManageProduct(ManageProduct manageProduct) {
         this.manageProduct = manageProduct;
         
-        this.manageProduct.getBtnAddIngredient().addActionListener(this);
-        this.manageProduct.getBtnDeleteIngredient().addActionListener(this);
-        this.manageProduct.getBtnSaveProduct().addActionListener(this);
+        this.manageProduct.getBtnAddIngredient().addActionListener(e -> addIngredientToProduct());
+        this.manageProduct.getBtnDeleteIngredient().addActionListener(e -> deleteIngredientFromProduct());
+        this.manageProduct.getBtnSaveProduct().addActionListener(e -> deleteIngredientFromProduct());
         
         this.manageProduct.getEdtNameProduct().addActionListener((ActionEvent e) -> {
             setNameProduct(manageProduct.getEdtNameProduct().getText()); 
@@ -248,8 +265,8 @@ public class Controller implements ActionListener{
     public void setManageIngredient(ManageIngredient manageIngredient) {
         this.manageIngredient = manageIngredient;
         
-        this.manageIngredient.getBtnSaveIngredient().addActionListener(this);
-        this.manageIngredient.getBtnDeleteIngredient().addActionListener(this);
+        this.manageIngredient.getBtnSaveIngredient().addActionListener(e -> deleteIngredient());
+        this.manageIngredient.getBtnDeleteIngredient().addActionListener(e -> saveOrModifyIngredient());
         
         //permite guardar un ingrediente con la tecla enter desde el textField de precio
         this.manageIngredient.getEdtPriceIngredient().addActionListener((ActionEvent e) -> {
@@ -283,47 +300,6 @@ public class Controller implements ActionListener{
     }
     
     
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
-        
-        
-        // Acciones del AddCategory
-        if (e.getSource() == addCategory.getCategorySave()) {
-            saveCategory();
-            fillTableCategory();
-            fillCategorys(homepage.getCategorys()); 
-            cleanCategory();
-        }
-        
-        if (e.getSource() == addCategory.getDeleteCategory()) {
-            deleteCategory();
-        }
-        
-        // Acciones del ManageProduct
-        if (e.getSource() == manageProduct.getBtnSaveProduct()) {
-            saveOrModifyProduct();
-        }
-        
-        if (e.getSource() == manageProduct.getBtnAddIngredient()) {
-            addIngredientToProduct();
-        }
-        
-        if (e.getSource() == manageProduct.getBtnDeleteIngredient()) {
-            deleteIngredientFromProduct();
-        }    
-        
-        // Acciones del ManageIngredient
-        if (e.getSource() == manageIngredient.getBtnDeleteIngredient()) {
-            deleteIngredient();
-        }
-        
-        if (e.getSource() == manageIngredient.getBtnSaveIngredient()) {
-            saveOrModifyIngredient();
-        }
-    }
-
     private void saveCategory() {
         String nameCategory = addCategory.getCategoryName().getText();
         if (!nameCategory.isEmpty()) {
