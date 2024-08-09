@@ -27,6 +27,7 @@ public class Customer {
     private String name;
     private String phone;
     private String address;
+    private String status;
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;

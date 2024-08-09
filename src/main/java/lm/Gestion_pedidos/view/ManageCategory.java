@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
  * @author Lucas
  */
 @Component
-public class AddCategory extends javax.swing.JDialog {
+public class ManageCategory extends javax.swing.JDialog {
 
     /**
      * Creates new form AddCategory
      */
     @Autowired
-    public AddCategory() {
+    public ManageCategory() {
         
         initComponents();
     }

@@ -2,7 +2,6 @@ package lm.Gestion_pedidos.controller;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -14,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -28,12 +25,14 @@ import lm.Gestion_pedidos.service.CategoryService;
 import lm.Gestion_pedidos.service.IngredientService;
 import lm.Gestion_pedidos.service.ProductIngredientService;
 import lm.Gestion_pedidos.service.ProductService;
-import lm.Gestion_pedidos.view.AddCategory;
+import lm.Gestion_pedidos.view.ManageCategory;
 import lm.Gestion_pedidos.view.Homepage;
+import lm.Gestion_pedidos.view.ManageCustomer;
 import lm.Gestion_pedidos.view.ManageIngredient;
 import lm.Gestion_pedidos.view.ManageProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -70,9 +69,10 @@ public class Controller {
     private ProductIngredientService productIngredientService;
     
     private Homepage homepage;
-    private AddCategory addCategory;
+    private ManageCategory addCategory;
     private ManageProduct manageProduct;
     private ManageIngredient manageIngredient;
+    private ManageCustomer manageCustomer;
     
 
     public void viewHomePage() {
@@ -88,7 +88,7 @@ public class Controller {
         homepage.setVisible(true);  
     }
     
-    private void openAddCategory() {
+    private void openManageCategory() {
         
         addCategory.setLocationRelativeTo(null);
         addCategory.setResizable(false);
@@ -97,7 +97,7 @@ public class Controller {
         addCategory.setVisible(true);  
     }
     
-    private void openViewProducts() {
+    private void openManageProducts() {
         manageProduct.setLocationRelativeTo(null);
         manageProduct.setResizable(false);
         manageProduct.setModal(true);
@@ -117,7 +117,7 @@ public class Controller {
         manageProduct.setVisible(true);  
     }
     
-    private void openViewIngredients() {
+    private void openManageIngredients() {
         manageIngredient.setLocationRelativeTo(null);
         manageIngredient.setResizable(false);
         manageIngredient.setModal(true);
@@ -125,13 +125,22 @@ public class Controller {
         manageIngredient.setVisible(true);
     }
     
+    private void openManageCustomer() {
+        manageCustomer.setLocationRelativeTo(null);
+        manageCustomer.setResizable(false);
+        manageCustomer.setModal(true);
+        manageCustomer.setVisible(true);
+        
+    }
+    
     @Autowired
     public void setHomepage(Homepage homepage) {
         this.homepage = homepage;
         
-        this.homepage.getBtnCategory().addActionListener(e -> openAddCategory());
-        this.homepage.getBtnProduct().addActionListener(e -> openViewProducts());
-        this.homepage.getBtnIngredient().addActionListener(e -> openViewIngredients());
+        this.homepage.getBtnCategory().addActionListener(e -> openManageCategory());
+        this.homepage.getBtnProduct().addActionListener(e -> openManageProducts());
+        this.homepage.getBtnIngredient().addActionListener(e -> openManageIngredients());
+        this.homepage.getBtnCustomer().addActionListener(e -> openManageCustomer());
           
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
@@ -140,7 +149,7 @@ public class Controller {
     }
     
     @Autowired
-    public void setAddCategory(AddCategory addCategory) {
+    public void setManageCategory(ManageCategory addCategory) {
         this.addCategory = addCategory;
         this.addCategory.getDeleteCategory().addActionListener(e -> deleteCategory());
         this.addCategory.getCategorySave().addActionListener(e -> {
@@ -174,7 +183,7 @@ public class Controller {
             
         });
         
-        // TODO seleccionar categoría de la tabla y permitir eliminarla o modificarla
+        // TODO seleccionar categoría de la tabla y permitir modificarla
         
     }
     
@@ -184,7 +193,8 @@ public class Controller {
         
         this.manageProduct.getBtnAddIngredient().addActionListener(e -> addIngredientToProduct());
         this.manageProduct.getBtnDeleteIngredient().addActionListener(e -> deleteIngredientFromProduct());
-        this.manageProduct.getBtnSaveProduct().addActionListener(e -> deleteIngredientFromProduct());
+        this.manageProduct.getBtnSaveProduct().addActionListener(e -> saveOrModifyProduct());
+        this.manageProduct.getBtnDeleteProduct().addActionListener(e -> deleteProduct());
         
         this.manageProduct.getEdtNameProduct().addActionListener((ActionEvent e) -> {
             setNameProduct(manageProduct.getEdtNameProduct().getText()); 
@@ -253,14 +263,7 @@ public class Controller {
         });    
     }
     
-    private HashSet<Long> updateIdIngredientesInProduct(HashSet<String> listIngredientsProduct) {
-        for (String nameIngredient : listIngredientsProduct) {
-            Ingredient i = ingredientService.findIngredientByName(nameIngredient);
-            listIdIngredientsInProduct.add(i.getIngredientId());
-        }
-        return listIdIngredientsInProduct;
-    }
-    
+ 
     @Autowired
     public void setManageIngredient(ManageIngredient manageIngredient) {
         this.manageIngredient = manageIngredient;
@@ -299,6 +302,15 @@ public class Controller {
         });
     }
     
+    @Autowired
+    public void setManageCustomer(ManageCustomer manageCustomer) {
+        this.manageCustomer = manageCustomer;
+        
+        this.manageCustomer.getBtnDeleteCustomer().addActionListener(e -> deleteCustomer());
+        this.manageCustomer.getBtnLookForCustomer().addActionListener(e -> lookForCustomer());
+        this.manageCustomer.getBtnSaveCustomer().addActionListener(e -> saveOrModifyCustomer());
+    }
+    
     
     private void saveCategory() {
         String nameCategory = addCategory.getCategoryName().getText();
@@ -325,16 +337,23 @@ public class Controller {
     
     
     private void deleteCategory() {
-        if (categorySelectedToModify != null) {
+        if (categorySelectedToModify == null) {
+            JOptionPane.showMessageDialog(addCategory, "Seleccione una Categoría de la tabla");
+            return;
+        }
+
+        try {
             categoryService.deleteCategory(categorySelectedToModify);
+            JOptionPane.showMessageDialog(addCategory, "Categoría eliminada");
+        } catch (DataIntegrityViolationException e) {
+            JOptionPane.showMessageDialog(addCategory, "La categoría contiene productos. No se puede eliminar");
+        } finally {
             fillTableCategory();
             fillCategorys(homepage.getCategorys());
+            homepage.getCategorys().setSelectedIndex(1);
             cleanCategory();
             categorySelectedToModify = null;
-        } else {
-            JOptionPane.showMessageDialog(addCategory, "Seleccione una Categoría de la tabla");
         }
-        
     }
     
     private void fillTableCategory() {
@@ -487,6 +506,14 @@ public class Controller {
                 boxCategorys.addItem(item);
             });
         } 
+    }
+    
+    private HashSet<Long> updateIdIngredientesInProduct(HashSet<String> listIngredientsProduct) {
+        for (String nameIngredient : listIngredientsProduct) {
+            Ingredient i = ingredientService.findIngredientByName(nameIngredient);
+            listIdIngredientsInProduct.add(i.getIngredientId());
+        }
+        return listIdIngredientsInProduct;
     }
     
     private void fillIngredients(JComboBox boxIngredients) {
@@ -799,6 +826,29 @@ public class Controller {
 
     private void setCategory(String string) {
         manageProduct.getCategoryTxt().setText(string);
+    }
+
+    private void deleteProduct() {
+        if (productSelectedToModify != null) {
+            List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(productSelectedToModify);
+            productIngredientService.deleteAll(listProductIngredient);
+            productService.deleteProduct(productSelectedToModify);
+            JOptionPane.showMessageDialog(manageProduct, "Producto eliminado correctamente");
+            fillTableProduct();
+            clearViewProduct();
+        }
+    }
+
+    private void deleteCustomer() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void lookForCustomer() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void saveOrModifyCustomer() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     
