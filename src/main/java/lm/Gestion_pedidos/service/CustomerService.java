@@ -1,5 +1,6 @@
 package lm.Gestion_pedidos.service;
 
+import java.util.List;
 import lm.Gestion_pedidos.model.Customer;
 import lm.Gestion_pedidos.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class CustomerService {
     
     public void addCustomer(Customer customer) {
         customerRepository.save(customer);
+    }
+    
+    public List<Customer> findAllCustomers() {
+        return customerRepository.findAll();
     }
     
     

@@ -18,10 +18,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lm.Gestion_pedidos.model.Category;
+import lm.Gestion_pedidos.model.Customer;
 import lm.Gestion_pedidos.model.Ingredient;
 import lm.Gestion_pedidos.model.Product;
 import lm.Gestion_pedidos.model.ProductIngredient;
 import lm.Gestion_pedidos.service.CategoryService;
+import lm.Gestion_pedidos.service.CustomerService;
 import lm.Gestion_pedidos.service.IngredientService;
 import lm.Gestion_pedidos.service.ProductIngredientService;
 import lm.Gestion_pedidos.service.ProductService;
@@ -52,6 +54,7 @@ public class Controller {
     private Ingredient ingredientSelectedToModify;
     private Category categorySelectedToModify;
     private Product productSelectedToModify;
+    private Customer customerSelectedToModify;
     
     @Autowired
     private ApplicationContext context;
@@ -67,6 +70,9 @@ public class Controller {
     
     @Autowired
     private ProductIngredientService productIngredientService;
+    
+    @Autowired
+    private CustomerService customerService;
     
     private Homepage homepage;
     private ManageCategory addCategory;
@@ -129,6 +135,7 @@ public class Controller {
         manageCustomer.setLocationRelativeTo(null);
         manageCustomer.setResizable(false);
         manageCustomer.setModal(true);
+        fillTableCustomer();
         manageCustomer.setVisible(true);
         
     }
@@ -183,7 +190,6 @@ public class Controller {
             
         });
         
-        // TODO seleccionar categoría de la tabla y permitir modificarla
         
     }
     
@@ -223,7 +229,6 @@ public class Controller {
         setCategory((String) manageProduct.getBoxCategory().getSelectedItem());
     });
         
-        //TODO: seleccionar producto de la tabla y permitir eliminarlo y editarlo
         this.manageProduct.getTableProducts().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -309,6 +314,32 @@ public class Controller {
         this.manageCustomer.getBtnDeleteCustomer().addActionListener(e -> deleteCustomer());
         this.manageCustomer.getBtnLookForCustomer().addActionListener(e -> lookForCustomer());
         this.manageCustomer.getBtnSaveCustomer().addActionListener(e -> saveOrModifyCustomer());
+        
+        this.manageCustomer.getTableCustomer().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    customerSelectedToModify = new Customer();
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    
+                    Long id = (Long) target.getValueAt(row, 0);
+                    String name = (String) target.getValueAt(row, 1);
+                    String addres = (String) target.getValueAt(row, 2);
+                    String phone = (String) target.getValueAt(row, 3);
+                    String status = (String) target.getValueAt(row, 4);
+                    
+                    manageCustomer.getEdtNameCustomer().setText(name);
+                    manageCustomer.getEdtAddresCustomer().setText(addres);
+                    manageCustomer.getEdtPhoneCustomer().setText(phone);
+                    manageCustomer.getEdtStatusCustomer().setText(status);
+                    
+                    customerSelectedToModify.setCustomerId(id);
+                }
+            }
+            
+        });
+                
     }
     
     
@@ -840,15 +871,97 @@ public class Controller {
     }
 
     private void deleteCustomer() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (categorySelectedToModify != null) {
+            customerService.deleteCustomer(customerSelectedToModify);
+            customerSelectedToModify = null;
+            clearViewCustomer();
+            fillTableCustomer();
+        }
     }
 
     private void lookForCustomer() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
 
     private void saveOrModifyCustomer() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String name = manageCustomer.getEdtNameCustomer().getText();
+        String phone = manageCustomer.getEdtPhoneCustomer().getText();
+        String addres = manageCustomer.getEdtAddresCustomer().getText();
+        String status = manageCustomer.getEdtStatusCustomer().getText();
+        
+        validateInputsCustomer(name, phone, addres);
+        
+        // comprobar si existe un cliente con el mismo telefono
+        
+        if (customerSelectedToModify != null) {
+            customerSelectedToModify.setName(name);
+            customerSelectedToModify.setAddress(addres);
+            customerSelectedToModify.setPhone(phone);
+            customerSelectedToModify.setStatus(status);
+            customerService.addCustomer(customerSelectedToModify);
+            clearViewCustomer();
+            JOptionPane.showMessageDialog(manageCustomer, "Cliente modificado correctamente");
+            fillTableCustomer();
+        } else {
+            Customer customer = new Customer(null, name, phone, addres, status, null);
+            customerService.addCustomer(customer);
+            clearViewCustomer();
+            JOptionPane.showMessageDialog(manageCustomer, "Cliente añadido Correctamente");
+            fillTableCustomer();
+        }
+        
+        
+            
+        
+        
+        
+    }
+
+    private void clearViewCustomer() {
+        manageCustomer.getEdtNameCustomer().setText("");
+        manageCustomer.getEdtAddresCustomer().setText("");
+        manageCustomer.getEdtPhoneCustomer().setText("");
+        manageCustomer.getEdtStatusCustomer().setText("");
+        
+    }
+
+    private void fillTableCustomer() {
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"ID" ,"Nombre", "Dirección", "Teléfono", "Observaciones"};
+        model.setColumnIdentifiers(headers);
+        manageCustomer.getTableCustomer().setModel(model);
+        
+        List<Customer> listCustomer = customerService.findAllCustomers();
+        if (!listCustomer.isEmpty()) {
+            listCustomer.forEach((customer) -> {
+                Object[] customerLine = {
+                    customer.getCustomerId(),
+                    customer.getName(), 
+                    customer.getAddress(), 
+                    customer.getPhone(), 
+                    customer.getStatus()
+                };
+                model.addRow(customerLine);
+            });
+        }
+    }
+    
+    
+
+    private boolean validateInputsCustomer(String name, String phone, String addres) {
+        if (name.equals("Nombre") || name.isEmpty()) {
+            JOptionPane.showMessageDialog(manageCustomer, "El nombre no puede estar vacío");
+            return false;
+        } else if(phone.equals("Teléfono") || phone.isEmpty()) {
+            JOptionPane.showMessageDialog(manageCustomer, "El teléfono no puede estar vacío");
+            return false;
+        } else if (addres.equals("Dirección") || addres.isEmpty()) {
+            JOptionPane.showMessageDialog(manageCustomer, "La dirección no puede estar vacía");
+            return false;
+        } 
+        
+        return true;
+        
     }
 
     
