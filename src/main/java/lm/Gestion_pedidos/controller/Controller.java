@@ -100,6 +100,7 @@ public class Controller {
         addCategory.setLocationRelativeTo(null);
         addCategory.setResizable(false);
         fillTableCategory();
+        cleanCategory();
         addCategory.setModal(true);
         addCategory.setVisible(true);  
     }
@@ -129,14 +130,16 @@ public class Controller {
         manageIngredient.setResizable(false);
         manageIngredient.setModal(true);
         fillTableIngredients();
+        cleanDataIngredient();
         manageIngredient.setVisible(true);
     }
     
-    private void openManageCustomer() {
+    private void openManageCustomer(String phone) {
         manageCustomer.setLocationRelativeTo(null);
         manageCustomer.setResizable(false);
         manageCustomer.setModal(true);
         fillTableCustomer();
+        clearViewCustomer(phone);
         manageCustomer.setVisible(true);
         
     }
@@ -148,7 +151,12 @@ public class Controller {
         this.homepage.getBtnCategory().addActionListener(e -> openManageCategory());
         this.homepage.getBtnProduct().addActionListener(e -> openManageProducts());
         this.homepage.getBtnIngredient().addActionListener(e -> openManageIngredients());
-        this.homepage.getBtnCustomer().addActionListener(e -> openManageCustomer());
+        this.homepage.getBtnCustomer().addActionListener(e -> openManageCustomer(""));
+        
+        this.homepage.getEdtPhoneCustomer().addActionListener((ActionEvent e) -> {
+            String phone = homepage.getEdtPhoneCustomer().getText();
+            lookForCustomer(phone);
+        });
           
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
@@ -318,6 +326,12 @@ public class Controller {
         
         this.manageCustomer.getEdtPhoneCustomer().addActionListener((ActionEvent e) ->{
             lookForCustomer();
+        });
+        
+        this.manageCustomer.getEdtAddresCustomer().addActionListener((ActionEvent e) -> {
+            saveOrModifyCustomer();
+            clearViewCustomer("");
+            manageCustomer.dispose();
         });
         
         
@@ -525,6 +539,7 @@ public class Controller {
     
     private void cleanCategory(){
         addCategory.getCategoryName().setText("");
+        categorySelectedToModify = null;
     }
 
     private void fillCategorys(JComboBox boxCategorys) {
@@ -815,7 +830,7 @@ public class Controller {
             fillTableIngredients();
             cleanDataIngredient();
             fillIngredients(homepage.getIngredientModify());
-            ingredientSelectedToModify = null;
+            
         } else {
             JOptionPane.showMessageDialog(manageIngredient, "Seleccione un ingrediente");
         }
@@ -849,7 +864,7 @@ public class Controller {
                 fillTableIngredients();
                 cleanDataIngredient();
                 fillIngredients(homepage.getIngredientModify());
-                ingredientSelectedToModify = null;
+                
             }
         } else {
             JOptionPane.showMessageDialog(manageIngredient, "Tiene que escribir el nombre y el precio del ingrediente");
@@ -859,6 +874,7 @@ public class Controller {
     private void cleanDataIngredient() {
         manageIngredient.getEdtNameIngredient().setText("");
         manageIngredient.getEdtPriceIngredient().setText("");
+        ingredientSelectedToModify = null;
         
     }
 
@@ -878,19 +894,33 @@ public class Controller {
     }
 
     private void deleteCustomer() {
-        if (categorySelectedToModify != null) {
+        if (customerSelectedToModify != null) {
             customerService.deleteCustomer(customerSelectedToModify);
             customerSelectedToModify = null;
-            clearViewCustomer();
+            JOptionPane.showMessageDialog(manageCustomer, "Cliente eliminado correctamente");
+            clearViewCustomer("");
             fillTableCustomer();
         }
     }
 
+    private void lookForCustomer(String phone) {
+        if(!phone.isEmpty()){
+            Customer customer = customerService.findCustomerByPhone(phone);
+            if (customer == null) {
+                openManageCustomer(phone);
+            } else {
+                homepage.getTxtAddresCustomer().setText(customer.getAddress());
+                homepage.getTxtNameCustomer().setText(customer.getName());
+            }
+        } 
+        
+    }
+    
     private void lookForCustomer() {
         customerSelectedToModify = new Customer();
         String phone = manageCustomer.getEdtPhoneCustomer().getText();
         if (phone.isEmpty()) {
-            JOptionPane.showMessageDialog(manageCustomer, "Escriba un teléfono para buscar al cliente");
+            JOptionPane.showMessageDialog(manageCustomer, "Escriba un teléfono para buscar un cliente");
         } else {
             Customer customer = customerService.findCustomerByPhone(phone);
             if (customer == null) {
@@ -903,9 +933,7 @@ public class Controller {
                 customerSelectedToModify.setCustomerId(customer.getCustomerId());
                 
             }
-        }
-            
-        
+        }   
     }
 
     private void saveOrModifyCustomer() {
@@ -914,7 +942,9 @@ public class Controller {
         String addres = manageCustomer.getEdtAddresCustomer().getText();
         String status = manageCustomer.getEdtStatusCustomer().getText();
         
-        validateInputsCustomer(name, phone, addres);
+        if (!validateInputsCustomer(name, phone, addres)){
+            return;
+        }
         
         // comprobar si existe un cliente con el mismo telefono
         
@@ -924,13 +954,13 @@ public class Controller {
             customerSelectedToModify.setPhone(phone);
             customerSelectedToModify.setStatus(status);
             customerService.addCustomer(customerSelectedToModify);
-            clearViewCustomer();
+            clearViewCustomer(phone);
             JOptionPane.showMessageDialog(manageCustomer, "Cliente modificado correctamente");
             fillTableCustomer();
         } else {
             Customer customer = new Customer(null, name, phone, addres, status, null);
             customerService.addCustomer(customer);
-            clearViewCustomer();
+            clearViewCustomer(phone);
             JOptionPane.showMessageDialog(manageCustomer, "Cliente añadido Correctamente");
             fillTableCustomer();
         }
@@ -942,11 +972,12 @@ public class Controller {
         
     }
 
-    private void clearViewCustomer() {
+    private void clearViewCustomer(String phone) {
         manageCustomer.getEdtNameCustomer().setText("");
         manageCustomer.getEdtAddresCustomer().setText("");
-        manageCustomer.getEdtPhoneCustomer().setText("");
+        manageCustomer.getEdtPhoneCustomer().setText(phone);
         manageCustomer.getEdtStatusCustomer().setText("");
+        customerSelectedToModify = null;
         
     }
 

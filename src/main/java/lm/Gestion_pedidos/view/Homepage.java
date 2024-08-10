@@ -2,7 +2,9 @@ package lm.Gestion_pedidos.view;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +55,17 @@ public class Homepage extends javax.swing.JFrame {
         return btnProduct;
     }
     
-
+    public JTextField getEdtPhoneCustomer() {
+        return customerPhone;
+    }
+    
+    public JLabel getTxtAddresCustomer() {
+        return customerAddres;
+    }
+    
+    public JLabel getTxtNameCustomer() {
+        return customerName;
+    }
     
     public JButton getBtnRemoveIngredient() {
         return ingredientRemove;
