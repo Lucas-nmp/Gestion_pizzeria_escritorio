@@ -55,6 +55,7 @@ public class Controller {
     private Category categorySelectedToModify;
     private Product productSelectedToModify;
     private Customer customerSelectedToModify;
+    private Customer customerSelectedForTheOrder;
     
     @Autowired
     private ApplicationContext context;
@@ -314,6 +315,12 @@ public class Controller {
         this.manageCustomer.getBtnDeleteCustomer().addActionListener(e -> deleteCustomer());
         this.manageCustomer.getBtnLookForCustomer().addActionListener(e -> lookForCustomer());
         this.manageCustomer.getBtnSaveCustomer().addActionListener(e -> saveOrModifyCustomer());
+        
+        this.manageCustomer.getEdtPhoneCustomer().addActionListener((ActionEvent e) ->{
+            lookForCustomer();
+        });
+        
+        
         
         this.manageCustomer.getTableCustomer().addMouseListener(new MouseAdapter() {
             @Override
@@ -880,6 +887,24 @@ public class Controller {
     }
 
     private void lookForCustomer() {
+        customerSelectedToModify = new Customer();
+        String phone = manageCustomer.getEdtPhoneCustomer().getText();
+        if (phone.isEmpty()) {
+            JOptionPane.showMessageDialog(manageCustomer, "Escriba un teléfono para buscar al cliente");
+        } else {
+            Customer customer = customerService.findCustomerByPhone(phone);
+            if (customer == null) {
+                JOptionPane.showMessageDialog(manageCustomer, "Cliente no encontrado");
+            } else {
+                manageCustomer.getEdtNameCustomer().setText(customer.getName());
+                manageCustomer.getEdtAddresCustomer().setText(customer.getAddress());
+                manageCustomer.getEdtStatusCustomer().setText(customer.getStatus());
+                
+                customerSelectedToModify.setCustomerId(customer.getCustomerId());
+                
+            }
+        }
+            
         
     }
 
