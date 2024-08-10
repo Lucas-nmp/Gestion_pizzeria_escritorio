@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Customer;
 import lm.Gestion_pedidos.model.Ingredient;
@@ -56,6 +57,9 @@ public class Controller {
     private Product productSelectedToModify;
     private Customer customerSelectedToModify;
     private Customer customerSelectedForTheOrder;
+    private Product productSelectedForTheOrder;
+    private HashSet<String> modifications;
+    private BigDecimal modificationsPrice = BigDecimal.ZERO;
     
     @Autowired
     private ApplicationContext context;
@@ -87,6 +91,8 @@ public class Controller {
         homepage.setResizable(false);
         fillIngredients(homepage.getIngredientModify());
         fillCategorys(homepage.getCategorys()); 
+        fillHeadersOrder();
+        modifications = new HashSet<>();
         homepage.getCategorys().setSelectedIndex(1);
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
         Category category = categoryService.findCategoryByName(selectedItem);
@@ -152,6 +158,10 @@ public class Controller {
         this.homepage.getBtnProduct().addActionListener(e -> openManageProducts());
         this.homepage.getBtnIngredient().addActionListener(e -> openManageIngredients());
         this.homepage.getBtnCustomer().addActionListener(e -> openManageCustomer(""));
+        this.homepage.getBtnAdd().addActionListener(e -> addForTheOrder());
+        this.homepage.getBtnAdd2().addActionListener(e -> addForTheOrder());
+        this.homepage.getBtnRemoveIngredient().addActionListener(e -> removeIngredient());
+        this.homepage.getBtnAddIngredient().addActionListener(e -> addIngredient());
         
         this.homepage.getEdtPhoneCustomer().addActionListener((ActionEvent e) -> {
             String phone = homepage.getEdtPhoneCustomer().getText();
@@ -160,6 +170,19 @@ public class Controller {
           
         this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
             handleCategorySelection();
+            
+        });
+        
+        this.homepage.getTableProducts().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 1) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    Long id = (Long) target.getValueAt(row, 0);
+                    productSelectedForTheOrder = productService.findProductById(id);
+                }
+            }
             
         });
     }
@@ -1018,6 +1041,77 @@ public class Controller {
         
         return true;
         
+    }
+    
+    private void fillHeadersOrder() {
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"Producto", "Observaciones", "PVP"};
+        model.setColumnIdentifiers(headers);
+        homepage.getTableOrder().setModel(model);
+        columnWidthOrderTable(homepage.getTableOrder());
+        
+    }
+    
+    private void columnWidthOrderTable(JTable table) {
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+        table.getColumnModel().getColumn(0).setPreferredWidth(80); 
+        table.getColumnModel().getColumn(1).setPreferredWidth(357); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(40);  
+    }
+
+    private void addForTheOrder() {
+        if (productSelectedForTheOrder == null) {
+            JOptionPane.showMessageDialog(homepage, "Seleccione un producto");
+        } else {
+            DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
+        
+            // Crear una fila con los datos del producto seleccionado
+            Object[] rowData = {
+                productSelectedForTheOrder.getName(),  // Nombre del producto
+                String.join(", ", modifications),                                    // Observaciones (dejar en blanco inicialmente)
+                modificationsPrice = modificationsPrice.add(productSelectedForTheOrder.getPrice())   // Precio del producto
+            };
+
+            // Añadir la fila al modelo
+            model.addRow(rowData);
+
+            productSelectedForTheOrder = null;
+            modifications.clear();
+            modificationsPrice = BigDecimal.ZERO;
+        }
+  
+    }
+
+    private void removeIngredient() {
+        String ingredient = homepage.getIngredientModify().getSelectedItem().toString();
+        if (ingredient.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
+            return;
+        }
+        
+        String[] idNameIngredient = ingredient.split(",");
+        String nameIngredient = idNameIngredient[1].trim();
+        
+        modifications.add("Sin " + nameIngredient);
+    }
+
+    private void addIngredient() {
+        
+        String ingredient = homepage.getIngredientModify().getSelectedItem().toString();
+        if (ingredient.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
+            return;
+        }
+
+        String[] idNameIngredient = ingredient.split(",");
+        Long id = Long.valueOf(idNameIngredient[0].trim());
+        String nameIngredient = idNameIngredient[1].trim();
+        
+        Ingredient in = ingredientService.findIngredientById(id);
+        modificationsPrice = modificationsPrice.add(in.getPrice());
+        homepage.getIngredientModify().setSelectedIndex(0);
+        
+        modifications.add("Con " + nameIngredient);
     }
 
     
