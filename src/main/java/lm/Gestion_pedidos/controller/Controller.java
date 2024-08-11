@@ -17,7 +17,6 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import lm.Gestion_pedidos.model.Category;
 import lm.Gestion_pedidos.model.Customer;
 import lm.Gestion_pedidos.model.Ingredient;
@@ -59,7 +58,8 @@ public class Controller {
     private Customer customerSelectedForTheOrder;
     private Product productSelectedForTheOrder;
     private HashSet<String> modifications;
-    private BigDecimal modificationsPrice = BigDecimal.ZERO;
+    private BigDecimal modificationsPrice;
+    private BigDecimal total;
     
     @Autowired
     private ApplicationContext context;
@@ -93,6 +93,8 @@ public class Controller {
         fillCategorys(homepage.getCategorys()); 
         fillHeadersOrder();
         modifications = new HashSet<>();
+        modificationsPrice = BigDecimal.ZERO;
+        total = BigDecimal.ZERO;
         homepage.getCategorys().setSelectedIndex(1);
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
         Category category = categoryService.findCategoryByName(selectedItem);
@@ -1070,8 +1072,10 @@ public class Controller {
                 productSelectedForTheOrder.getName(),  // Nombre del producto
                 String.join(", ", modifications),                                    // Observaciones (dejar en blanco inicialmente)
                 modificationsPrice = modificationsPrice.add(productSelectedForTheOrder.getPrice())   // Precio del producto
+               
             };
-
+            total = total.add(modificationsPrice);
+            homepage.getTxtTotalPrice().setText(total.toString());
             // Añadir la fila al modelo
             model.addRow(rowData);
 
@@ -1093,6 +1097,7 @@ public class Controller {
         String nameIngredient = idNameIngredient[1].trim();
         
         modifications.add("Sin " + nameIngredient);
+        homepage.getIngredientModify().setSelectedIndex(0);
     }
 
     private void addIngredient() {

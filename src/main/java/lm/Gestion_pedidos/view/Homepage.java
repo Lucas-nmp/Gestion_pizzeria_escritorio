@@ -72,6 +72,10 @@ public class Homepage extends javax.swing.JFrame {
         return customerName;
     }
     
+    public JLabel getTxtTotalPrice() {
+        return totalPrice;
+    }
+    
     public JButton getBtnRemoveIngredient() {
         return ingredientRemove;
     }
@@ -408,11 +412,11 @@ public class Homepage extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Total:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, -1, -1));
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 360, -1, -1));
 
         totalPrice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         totalPrice.setText("0,0");
-        jPanel2.add(totalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 360, -1, -1));
+        jPanel2.add(totalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 360, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
