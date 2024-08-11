@@ -164,6 +164,10 @@ public class Controller {
         this.homepage.getBtnAdd2().addActionListener(e -> addForTheOrder());
         this.homepage.getBtnRemoveIngredient().addActionListener(e -> removeIngredient());
         this.homepage.getBtnAddIngredient().addActionListener(e -> addIngredient());
+        this.homepage.getBtnCancelOrder().addActionListener(e -> cancelOrder());
+        this.homepage.getBtnConfirmOrder().addActionListener(e -> confirmOrder());
+        this.homepage.getBtnRemoveFromOrder().addActionListener(e -> removeFromOrder());
+        
         
         this.homepage.getEdtPhoneCustomer().addActionListener((ActionEvent e) -> {
             String phone = homepage.getEdtPhoneCustomer().getText();
@@ -174,6 +178,32 @@ public class Controller {
             handleCategorySelection();
             
         });
+        
+        this.homepage.getTableOrder().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    JTable target = (JTable) e.getSource();
+                    int selectedRow = target.getSelectedRow(); // Obtener la fila seleccionada
+
+                    if (selectedRow != -1) { // Verificar que se haya seleccionado una fila
+                        // Con este codigo al seleccionar pregunta si se quiere eliminar el artículo seleccionado
+                        /*int response = JOptionPane.showConfirmDialog(homepage, 
+                            "¿Deseas eliminar el elemento seleccionado?", 
+                            "Confirmar eliminación", 
+                            JOptionPane.YES_NO_OPTION);
+
+                        if (response == JOptionPane.YES_OPTION) {
+                            DefaultTableModel model = (DefaultTableModel) target.getModel();
+                            model.removeRow(selectedRow); // Eliminar la fila del modelo
+                        }*/
+                    }
+                }
+            }
+        
+        });
+        
+        
         
         this.homepage.getTableProducts().addMouseListener(new MouseAdapter() {
             @Override
@@ -1117,6 +1147,31 @@ public class Controller {
         homepage.getIngredientModify().setSelectedIndex(0);
         
         modifications.add("Con " + nameIngredient);
+    }
+
+    private void cancelOrder() {
+        
+    }
+
+    private void confirmOrder() {
+        
+    }
+
+    private void removeFromOrder() {
+        // con este mismo enfoque puedo mirar si podría eliminar los elementos de la base de datos
+        JTable target = homepage.getTableOrder();
+        int selectedRow = target.getSelectedRow();
+        BigDecimal price = (BigDecimal) target.getValueAt(selectedRow, 2);
+        total = total.subtract(price);
+        homepage.getTxtTotalPrice().setText(total.toString());
+
+        if (selectedRow != -1) { // Verificar que se haya seleccionado una fila
+            DefaultTableModel model = (DefaultTableModel) target.getModel();
+            model.removeRow(selectedRow); // Eliminar la fila del modelo
+        } else {
+            JOptionPane.showMessageDialog(homepage, "Seleccione una fila para eliminar");
+        }
+        
     }
 
     

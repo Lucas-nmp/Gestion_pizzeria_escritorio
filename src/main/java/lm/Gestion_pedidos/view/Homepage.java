@@ -81,8 +81,19 @@ public class Homepage extends javax.swing.JFrame {
     }
     
     public JButton getBtnAddIngredient() {
-        return ingredientAdd;
-                
+        return ingredientAdd;         
+    }
+    
+    public JButton getBtnConfirmOrder() {
+        return btnConfirmOrder;
+    }
+    
+    public JButton getBtnCancelOrder() {
+        return btnCancelOrder;
+    }
+    
+    public JButton getBtnRemoveFromOrder() {
+        return BtnRemoveFromOrder;
     }
     
     public JComboBox getCategorys() {
@@ -153,9 +164,9 @@ public class Homepage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         homepageBtnAdd2 = new javax.swing.JButton();
         homepageBtnAdd = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        BtnRemoveFromOrder = new javax.swing.JButton();
+        btnCancelOrder = new javax.swing.JButton();
+        btnConfirmOrder = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -436,14 +447,14 @@ public class Homepage extends javax.swing.JFrame {
         homepageBtnAdd.setText("AÑADIR AL PEDIDO");
         homepageBtnAdd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setText("jButton1");
+        BtnRemoveFromOrder.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        BtnRemoveFromOrder.setText("Quitar del pedido");
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setText("jButton2");
+        btnCancelOrder.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnCancelOrder.setText("Cancelar pedido");
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton3.setText("jButton3");
+        btnConfirmOrder.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnConfirmOrder.setText("Confirmar pedido");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -479,11 +490,11 @@ public class Homepage extends javax.swing.JFrame {
                             .addComponent(jCheckBox4)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(146, 146, 146)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(BtnRemoveFromOrder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(btnCancelOrder)
+                .addGap(52, 52, 52)
+                .addComponent(btnConfirmOrder)
                 .addGap(21, 21, 21))
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
@@ -511,9 +522,9 @@ public class Homepage extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)))
+                            .addComponent(BtnRemoveFromOrder)
+                            .addComponent(btnCancelOrder)
+                            .addComponent(btnConfirmOrder)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(jLabel3)
@@ -571,10 +582,13 @@ public class Homepage extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnRemoveFromOrder;
     private javax.swing.JComboBox<String> Category;
     private javax.swing.JTable ProductTable;
     private javax.swing.JComboBox<String> boxIngredientModify;
+    private javax.swing.JButton btnCancelOrder;
     private javax.swing.JButton btnCategory;
+    private javax.swing.JButton btnConfirmOrder;
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnIngredient;
@@ -590,9 +604,6 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton homepageBtnAdd2;
     private javax.swing.JButton ingredientAdd;
     private javax.swing.JButton ingredientRemove;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
