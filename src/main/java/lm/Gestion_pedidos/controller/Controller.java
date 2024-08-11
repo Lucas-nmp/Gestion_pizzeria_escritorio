@@ -52,7 +52,6 @@ public class Controller {
     private HashSet<String> listIngredientsProduct = new HashSet<>();
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
     private Ingredient ingredientSelectedToModify;
-    private Category categorySelectedToModify;
     private Product productSelectedToModify;
     private Customer customerSelectedToModify;
     private Customer customerSelectedForTheOrder;
@@ -80,7 +79,7 @@ public class Controller {
     private CustomerService customerService;
     
     private Homepage homepage;
-    private ManageCategory addCategory;
+    private ManageCategory manageCategory;
     private ManageProduct manageProduct;
     private ManageIngredient manageIngredient;
     private ManageCustomer manageCustomer;
@@ -105,12 +104,12 @@ public class Controller {
     
     private void openManageCategory() {
         
-        addCategory.setLocationRelativeTo(null);
-        addCategory.setResizable(false);
+        manageCategory.setLocationRelativeTo(null);
+        manageCategory.setResizable(false);
         fillTableCategory();
         cleanCategory();
-        addCategory.setModal(true);
-        addCategory.setVisible(true);  
+        manageCategory.setModal(true);
+        manageCategory.setVisible(true);  
     }
     
     private void openManageProducts() {
@@ -220,27 +219,35 @@ public class Controller {
     }
     
     @Autowired
-    public void setManageCategory(ManageCategory addCategory) {
-        this.addCategory = addCategory;
-        this.addCategory.getDeleteCategory().addActionListener(e -> deleteCategory());
-        this.addCategory.getCategorySave().addActionListener(e -> {
-            saveCategory();
+    public void setManageCategory(ManageCategory manageCategory) {
+        this.manageCategory = manageCategory;
+        this.manageCategory.getDeleteCategory().addActionListener(e -> deleteCategory());
+        this.manageCategory.getCategorySave().addActionListener(e -> {
+            saveOrModifyCategory();
             fillTableCategory();
             fillCategorys(homepage.getCategorys()); 
             cleanCategory();    
         });
         
-        this.addCategory.getCategoryName().addActionListener((ActionEvent e) -> {
-            saveCategory();
+        this.manageCategory.getCategoryName().addActionListener((ActionEvent e) -> {
+            saveOrModifyCategory();
             fillTableCategory();
             fillCategorys(homepage.getCategorys()); 
             cleanCategory();
         });
         
-        this.addCategory.getCategoryTable().addMouseListener(new MouseAdapter() {
+        this.manageCategory.getCategoryTable().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int selectedRow = target.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    String name = (String) target.getValueAt(selectedRow, 1);
+                    manageCategory.getCategoryName().setText(name);
+                /*
                 if(e.getClickCount() == 1) {
+                    
                     categorySelectedToModify = new Category();
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
@@ -249,6 +256,7 @@ public class Controller {
                     addCategory.getCategoryName().setText(nameCategory);
                     categorySelectedToModify.setCategoryId(idCategory);
                     categorySelectedToModify.setName(nameCategory);
+                    */
                 }
             }
             
@@ -418,56 +426,61 @@ public class Controller {
                 
     }
     
-    
-    private void saveCategory() {
-        String nameCategory = addCategory.getCategoryName().getText();
-        if (!nameCategory.isEmpty()) {
-            if (categorySelectedToModify == null) {
-                Category category = new Category(null, nameCategory);
-                categoryService.addCategory(category); 
-                fillCategorys(homepage.getCategorys());
-                fillTableCategory();
-                cleanCategory();
-            } else {
-                categorySelectedToModify.setName(nameCategory);
-                categoryService.addCategory(categorySelectedToModify);
-                fillCategorys(homepage.getCategorys());
-                fillTableCategory();
-                cleanCategory();
-                categorySelectedToModify = null;
-            }
-            
-        } else {
-            JOptionPane.showMessageDialog(addCategory, "El nombre de la categoría no puede estar vacío");
-        }  
+    private void saveOrModifyCategory() {
+        JTable target = manageCategory.getCategoryTable();
+        int selectedRow = target.getSelectedRow();
+        String name = manageCategory.getCategoryName().getText();
+
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(manageCategory, "El nombre no puede estar vacío");
+            return;
+        }
+
+        Category category = new Category();
+        if (selectedRow != -1) { // Modificar categoría existente
+            Long id = (Long) target.getValueAt(selectedRow, 0);
+            category.setCategoryId(id);
+        }
+
+        category.setName(name);
+        categoryService.addCategory(category);
+        fillCategorys(homepage.getCategorys());
+        fillTableCategory();
+        cleanCategory();
     }
     
     
     private void deleteCategory() {
-        if (categorySelectedToModify == null) {
-            JOptionPane.showMessageDialog(addCategory, "Seleccione una Categoría de la tabla");
+        JTable target = manageCategory.getCategoryTable();
+        int selectedRow = target.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(manageCategory, "Seleccione una Categoría de la tabla");
             return;
         }
 
+        String name = (String) target.getValueAt(selectedRow, 1);
+        Category category = categoryService.findCategoryByName(name);
+
         try {
-            categoryService.deleteCategory(categorySelectedToModify);
-            JOptionPane.showMessageDialog(addCategory, "Categoría eliminada");
+            categoryService.deleteCategory(category);
+            JOptionPane.showMessageDialog(manageCategory, "Categoría eliminada");
         } catch (DataIntegrityViolationException e) {
-            JOptionPane.showMessageDialog(addCategory, "La categoría contiene productos. No se puede eliminar");
+            JOptionPane.showMessageDialog(manageCategory, "La categoría contiene productos. No se puede eliminar");
         } finally {
             fillTableCategory();
             fillCategorys(homepage.getCategorys());
             homepage.getCategorys().setSelectedIndex(1);
             cleanCategory();
-            categorySelectedToModify = null;
         }
     }
+    
     
     private void fillTableCategory() {
         DefaultTableModel model = new DefaultTableModel();
         String[] headers = {"ID", "Nombre"};
         model.setColumnIdentifiers(headers);
-        addCategory.getCategoryTable().setModel(model);
+        manageCategory.getCategoryTable().setModel(model);
         
         List<Category> listCategorys = categoryService.getAllCategorys();
         listCategorys.forEach((category) -> {
@@ -593,8 +606,7 @@ public class Controller {
     }
     
     private void cleanCategory(){
-        addCategory.getCategoryName().setText("");
-        categorySelectedToModify = null;
+        manageCategory.getCategoryName().setText("");
     }
 
     private void fillCategorys(JComboBox boxCategorys) {
