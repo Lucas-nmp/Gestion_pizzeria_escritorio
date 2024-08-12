@@ -1,6 +1,7 @@
 package lm.Gestion_pedidos.controller;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -51,9 +52,9 @@ public class Controller {
     
     private HashSet<String> listIngredientsProduct = new HashSet<>();
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
-    private Ingredient ingredientSelectedToModify;
-    private Product productSelectedToModify;
-    private Customer customerSelectedToModify;
+    //private Ingredient ingredientSelectedToModify; // eliminar
+    private Product productSelectedToModify; // eliminar 
+    private Customer customerSelectedToModify; // lo puedo eliminar
     private Customer customerSelectedForTheOrder;
     private Product productSelectedForTheOrder;
     private HashSet<String> modifications;
@@ -245,18 +246,7 @@ public class Controller {
                 if (selectedRow != -1) {
                     String name = (String) target.getValueAt(selectedRow, 1);
                     manageCategory.getCategoryName().setText(name);
-                /*
-                if(e.getClickCount() == 1) {
-                    
-                    categorySelectedToModify = new Category();
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    Long idCategory = (Long) target.getValueAt(row, 0);
-                    String nameCategory = (String) target.getValueAt(row, 1);
-                    addCategory.getCategoryName().setText(nameCategory);
-                    categorySelectedToModify.setCategoryId(idCategory);
-                    categorySelectedToModify.setName(nameCategory);
-                    */
+                
                 }
             }
             
@@ -345,8 +335,8 @@ public class Controller {
     public void setManageIngredient(ManageIngredient manageIngredient) {
         this.manageIngredient = manageIngredient;
         
-        this.manageIngredient.getBtnSaveIngredient().addActionListener(e -> deleteIngredient());
-        this.manageIngredient.getBtnDeleteIngredient().addActionListener(e -> saveOrModifyIngredient());
+        this.manageIngredient.getBtnSaveIngredient().addActionListener(e -> saveOrModifyIngredient());
+        this.manageIngredient.getBtnDeleteIngredient().addActionListener(e -> deleteIngredient());
         
         //permite guardar un ingrediente con la tecla enter desde el textField de precio
         this.manageIngredient.getEdtPriceIngredient().addActionListener((ActionEvent e) -> {
@@ -361,19 +351,14 @@ public class Controller {
         this.manageIngredient.getTableIngredient().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1) {
-                    ingredientSelectedToModify = new Ingredient();
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-
-                    Long idIngredient = (Long) target.getValueAt(row, 0);
-                    String nameIngredient = (String) target.getValueAt(row, 1);
-                    BigDecimal priceIngredient = (BigDecimal) target.getValueAt(row, 2);
+                JTable target = (JTable) e.getSource();
+                int selectedRow = target.getSelectedRow();
+                if (e.getClickCount() != -1) {
+                    String nameIngredient = (String) target.getValueAt(selectedRow, 1);
+                    BigDecimal priceIngredient = (BigDecimal) target.getValueAt(selectedRow, 2);
                     manageIngredient.getEdtNameIngredient().setText(nameIngredient);
                     manageIngredient.getEdtPriceIngredient().setText(priceIngredient.toString());
-                    ingredientSelectedToModify.setIngredientId(idIngredient);
-                    ingredientSelectedToModify.setName(nameIngredient);
-                    ingredientSelectedToModify.setPrice(priceIngredient);
+
                 }  
             }            
         });
@@ -892,20 +877,34 @@ public class Controller {
     }
 
     private void deleteIngredient() {
-        if (ingredientSelectedToModify != null) {
-            ingredientService.deleteIngredient(ingredientSelectedToModify);
+        JTable target = manageIngredient.getTableIngredient();
+        int selectedRow = target.getSelectedRow();
+        
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(manageIngredient, "Seleccione un ingrediente de la tabla");
+            return;
+        }
+        
+        Long id = (Long) target.getValueAt(selectedRow, 0);
+        Ingredient ingredient = ingredientService.findIngredientById(id);
+        try {
+            ingredientService.deleteIngredient(ingredient);
+            JOptionPane.showMessageDialog(manageIngredient, "Ingrediente eliminado"); 
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(manageIngredient, "no eliminado"); 
+        } finally {
             fillTableIngredients();
             cleanDataIngredient();
             fillIngredients(homepage.getIngredientModify());
-            
-        } else {
-            JOptionPane.showMessageDialog(manageIngredient, "Seleccione un ingrediente");
         }
+         
         
     }
 
     
     private void saveOrModifyIngredient() {
+        JTable target = manageIngredient.getTableIngredient();
+        int selectedRow = target.getSelectedRow();
         String name = manageIngredient.getEdtNameIngredient().getText();
         BigDecimal price;
         try {
@@ -914,35 +913,30 @@ public class Controller {
             JOptionPane.showMessageDialog(manageIngredient, "El precio tiene que ser numérico");
             return;
         }
-
-        if (!name.isEmpty()) {
-            if (ingredientSelectedToModify == null) {
-                Ingredient ingredient = new Ingredient();
-                ingredient.setName(name);
-                ingredient.setPrice(price);
-                ingredientService.addModifyIngredient(ingredient);
-                fillTableIngredients();
-                cleanDataIngredient();
-                fillIngredients(homepage.getIngredientModify());
-            } else {
-                ingredientSelectedToModify.setName(name);
-                ingredientSelectedToModify.setPrice(price);
-                ingredientService.addModifyIngredient(ingredientSelectedToModify);
-                fillTableIngredients();
-                cleanDataIngredient();
-                fillIngredients(homepage.getIngredientModify());
-                
-            }
-        } else {
-            JOptionPane.showMessageDialog(manageIngredient, "Tiene que escribir el nombre y el precio del ingrediente");
+        
+        if (name.isEmpty()){
+            JOptionPane.showMessageDialog(manageIngredient, "El nombre no puede estar vacío");
+            return;
         }
+        
+        Ingredient ingredient = new Ingredient();
+        if (selectedRow != -1) {
+            Long id = (Long) target.getValueAt(selectedRow, 0);
+            ingredient.setIngredientId(id);
+        }
+        
+        ingredient.setName(name);
+        ingredient.setPrice(price);
+        ingredientService.addModifyIngredient(ingredient);
+        fillTableIngredients();
+        cleanDataIngredient();
+        fillIngredients(homepage.getIngredientModify());
+        
     }
 
     private void cleanDataIngredient() {
         manageIngredient.getEdtNameIngredient().setText("");
-        manageIngredient.getEdtPriceIngredient().setText("");
-        ingredientSelectedToModify = null;
-        
+        manageIngredient.getEdtPriceIngredient().setText("");  
     }
 
     private void setCategory(String string) {
