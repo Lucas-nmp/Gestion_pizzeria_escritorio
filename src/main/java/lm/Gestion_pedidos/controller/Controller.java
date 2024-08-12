@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.annotation.Target;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,9 +53,7 @@ public class Controller {
     
     private HashSet<String> listIngredientsProduct = new HashSet<>();
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
-    //private Ingredient ingredientSelectedToModify; // eliminar
     private Product productSelectedToModify; // eliminar 
-    private Customer customerSelectedToModify; // lo puedo eliminar
     private Customer customerSelectedForTheOrder;
     private Product productSelectedForTheOrder;
     private HashSet<String> modifications;
@@ -387,23 +386,20 @@ public class Controller {
         this.manageCustomer.getTableCustomer().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1) {
-                    customerSelectedToModify = new Customer();
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    
-                    Long id = (Long) target.getValueAt(row, 0);
-                    String name = (String) target.getValueAt(row, 1);
-                    String addres = (String) target.getValueAt(row, 2);
-                    String phone = (String) target.getValueAt(row, 3);
-                    String status = (String) target.getValueAt(row, 4);
+                JTable target = (JTable) e.getSource();
+                int selectedRow = target.getSelectedRow();
+                if (e.getClickCount() != -1) {                  
+                    String name = (String) target.getValueAt(selectedRow, 1);
+                    String addres = (String) target.getValueAt(selectedRow, 2);
+                    String phone = (String) target.getValueAt(selectedRow, 3);
+                    String status = (String) target.getValueAt(selectedRow, 4);
                     
                     manageCustomer.getEdtNameCustomer().setText(name);
                     manageCustomer.getEdtAddresCustomer().setText(addres);
                     manageCustomer.getEdtPhoneCustomer().setText(phone);
                     manageCustomer.getEdtStatusCustomer().setText(status);
                     
-                    customerSelectedToModify.setCustomerId(id);
+                    
                 }
             }
             
@@ -896,9 +892,7 @@ public class Controller {
             fillTableIngredients();
             cleanDataIngredient();
             fillIngredients(homepage.getIngredientModify());
-        }
-         
-        
+        }  
     }
 
     
@@ -955,10 +949,23 @@ public class Controller {
     }
 
     private void deleteCustomer() {
-        if (customerSelectedToModify != null) {
-            customerService.deleteCustomer(customerSelectedToModify);
-            customerSelectedToModify = null;
+        JTable target = manageCustomer.getTableCustomer();
+        int selectedRow = target.getSelectedRow();
+        
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(manageCustomer, "Seleccione un cliente de la tabla");
+            return;
+        }
+        
+        Long id = (Long) target.getValueAt(selectedRow, 0);
+        Customer customer = customerService.findCustomerById(id);
+        
+        try {
+            customerService.deleteCustomer(customer);
             JOptionPane.showMessageDialog(manageCustomer, "Cliente eliminado correctamente");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(manageCustomer, "Cliente no eliminado");
+        } finally {
             clearViewCustomer("");
             fillTableCustomer();
         }
@@ -978,7 +985,7 @@ public class Controller {
     }
     
     private void lookForCustomer() {
-        customerSelectedToModify = new Customer();
+        
         String phone = manageCustomer.getEdtPhoneCustomer().getText();
         if (phone.isEmpty()) {
             JOptionPane.showMessageDialog(manageCustomer, "Escriba un teléfono para buscar un cliente");
@@ -991,13 +998,16 @@ public class Controller {
                 manageCustomer.getEdtAddresCustomer().setText(customer.getAddress());
                 manageCustomer.getEdtStatusCustomer().setText(customer.getStatus());
                 
-                customerSelectedToModify.setCustomerId(customer.getCustomerId());
+                
                 
             }
         }   
     }
 
     private void saveOrModifyCustomer() {
+        JTable target = manageCustomer.getTableCustomer();
+        int selectedRow = target.getSelectedRow();
+        
         String name = manageCustomer.getEdtNameCustomer().getText();
         String phone = manageCustomer.getEdtPhoneCustomer().getText();
         String addres = manageCustomer.getEdtAddresCustomer().getText();
@@ -1007,39 +1017,45 @@ public class Controller {
             return;
         }
         
-        // comprobar si existe un cliente con el mismo telefono
+        Customer customer;
         
-        if (customerSelectedToModify != null) {
-            customerSelectedToModify.setName(name);
-            customerSelectedToModify.setAddress(addres);
-            customerSelectedToModify.setPhone(phone);
-            customerSelectedToModify.setStatus(status);
-            customerService.addCustomer(customerSelectedToModify);
-            clearViewCustomer(phone);
-            JOptionPane.showMessageDialog(manageCustomer, "Cliente modificado correctamente");
-            fillTableCustomer();
+        if (selectedRow != -1) {
+            Long id = (Long) target.getValueAt(selectedRow, 0);
+            customer = customerService.findCustomerById(id);
+            
+            if (!customer.getPhone().equals(phone) && customerService.findCustomerByPhone(phone) != null) {
+            JOptionPane.showMessageDialog(manageCustomer, "Ya existe un cliente con ese Nº de teléfono");
+            return;
+            }
         } else {
-            Customer customer = new Customer(null, name, phone, addres, status, null);
-            customerService.addCustomer(customer);
-            clearViewCustomer(phone);
-            JOptionPane.showMessageDialog(manageCustomer, "Cliente añadido Correctamente");
-            fillTableCustomer();
+            if (customerService.findCustomerByPhone(phone) != null) {
+                JOptionPane.showMessageDialog(manageCustomer, "Ya existe un cliente con ese Nº de teléfono");
+                return;
+            }
+            customer = new Customer(); 
         }
         
-        
-            
-        
-        
-        
+        customer.setName(name);
+        customer.setAddress(addres);
+        customer.setPhone(phone);
+        customer.setStatus(status);
+
+        customerService.addCustomer(customer);
+
+        clearViewCustomer("");
+        JOptionPane.showMessageDialog(manageCustomer, "Cliente añadido/modificado Correctamente");
+        fillTableCustomer();   
     }
+        
+        
+        
+    
 
     private void clearViewCustomer(String phone) {
         manageCustomer.getEdtNameCustomer().setText("");
         manageCustomer.getEdtAddresCustomer().setText("");
         manageCustomer.getEdtPhoneCustomer().setText(phone);
         manageCustomer.getEdtStatusCustomer().setText("");
-        customerSelectedToModify = null;
-        
     }
 
     private void fillTableCustomer() {

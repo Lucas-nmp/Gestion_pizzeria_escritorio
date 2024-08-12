@@ -21,6 +21,11 @@ public class CustomerService {
         return customer;
     }
     
+    public Customer findCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id).orElse(null);
+        return customer;
+    }
+    
     public void deleteCustomer(Customer customer) {
         customerRepository.delete(customer);
     }
