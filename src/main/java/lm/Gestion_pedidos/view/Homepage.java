@@ -64,12 +64,28 @@ public class Homepage extends javax.swing.JFrame {
         return customerPhone;
     }
     
+    public JTextField getEdtAlternativeAddres() {
+        return customerAlternativeAddres;
+    }
+    
     public JLabel getTxtAddresCustomer() {
         return customerAddres;
     }
     
     public JLabel getTxtNameCustomer() {
         return customerName;
+    }
+    
+    public JLabel getTxtOrderNameCustomer() {
+        return orderName;
+    }
+    
+    public JLabel getTxtOrderPhoneCustomer() {
+        return orderPhone;
+    }
+    
+    public JLabel getTxtOrderAddresCustomer() {
+        return orderAddres;
     }
     
     public JLabel getTxtTotalPrice() {

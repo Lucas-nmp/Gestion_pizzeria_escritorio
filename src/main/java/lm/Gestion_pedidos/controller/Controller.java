@@ -39,6 +39,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+
 /**
  *
  * @author Lucas
@@ -963,7 +977,7 @@ public class Controller {
         try {
             customerService.deleteCustomer(customer);
             JOptionPane.showMessageDialog(manageCustomer, "Cliente eliminado correctamente");
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(manageCustomer, "Cliente no eliminado");
         } finally {
             clearViewCustomer("");
@@ -977,8 +991,17 @@ public class Controller {
             if (customer == null) {
                 openManageCustomer(phone);
             } else {
+                String status = customer.getStatus();
+                if (!status.isEmpty()) {
+                    JOptionPane.showMessageDialog(homepage, status);
+                } 
                 homepage.getTxtAddresCustomer().setText(customer.getAddress());
                 homepage.getTxtNameCustomer().setText(customer.getName());
+                
+                homepage.getTxtOrderNameCustomer().setText(customer.getName());
+                homepage.getTxtOrderAddresCustomer().setText(customer.getAddress());
+                homepage.getTxtOrderPhoneCustomer().setText(customer.getPhone());
+                
             }
         } 
         
@@ -996,10 +1019,7 @@ public class Controller {
             } else {
                 manageCustomer.getEdtNameCustomer().setText(customer.getName());
                 manageCustomer.getEdtAddresCustomer().setText(customer.getAddress());
-                manageCustomer.getEdtStatusCustomer().setText(customer.getStatus());
-                
-                
-                
+                manageCustomer.getEdtStatusCustomer().setText(customer.getStatus());  
             }
         }   
     }
@@ -1121,14 +1141,14 @@ public class Controller {
         
             // Crear una fila con los datos del producto seleccionado
             Object[] rowData = {
-                productSelectedForTheOrder.getName(),  // Nombre del producto
-                String.join(", ", modifications),                                    // Observaciones (dejar en blanco inicialmente)
-                modificationsPrice = modificationsPrice.add(productSelectedForTheOrder.getPrice())   // Precio del producto
+                productSelectedForTheOrder.getName(),  
+                String.join(", ", modifications),                                    
+                modificationsPrice = modificationsPrice.add(productSelectedForTheOrder.getPrice())   
                
             };
             total = total.add(modificationsPrice);
             homepage.getTxtTotalPrice().setText(total.toString());
-            // Añadir la fila al modelo
+            
             model.addRow(rowData);
 
             productSelectedForTheOrder = null;
@@ -1153,7 +1173,6 @@ public class Controller {
     }
 
     private void addIngredient() {
-        
         String ingredient = homepage.getIngredientModify().getSelectedItem().toString();
         if (ingredient.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione un ingrediente");
@@ -1172,13 +1191,45 @@ public class Controller {
     }
 
     private void cancelOrder() {
+        DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
+        model.setRowCount(0);
         
+        total = BigDecimal.ZERO;
+        homepage.getTxtTotalPrice().setText(total.toString());
+        
+        productSelectedForTheOrder = null;
+        modifications.clear();
+        clearOrderData();
+    }
+    
+    private void clearOrderData() {
+        homepage.getEdtPhoneCustomer().setText("Teléfono");
+        homepage.getTxtAddresCustomer().setText("Dirección");
+        homepage.getTxtNameCustomer().setText("Nombre");
+        homepage.getEdtAlternativeAddres().setText("Dirección alternativa");
     }
 
     private void confirmOrder() {
+        if (homepage.getTxtOrderPhoneCustomer().getText().equals("Teléfono")) {
+            JOptionPane.showMessageDialog(homepage, "Seleccione un cliente");
+            return;
+        }
+        String address = homepage.getEdtAlternativeAddres().getText();
+        if (address.isEmpty() || address.equals("Dirección alternativa")) {
+            address = homepage.getTxtAddresCustomer().getText();
+        }
+        homepage.getTxtOrderAddresCustomer().setText(address);
+        String phone = homepage.getTxtOrderPhoneCustomer().getText();
+        Customer customer = customerService.findCustomerByPhone(phone);
+        
+        
+        
+        
+        
         
     }
 
+    
     private void removeFromOrder() {
         // con este mismo enfoque puedo mirar si podría eliminar los elementos de la base de datos
         JTable target = homepage.getTableOrder();
