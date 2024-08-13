@@ -79,6 +79,8 @@ public class Controller {
     private BigDecimal modificationsPrice;
     private BigDecimal total;
     
+    private final BigDecimal PRICE_DOUBLE_CHEESE = BigDecimal.valueOf(0.60);
+    
     @Autowired
     private ApplicationContext context;
     
@@ -1146,6 +1148,12 @@ public class Controller {
     }
 
     private void addForTheOrder() {
+        
+        checkOptions();
+        
+        checkObservations();
+        
+        
         if (productSelectedForTheOrder == null) {
             JOptionPane.showMessageDialog(homepage, "Seleccione un producto");
         } else {
@@ -1166,9 +1174,55 @@ public class Controller {
 
             productSelectedForTheOrder = null;
             modifications.clear();
+            clearChecks();
             modificationsPrice = BigDecimal.ZERO;
         }
   
+    }
+    
+    private void checkOptions() {
+        if (homepage.getCheckDoubleCheese().isSelected()) {
+            modifications.add("Doble de queso");
+            modificationsPrice = modificationsPrice.add(PRICE_DOUBLE_CHEESE);
+        }
+        
+        if (homepage.getCheckUndercooked().isSelected()) {
+            modifications.add("Poco hecha");
+        }
+        
+        if (homepage.getCheckVeryCooked().isSelected()) {
+            modifications.add("Muy hecha");
+        }
+        
+        if (homepage.getCheckWithoutCheese().isSelected()) {
+            modifications.add("Sin queso");
+        }
+    }
+    
+    private void checkObservations() {
+        String observations = homepage.getEdtObservations().getText();
+
+        try {
+            String[] dto = observations.split(" ");
+            if (dto.length > 0) {
+                // Intenta convertir el primer elemento a un número
+                BigDecimal descuento = new BigDecimal(dto[0]);
+                // Resta el descuento a modificationsPrice y guarda el resultado
+                modificationsPrice = modificationsPrice.subtract(descuento);
+            }
+        } catch (NumberFormatException e) {
+            
+        }
+
+        modifications.add(observations);
+    }
+    
+    private void clearChecks() {
+        homepage.getCheckDoubleCheese().setSelected(false);
+        homepage.getCheckUndercooked().setSelected(false);
+        homepage.getCheckVeryCooked().setSelected(false);
+        homepage.getCheckWithoutCheese().setSelected(false);
+        homepage.getEdtObservations().setText("");
     }
 
     private void removeIngredient() {
@@ -1201,12 +1255,9 @@ public class Controller {
         homepage.getIngredientModify().setSelectedIndex(0);
         
         modifications.add("Con " + nameIngredient);
+
     }
 
-    private void cancelOrder() {
-
-        clearOrderData();
-    }
     
     private void clearOrderData() {
         DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
@@ -1221,6 +1272,7 @@ public class Controller {
         homepage.getTxtOrderNameCustomer().setText("Nombre");
         homepage.getTxtOrderPhoneCustomer().setText("Teléfono");
         homepage.getTxtOrderAddresCustomer().setText("Dirección");
+        clearChecks();
     }
 
     private void confirmOrder() {
@@ -1262,12 +1314,7 @@ public class Controller {
         }
         
         clearOrderData();
-        
-        
-        
-        
-        
-        
+  
     }
 
     

@@ -1,9 +1,11 @@
 package lm.Gestion_pedidos.view;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -127,6 +129,26 @@ public class Homepage extends javax.swing.JFrame {
     public JTable getTableOrder() {
         return orderTable; 
     }
+    
+    public JCheckBox getCheckDoubleCheese() {
+        return checkDoubleCheese;
+    }
+    
+    public JCheckBox getCheckWithoutCheese() {
+        return checkWithoutCheese;
+    }
+    
+    public JCheckBox getCheckUndercooked() {
+        return checkUndercooked;
+    }
+    
+    public JCheckBox getCheckVeryCooked() {
+        return checkVeryCooked;
+    }
+    
+    public JTextArea getEdtObservations() {
+        return edtObservations;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -159,13 +181,13 @@ public class Homepage extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         ProductTable = new javax.swing.JTable();
         boxIngredientModify = new javax.swing.JComboBox<>();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        checkDoubleCheese = new javax.swing.JCheckBox();
+        checkUndercooked = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        edtObservations = new javax.swing.JTextArea();
+        checkVeryCooked = new javax.swing.JCheckBox();
+        checkWithoutCheese = new javax.swing.JCheckBox();
         ingredientRemove = new javax.swing.JButton();
         ingredientAdd = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -361,37 +383,37 @@ public class Homepage extends javax.swing.JFrame {
         boxIngredientModify.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         boxIngredientModify.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jCheckBox1.setBackground(new java.awt.Color(120, 168, 252));
-        jCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox1.setText("Doble de queso");
-        jCheckBox1.setBorder(null);
+        checkDoubleCheese.setBackground(new java.awt.Color(120, 168, 252));
+        checkDoubleCheese.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        checkDoubleCheese.setForeground(new java.awt.Color(255, 255, 255));
+        checkDoubleCheese.setText("Doble de queso");
+        checkDoubleCheese.setBorder(null);
 
-        jCheckBox2.setBackground(new java.awt.Color(120, 168, 252));
-        jCheckBox2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox2.setText("Poco hecha");
-        jCheckBox2.setBorder(null);
+        checkUndercooked.setBackground(new java.awt.Color(120, 168, 252));
+        checkUndercooked.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        checkUndercooked.setForeground(new java.awt.Color(255, 255, 255));
+        checkUndercooked.setText("Poco hecha");
+        checkUndercooked.setBorder(null);
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Observaciones");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        edtObservations.setColumns(20);
+        edtObservations.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        edtObservations.setRows(5);
+        jScrollPane2.setViewportView(edtObservations);
 
-        jCheckBox4.setBackground(new java.awt.Color(120, 168, 252));
-        jCheckBox4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jCheckBox4.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox4.setText("Muy hecha");
-        jCheckBox4.setBorder(null);
+        checkVeryCooked.setBackground(new java.awt.Color(120, 168, 252));
+        checkVeryCooked.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        checkVeryCooked.setForeground(new java.awt.Color(255, 255, 255));
+        checkVeryCooked.setText("Muy hecha");
+        checkVeryCooked.setBorder(null);
 
-        jCheckBox3.setBackground(new java.awt.Color(120, 168, 252));
-        jCheckBox3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jCheckBox3.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox3.setText("Sin queso");
-        jCheckBox3.setBorder(null);
+        checkWithoutCheese.setBackground(new java.awt.Color(120, 168, 252));
+        checkWithoutCheese.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        checkWithoutCheese.setForeground(new java.awt.Color(255, 255, 255));
+        checkWithoutCheese.setText("Sin queso");
+        checkWithoutCheese.setBorder(null);
 
         ingredientRemove.setBackground(new java.awt.Color(120, 168, 252));
         ingredientRemove.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -498,12 +520,12 @@ public class Homepage extends javax.swing.JFrame {
                             .addComponent(ingredientRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox2)
-                            .addComponent(jCheckBox1))
+                            .addComponent(checkUndercooked)
+                            .addComponent(checkDoubleCheese))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox3)
-                            .addComponent(jCheckBox4)))
+                            .addComponent(checkWithoutCheese)
+                            .addComponent(checkVeryCooked)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(BtnRemoveFromOrder)
@@ -552,12 +574,12 @@ public class Homepage extends javax.swing.JFrame {
                         .addComponent(ingredientRemove)
                         .addGap(29, 29, 29)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jCheckBox3))
+                            .addComponent(checkDoubleCheese)
+                            .addComponent(checkWithoutCheese))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox2)
-                            .addComponent(jCheckBox4))
+                            .addComponent(checkUndercooked)
+                            .addComponent(checkVeryCooked))
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(218, 218, 218)
@@ -611,19 +633,20 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton btnProduct;
     private javax.swing.JButton btnSettings;
     private javax.swing.JButton btnStatistics;
+    private javax.swing.JCheckBox checkDoubleCheese;
+    private javax.swing.JCheckBox checkUndercooked;
+    private javax.swing.JCheckBox checkVeryCooked;
+    private javax.swing.JCheckBox checkWithoutCheese;
     private javax.swing.JLabel companyName;
     private javax.swing.JLabel customerAddres;
     private javax.swing.JTextField customerAlternativeAddres;
     private javax.swing.JLabel customerName;
     private javax.swing.JTextField customerPhone;
+    private javax.swing.JTextArea edtObservations;
     private javax.swing.JButton homepageBtnAdd;
     private javax.swing.JButton homepageBtnAdd2;
     private javax.swing.JButton ingredientAdd;
     private javax.swing.JButton ingredientRemove;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -639,7 +662,6 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel orderAddres;
     private javax.swing.JLabel orderName;
     private javax.swing.JLabel orderPhone;
