@@ -72,9 +72,7 @@ public class Controller {
     
     private HashSet<String> listIngredientsProduct = new HashSet<>();
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
-    private Product productSelectedToModify; // eliminar 
-    private Customer customerSelectedForTheOrder;
-    private Product productSelectedForTheOrder; // eliminar 
+    private Product productSelectedToModify; // eliminar  
     private HashSet<String> modifications;
     private BigDecimal modificationsPrice;
     private BigDecimal total;
@@ -121,7 +119,8 @@ public class Controller {
         modifications = new HashSet<>();
         modificationsPrice = BigDecimal.ZERO;
         total = BigDecimal.ZERO;
-        homepage.getCategorys().setSelectedIndex(1);
+        setCategory();
+        
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
         Category category = categoryService.findCategoryByName(selectedItem);
         
@@ -234,12 +233,7 @@ public class Controller {
         this.homepage.getTableProducts().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 1) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    Long id = (Long) target.getValueAt(row, 0);
-                    productSelectedForTheOrder = productService.findProductById(id);
-                }
+                
             }
             
         });
@@ -276,9 +270,7 @@ public class Controller {
                 }
             }
             
-        });
-        
-        
+        });  
     }
     
     @Autowired
@@ -432,6 +424,16 @@ public class Controller {
             
         });
                 
+    }
+    
+    private void setCategory() {
+        int itemCount = homepage.getCategorys().getItemCount();
+        if (itemCount > 1) {
+            homepage.getCategorys().setSelectedIndex(1);
+        } else {
+            homepage.getCategorys().setSelectedIndex(0);
+        } 
+            
     }
     
     private void saveOrModifyCategory() {
@@ -963,7 +965,7 @@ public class Controller {
     private void setCategory(String string) {
         manageProduct.getCategoryTxt().setText(string);
     }
-
+    /*
     private void deleteProduct() {
         if (productSelectedToModify != null) {
             List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(productSelectedToModify);
@@ -972,6 +974,30 @@ public class Controller {
             JOptionPane.showMessageDialog(manageProduct, "Producto eliminado correctamente");
             fillTableProduct();
             clearViewProduct();
+        }
+    }
+    */
+    
+    private void deleteProduct() {
+        JTable target = manageProduct.getTableProducts();
+        int selectedRow = target.getSelectedRow();
+        
+        if (selectedRow != -1) {
+            Long id = (Long) target.getValueAt(selectedRow, 0);
+            Product product = productService.findProductById(id);
+            List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(product);
+            try {
+                productIngredientService.deleteAll(listProductIngredient);
+                productService.deleteProduct(product);
+                JOptionPane.showMessageDialog(manageProduct, "Producto eliminado correctamente");
+                fillTableProduct();
+                clearViewProduct();
+            } catch (DataIntegrityViolationException e) {
+                JOptionPane.showMessageDialog(manageProduct, "El producto está en algún pedido, no se puede eliminar. Pruebe a modificarlo");
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(manageProduct, "Seleccione un producto para eliminar");
         }
     }
 
@@ -1153,32 +1179,36 @@ public class Controller {
         
         checkObservations();
         
-        
-        if (productSelectedForTheOrder == null) {
-            JOptionPane.showMessageDialog(homepage, "Seleccione un producto");
-        } else {
+        JTable target = homepage.getTableProducts();
+        int selectedRow = target.getSelectedRow();
+        if (selectedRow != -1) {
+            Long id = (Long) target.getValueAt(selectedRow, 0);
+            Product product = productService.findProductById(id);
+            
             DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
-        
-            // Crear una fila con los datos del producto seleccionado
             Object[] rowData = {
-                productSelectedForTheOrder.getProductId(),
-                productSelectedForTheOrder.getName(),  
+                product.getProductId(),
+                product.getName(),  
                 String.join(", ", modifications),                                    
-                modificationsPrice = modificationsPrice.add(productSelectedForTheOrder.getPrice())   
-               
+                modificationsPrice = modificationsPrice.add(product.getPrice())   
             };
             total = total.add(modificationsPrice);
             homepage.getTxtTotalPrice().setText(total.toString());
             
             model.addRow(rowData);
 
-            productSelectedForTheOrder = null;
+            
             modifications.clear();
             clearChecks();
             modificationsPrice = BigDecimal.ZERO;
+            target.clearSelection();
+        } else {
+            JOptionPane.showMessageDialog(homepage, "Seleccione un producto"); 
         }
-  
+        
     }
+    
+    
     
     private void checkOptions() {
         if (homepage.getCheckDoubleCheese().isSelected()) {
@@ -1333,27 +1363,5 @@ public class Controller {
             JOptionPane.showMessageDialog(homepage, "Seleccione una fila para eliminar");
         }
         
-    }
-
-    
-
-    
-
-    
-
-        
-        
-        
-        
-        
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
+    }   
 }
