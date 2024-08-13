@@ -24,6 +24,10 @@ public class OrderService {
         orderRepository.save(order);
     }
     
+    public Order findOrderById(Long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+    
     // buscar el último pedido del cliente
     // buscar pedidos por cliente
     // por rango de fecha

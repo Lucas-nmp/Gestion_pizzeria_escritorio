@@ -52,6 +52,11 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import java.time.LocalDate;
+import lm.Gestion_pedidos.model.Order;
+import lm.Gestion_pedidos.model.OrderProduct;
+import lm.Gestion_pedidos.service.OrderProductService;
+import lm.Gestion_pedidos.service.OrderService;
 
 /**
  *
@@ -69,7 +74,7 @@ public class Controller {
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
     private Product productSelectedToModify; // eliminar 
     private Customer customerSelectedForTheOrder;
-    private Product productSelectedForTheOrder;
+    private Product productSelectedForTheOrder; // eliminar 
     private HashSet<String> modifications;
     private BigDecimal modificationsPrice;
     private BigDecimal total;
@@ -91,6 +96,12 @@ public class Controller {
     
     @Autowired
     private CustomerService customerService;
+    
+    @Autowired
+    private OrderService orderService;
+    
+    @Autowired
+    private OrderProductService orderProductService;
     
     private Homepage homepage;
     private ManageCategory manageCategory;
@@ -177,7 +188,7 @@ public class Controller {
         this.homepage.getBtnAdd2().addActionListener(e -> addForTheOrder());
         this.homepage.getBtnRemoveIngredient().addActionListener(e -> removeIngredient());
         this.homepage.getBtnAddIngredient().addActionListener(e -> addIngredient());
-        this.homepage.getBtnCancelOrder().addActionListener(e -> cancelOrder());
+        this.homepage.getBtnCancelOrder().addActionListener(e -> clearOrderData());
         this.homepage.getBtnConfirmOrder().addActionListener(e -> confirmOrder());
         this.homepage.getBtnRemoveFromOrder().addActionListener(e -> removeFromOrder());
         
@@ -1119,7 +1130,7 @@ public class Controller {
     
     private void fillHeadersOrder() {
         DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"Producto", "Observaciones", "PVP"};
+        String[] headers = {"ID", "Producto", "Observaciones", "PVP"};
         model.setColumnIdentifiers(headers);
         homepage.getTableOrder().setModel(model);
         columnWidthOrderTable(homepage.getTableOrder());
@@ -1128,9 +1139,10 @@ public class Controller {
     
     private void columnWidthOrderTable(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
-        table.getColumnModel().getColumn(0).setPreferredWidth(80); 
-        table.getColumnModel().getColumn(1).setPreferredWidth(357); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(40);  
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
+        table.getColumnModel().getColumn(1).setPreferredWidth(80); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(327); 
+        table.getColumnModel().getColumn(3).setPreferredWidth(40);  
     }
 
     private void addForTheOrder() {
@@ -1141,6 +1153,7 @@ public class Controller {
         
             // Crear una fila con los datos del producto seleccionado
             Object[] rowData = {
+                productSelectedForTheOrder.getProductId(),
                 productSelectedForTheOrder.getName(),  
                 String.join(", ", modifications),                                    
                 modificationsPrice = modificationsPrice.add(productSelectedForTheOrder.getPrice())   
@@ -1191,22 +1204,23 @@ public class Controller {
     }
 
     private void cancelOrder() {
+
+        clearOrderData();
+    }
+    
+    private void clearOrderData() {
         DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
         model.setRowCount(0);
         
         total = BigDecimal.ZERO;
         homepage.getTxtTotalPrice().setText(total.toString());
-        
-        productSelectedForTheOrder = null;
-        modifications.clear();
-        clearOrderData();
-    }
-    
-    private void clearOrderData() {
         homepage.getEdtPhoneCustomer().setText("Teléfono");
         homepage.getTxtAddresCustomer().setText("Dirección");
         homepage.getTxtNameCustomer().setText("Nombre");
         homepage.getEdtAlternativeAddres().setText("Dirección alternativa");
+        homepage.getTxtOrderNameCustomer().setText("Nombre");
+        homepage.getTxtOrderPhoneCustomer().setText("Teléfono");
+        homepage.getTxtOrderAddresCustomer().setText("Dirección");
     }
 
     private void confirmOrder() {
@@ -1222,6 +1236,33 @@ public class Controller {
         String phone = homepage.getTxtOrderPhoneCustomer().getText();
         Customer customer = customerService.findCustomerByPhone(phone);
         
+        LocalDate orderDate = LocalDate.now();
+        Order order = new Order();
+        order.setCustomer(customer);
+        order.setDate(orderDate);
+        order.setTotalPrice(total);
+        
+        DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
+        int rowCount = model.getRowCount();
+        
+        if (rowCount == 0) {
+            JOptionPane.showMessageDialog(homepage, "Seleccione al menos un producto");
+            return;
+        }
+        
+        orderService.addOrder(order);
+
+        // Crear una lista para almacenar los productos del pedido
+        List<OrderProduct> OrderProducts = new ArrayList<>();
+        for (int i = 0; i<rowCount; i++) {
+            Product product = productService.findProductById((Long) model.getValueAt(i, 0));
+            String observation = (String) model.getValueAt(i, 2);
+            OrderProduct or = new OrderProduct(null, order, product, observation);
+            orderProductService.saveOrderProduct(or);
+        }
+        
+        clearOrderData();
+        
         
         
         
@@ -1234,7 +1275,7 @@ public class Controller {
         // con este mismo enfoque puedo mirar si podría eliminar los elementos de la base de datos
         JTable target = homepage.getTableOrder();
         int selectedRow = target.getSelectedRow();
-        BigDecimal price = (BigDecimal) target.getValueAt(selectedRow, 2);
+        BigDecimal price = (BigDecimal) target.getValueAt(selectedRow, 3);
         total = total.subtract(price);
         homepage.getTxtTotalPrice().setText(total.toString());
 
