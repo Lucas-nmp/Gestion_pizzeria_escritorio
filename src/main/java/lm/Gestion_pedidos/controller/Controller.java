@@ -52,6 +52,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -1287,7 +1289,8 @@ public class Controller {
 
     private void printOrder(String address, BigDecimal total, Order order) {
         try {
-            PdfWriter writer = new PdfWriter(new FileOutputStream(order.getOrderId() + "-" + order.getDate().getYear()+ ("-") + order.getCustomer().getCustomerId() +".pdf"));
+            String fileName = order.getOrderId() + "-" + order.getDate().getYear() + "-" + order.getCustomer().getCustomerId() + ".pdf";
+            PdfWriter writer = new PdfWriter(new FileOutputStream(fileName));
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
             
@@ -1297,7 +1300,7 @@ public class Controller {
             Color blue = new DeviceRgb(173, 216, 230);
             PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
 
-            Paragraph title = new Paragraph("Pedido Nº: " + order.getOrderId() + "-" + order.getDate().getYear()+ ("-") + order.getCustomer().getCustomerId())
+            Paragraph title = new Paragraph("Pedido Nº: " + fileName)
                     .setFont(boldFont)
                     .setFontSize(25)
                     .setFontColor(blue)
@@ -1363,6 +1366,20 @@ public class Controller {
             document.add(totalParagraph);
 
             document.close();
+            
+            // Abrir el archivo PDF automáticamente
+            File pdfFile = new File(fileName);
+            if (pdfFile.exists()) {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se puede abrir el archivo automáticamente.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "El archivo no se pudo generar.");
+            }
+            
+            
         } catch (IOException | NumberFormatException e) {
         }
     }
