@@ -52,6 +52,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import lm.Gestion_pedidos.model.Order;
 import lm.Gestion_pedidos.model.OrderProduct;
@@ -148,9 +150,13 @@ public class Controller {
         manageProduct.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                homepage.getCategorys().setSelectedIndex(1);
-                String selectedItem = (String) homepage.getCategorys().getSelectedItem();
-                Category category = categoryService.findCategoryByName(selectedItem);
+                int itemCount = homepage.getCategorys().getItemCount();
+                if (itemCount > 1) {
+                    homepage.getCategorys().setSelectedIndex(1);
+                } else {
+                    homepage.getCategorys().setSelectedIndex(0);
+                }
+                
             }
         
         });
@@ -1246,13 +1252,16 @@ public class Controller {
         orderService.addOrder(order);
 
         // Crear una lista para almacenar los productos del pedido
-        List<OrderProduct> OrderProducts = new ArrayList<>();
+        //List<OrderProduct> OrderProducts = new ArrayList<>();
         for (int i = 0; i<rowCount; i++) {
             Product product = productService.findProductById((Long) model.getValueAt(i, 0));
             String observation = (String) model.getValueAt(i, 2);
-            OrderProduct or = new OrderProduct(null, order, product, observation);
-            orderProductService.saveOrderProduct(or);
+            BigDecimal price = (BigDecimal) model.getValueAt(i, 3);
+            OrderProduct orderProduct = new OrderProduct(null, order, product, observation, price);
+            orderProductService.saveOrderProduct(orderProduct);
         }
+        
+        printOrder(address, total, order);
         
         clearOrderData();
   
@@ -1260,7 +1269,7 @@ public class Controller {
 
     
     private void removeFromOrder() {
-        // con este mismo enfoque puedo mirar si podría eliminar los elementos de la base de datos
+        
         JTable target = homepage.getTableOrder();
         int selectedRow = target.getSelectedRow();
         BigDecimal price = (BigDecimal) target.getValueAt(selectedRow, 3);
@@ -1275,4 +1284,86 @@ public class Controller {
         }
         
     }   
+
+    private void printOrder(String address, BigDecimal total, Order order) {
+        try {
+            PdfWriter writer = new PdfWriter(new FileOutputStream(order.getOrderId() + "-" + order.getDate().getYear()+ ("-") + order.getCustomer().getCustomerId() +".pdf"));
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document document = new Document(pdfDoc);
+            
+            Customer customer = order.getCustomer();
+            
+            // Título y datos de la empresa
+            Color blue = new DeviceRgb(173, 216, 230);
+            PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
+            Paragraph title = new Paragraph("Pedido Nº: " + order.getOrderId() + "-" + order.getDate().getYear()+ ("-") + order.getCustomer().getCustomerId())
+                    .setFont(boldFont)
+                    .setFontSize(25)
+                    .setFontColor(blue)
+                    .setTextAlignment(TextAlignment.RIGHT);
+
+            /*
+            Paragraph companyDetails = new Paragraph()
+                    .add(datosEmpresa[0] + "\n")
+                    .add(datosEmpresa[1] + "\n")
+                    .add("CIF: " + datosEmpresa[2] + "\n")
+                    .add("Teléfono: " + datosEmpresa[3] + "\n")
+                    .add("Email: " + datosEmpresa[4] + "\n")
+                    .setTextAlignment(TextAlignment.RIGHT);
+
+            document.add(title);
+            document.add(companyDetails);
+            */
+            
+            document.add(new Paragraph("\n"));
+            
+
+            // Datos del cliente
+            Paragraph clientDetails = new Paragraph()
+                    .add("Cliente: " + customer.getName() + "\n")
+                    .add("Dirección: " + address + "\n")
+                    .add("Teléfono: " + customer.getPhone() + "\n")
+                    .setTextAlignment(TextAlignment.LEFT);
+
+            document.add(clientDetails);
+
+            
+            document.add(new Paragraph("\n"));
+            
+
+            // Tabla de productos
+            float[] columnWidths = {1, 5, 1}; // Ancho de las columnas
+            Table table = new Table(UnitValue.createPercentArray(columnWidths));
+            table.setWidth(UnitValue.createPercentValue(100));
+            table.addHeaderCell(new Cell().add(new Paragraph("Producto").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Observaciones").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Precio").setBold()));
+
+            List<OrderProduct> listOrderProduct = orderProductService.getOrdersProductByOrder(order);
+            
+            
+            for (OrderProduct product : listOrderProduct) {
+                table.addCell(new Paragraph(product.getProduct().getName()));
+                table.addCell(new Paragraph(product.getObservations()));
+                table.addCell(new Paragraph(product.getPriceWithModifications().toString()));
+               
+                
+            }
+
+            document.add(table);
+
+            
+
+            Paragraph totalParagraph = new Paragraph("Total: " + total)
+                    .setTextAlignment(TextAlignment.RIGHT)
+                    .setBold();
+
+            document.add(new Paragraph("\n"));
+            document.add(totalParagraph);
+
+            document.close();
+        } catch (IOException | NumberFormatException e) {
+        }
+    }
 }
