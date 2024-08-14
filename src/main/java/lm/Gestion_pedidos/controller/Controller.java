@@ -72,7 +72,6 @@ public class Controller {
     
     private HashSet<String> listIngredientsProduct = new HashSet<>();
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
-    private Product productSelectedToModify; // eliminar  
     private HashSet<String> modifications;
     private BigDecimal modificationsPrice;
     private BigDecimal total;
@@ -314,7 +313,7 @@ public class Controller {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     listIngredientsProduct.clear();
-                    productSelectedToModify = new Product();
+                    //productSelectedToModify = new Product();
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
                     
@@ -336,7 +335,7 @@ public class Controller {
                     updateIngredientsInProduct(listIngredientsProduct);
                     
                     // Añadir al producto para Modificarlo
-                    productSelectedToModify.setProductId(id);
+                    //productSelectedToModify.setProductId(id);
                     
                     
                     listIdIngredientsInProduct = updateIdIngredientesInProduct(listIngredientsProduct);
@@ -629,7 +628,7 @@ public class Controller {
             boxCategorys.addItem("Añadir");
         } else {
             boxCategorys.removeAllItems();
-            boxCategorys.addItem("Seleccionar"); // Mejor será que aparezca seleccionado la primera categoría(la más usada) y con los productos en la lista 
+            boxCategorys.addItem("Seleccionar"); 
             listCategorys.forEach((category) -> {
                 //String item = category.getCategoryId() + ", " + category.getName();
                 String item = category.getName();
@@ -664,93 +663,19 @@ public class Controller {
     }
     
     
-    
     private void saveOrModifyProduct() {
         String categoryName = manageProduct.getCategoryTxt().getText();
         String name = manageProduct.getNameTxt().getText();
         String price = manageProduct.getPriceTxt().getText();
-        String ingredients = manageProduct.getIngredientsTxt().getText();
-        BigDecimal priceB;
-
-        if (categoryName.equals("Seleccionar") || categoryName.equals("Añadir")) {
-            JOptionPane.showMessageDialog(manageProduct, "Seleccione una categoría de producto");
-        } else if (name.equals("Nombre") || name.isEmpty()) {
-            JOptionPane.showMessageDialog(manageProduct, "Escriba el nombre del producto");
-        } else if (price.equals("Precio") || price.isEmpty()) {
-            JOptionPane.showMessageDialog(manageProduct, "Escriba el precio del producto");
-        } else if (listIdIngredientsInProduct.isEmpty()) {
-            JOptionPane.showMessageDialog(manageProduct, "Seleccione al menos un ingrediente");
-        } else {
-            try {
-                priceB = new BigDecimal(price);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(manageProduct, "El precio no tiene el formato correcto");
-                return; // Terminate if price is invalid
-            }
-
-            Category category = categoryService.findCategoryByName(categoryName);
-
-            if (productSelectedToModify != null) {
-                // Actualizar un producto existente
-                productSelectedToModify.setName(name);
-                productSelectedToModify.setPrice(priceB);
-                productSelectedToModify.setCategory(category);
-                List<Long> listId = getIdIngredients(ingredients);
-                List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(productSelectedToModify);
-                productIngredientService.deleteAll(listProductIngredient);
-                
-                
-                for (Long id : listId) {
-                    Ingredient ingredient = ingredientService.findIngredientById(id);
-                    ProductIngredient productIngredient = new ProductIngredient(null, productSelectedToModify, ingredient);
-                    productIngredientService.saveProductIngredient(productIngredient);
-                }
- 
-                productService.saveModifyProduct(productSelectedToModify);
-                
-                JOptionPane.showMessageDialog(manageProduct, "Producto modificado");
-            } else {
-                // Crear un nuevo producto
-                Product product = new Product();
-                product.setName(name);
-                product.setPrice(priceB);
-                product.setCategory(category);
-                productService.saveModifyProduct(product);
-                             
-                for (Long id : listIdIngredientsInProduct) {
-                    Ingredient ingredient = ingredientService.findIngredientById(id);
-                    ProductIngredient productIngredient = new ProductIngredient(null, product, ingredient);
-                    productIngredientService.saveProductIngredient(productIngredient);
-                }
-                JOptionPane.showMessageDialog(manageProduct, "Producto añadido");
-            }
-
-            fillTableProduct();
-            clearViewProduct();
-        }
-    }
-    
-    private List<Long> getIdIngredients(String ingredients) {
-        List<Long> listId = new ArrayList<>();
-        String[] nameIngredients = ingredients.split(", ");
-        for (String name : nameIngredients) {
-            Ingredient i = ingredientService.findIngredientByName(name);
-            listId.add(i.getIngredientId());
-        }
-        return listId;
-    }
-
-    
-    /*
-    private void saveOrModifyProduct() {
-        String categoryName = manageProduct.getCategoryTxt().getText();
-        String name = manageProduct.getNameTxt().getText();
-        String price = manageProduct.getPriceTxt().getText();
-
+        String message = "Producto añadido correctamente";
+        
         if (!validateInputs(categoryName, name, price)) {
             return;
         }
-
+        
+        String ingredients = manageProduct.getIngredientsTxt().getText();
+        List<Long> listId = getIdIngredients(ingredients);
+        
         BigDecimal priceB = convertToBigDecimal(price);
         if (priceB == null) {
             JOptionPane.showMessageDialog(manageProduct, "El precio no tiene el formato correcto");
@@ -758,16 +683,35 @@ public class Controller {
         }
 
         Category category = categoryService.findCategoryByName(categoryName);
-
-        if (productSelectedToModify != null) {
-            updateExistingProduct(productSelectedToModify, name, priceB, category);
-        } else {
-            createNewProduct(name, priceB, category);
+        Product product = new Product();
+        JTable target = manageProduct.getTableProducts();
+        int selectedRow = target.getSelectedRow();
+        if (selectedRow != -1) {
+            Long id = (Long) target.getValueAt(selectedRow, 0);
+            product = productService.findProductById(id);
+            
+            List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(product);
+            productIngredientService.deleteAll(listProductIngredient);
+            message = "Producto modificado correctamente";
         }
-
+        
+        product.setName(name);
+        product.setPrice(priceB);
+        product.setCategory(category);
+        
+        productService.saveModifyProduct(product);
+        
+        for (Long id : listIdIngredientsInProduct) {
+            Ingredient ingredient = ingredientService.findIngredientById(id);
+            ProductIngredient productIngredient = new ProductIngredient(null, product, ingredient);
+            productIngredientService.saveProductIngredient(productIngredient);
+        }
+        JOptionPane.showMessageDialog(manageProduct, message);
         fillTableProduct();
-        clearProduct();
+        clearViewProduct();
+            
     }
+    
 
     private boolean validateInputs(String categoryName, String name, String price) {
         if (categoryName.equals("Seleccionar") || categoryName.equals("Añadir")) {
@@ -785,7 +729,8 @@ public class Controller {
         }
         return true;
     }
-
+    
+    
     private BigDecimal convertToBigDecimal(String price) {
         try {
             return new BigDecimal(price);
@@ -793,50 +738,18 @@ public class Controller {
             return null;
         }
     }
-
-    private void updateExistingProduct(Product product, String name, BigDecimal price, Category category) {
-        product.setName(name);
-        product.setPrice(price);
-        product.setCategory(category);
-        productService.saveModifyProduct(product);
-        updateProductIngredients(product);
-    }
-
-    private void createNewProduct(String name, BigDecimal price, Category category) {
-        Product product = new Product(null, name, price, category, null);
-        productService.saveModifyProduct(product);
-        updateProductIngredients(product);
-    }
-
-    private void updateProductIngredients(Product product) {
-        
-        List<ProductIngredient> existingIngredients = productIngredientService.findByProduct(product);
-
-        // Convertimos las listas a sets para una comparación más sencilla
-        Set<Long> existingIngredientIds = existingIngredients.stream()
-            .map(pi -> pi.getIngredient().getIngredientId())
-            .collect(Collectors.toSet());
-
-        Set<Long> newIngredientIds = new HashSet<>(listIdIngredientsInProduct);
-
-        // Ingredientes a eliminar
-        existingIngredients.stream()
-            .filter(pi -> !newIngredientIds.contains(pi.getIngredient().getIngredientId()))
-            .forEach(pi -> productIngredientService.deleteProductIngredient(pi));
-
-        // Ingredientes a añadir
-        newIngredientIds.stream()
-            .filter(id -> !existingIngredientIds.contains(id))
-            .forEach(id -> {
-                Ingredient ingredient = ingredientService.findIngredientById(id);
-                ProductIngredient productIngredient = new ProductIngredient(null, product, ingredient);
-                productIngredientService.saveProductIngredient(productIngredient);
-            });
-            
-    }
-    */
     
     
+    private List<Long> getIdIngredients(String ingredients) {
+        List<Long> listId = new ArrayList<>();
+        String[] nameIngredients = ingredients.split(", ");
+        for (String name : nameIngredients) {
+            Ingredient i = ingredientService.findIngredientByName(name);
+            listId.add(i.getIngredientId());
+        }
+        return listId;
+    }
+
     private void clearViewProduct(){
         manageProduct.getBoxCategory().setSelectedIndex(0);
         manageProduct.getEdtNameProduct().setText("");
@@ -844,10 +757,8 @@ public class Controller {
         manageProduct.getNameTxt().setText("Nombre");
         manageProduct.getPriceTxt().setText("Precio");
         manageProduct.getIngredientsTxt().setText("Ingredientes");
-        productSelectedToModify = null;
         listIdIngredientsInProduct.clear();
-        listIngredientsProduct.clear();
-        
+        listIngredientsProduct.clear(); 
     }
 
     private void setNameProduct(String text) {
