@@ -57,6 +57,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
+import java.util.Set;
 import lm.Gestion_pedidos.model.Company;
 import lm.Gestion_pedidos.model.Order;
 import lm.Gestion_pedidos.model.OrderProduct;
@@ -198,6 +200,11 @@ public class Controller {
     
     
     private void openStatistics() {
+        statistics.setLocationRelativeTo(null);
+        statistics.setResizable(false);
+        statistics.setModal(true);
+        fillMonth();
+        statistics.setVisible(true);
         
     }
     
@@ -233,10 +240,7 @@ public class Controller {
             lookForCustomer(phone);
         });
           
-        this.homepage.getCategorys().addActionListener((ActionEvent e) -> {
-            handleCategorySelection();
-            
-        });
+        this.homepage.getCategorys().addActionListener( e -> handleCategorySelection());
         
         this.homepage.getTableOrder().addMouseListener(new MouseAdapter() {
             @Override
@@ -454,9 +458,11 @@ public class Controller {
     
     @Autowired
     private void setStatistics(Statistics statistics) {
-        this.statistics = statistics;
+        this.statistics = statistics;  
         
-        
+        this.statistics.getBoxMonth().addActionListener(e -> handleMonthSelection());
+                
+              
     }
     
     @Autowired
@@ -550,6 +556,15 @@ public class Controller {
             fillTableProduct(category);  
         }
     }
+    
+    private void handleMonthSelection() {
+        String selectedMonth = (String) statistics.getBoxMonth().getSelectedItem();
+        
+        if (selectedMonth != null && !selectedMonth.equals("Seleccione un mes")) {
+            seeStatistics(selectedMonth);
+        }
+    }
+    
     
     private void fillHeadersTableProducts(DefaultTableModel model) {
         String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
@@ -676,6 +691,20 @@ public class Controller {
                 boxCategorys.addItem(item);
             });
         } 
+    }
+    
+    private void fillMonth() {
+        JComboBox boxMonth = statistics.getBoxMonth();
+        boxMonth.removeAllItems();
+        List<String> months = List.of(
+            "Seleccione un mes",    
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        );
+        
+        months.forEach((month) -> {
+            boxMonth.addItem(month);
+        });
     }
     
     private HashSet<Long> updateIdIngredientesInProduct(HashSet<String> listIngredientsProduct) {
@@ -1435,9 +1464,55 @@ public class Controller {
         companyService.saveCompany(company);
         homepage.getTxtCompanyName().setText(company.getName());
         JOptionPane.showMessageDialog(setting, "Datos guardados correctamente");
-        setting.dispose();
+        setting.dispose();  
+    }
+
+    private void seeStatistics(String month) {
+        List<Order> orders = orderService.findAllOrders();
         
+        LocalDate date = LocalDate.now();
+        int year = date.getYear();
+        
+        int totalOrdersForYear = 0;
+        int totalOrdersForMonth = 0;
+        
+        BigDecimal totalIncomeForMonth = BigDecimal.ZERO;
+        Set<Customer> uniqueCustomers = new HashSet<>(); 
+        
+        int monthNumber = getMonthNumber(month);
+        
+        for (Order order : orders) {
+            if(year == order.getDate().getYear()) {
+                totalOrdersForYear++;
+            }
+            
+            if (year == order.getDate().getYear() && monthNumber == order.getDate().getMonthValue()) {
+                totalOrdersForMonth++;
+                totalIncomeForMonth = totalIncomeForMonth.add(order.getTotalPrice());
+            }  
+            
+            uniqueCustomers.add(order.getCustomer());
+        }
+        
+        int totalCustomersForMonth = uniqueCustomers.size();
+        
+        statistics.getTotalOrdersForMonth().setText(String.valueOf(totalOrdersForMonth));
+        statistics.getBestCustomer().setText(String.valueOf(""));
+        statistics.getTotalCustomersForMonth().setText(String.valueOf(totalCustomersForMonth));
+        statistics.getTotalIncomeForMonth().setText(totalIncomeForMonth.toString());
+        statistics.getTotalOrdersForYear().setText(String.valueOf(totalOrdersForYear));
         
         
     }
+    
+    private int getMonthNumber(String month) {
+        List<String> months = List.of(
+            "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", 
+            "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+        );
+
+        return months.indexOf(month.toUpperCase()) + 1;
+    }
+
+    
 }
