@@ -94,6 +94,10 @@ public class Homepage extends javax.swing.JFrame {
         return totalPrice;
     }
     
+    public JLabel getTxtCompanyName() {
+        return companyName;
+    }
+    
     public JButton getBtnRemoveIngredient() {
         return ingredientRemove;
     }

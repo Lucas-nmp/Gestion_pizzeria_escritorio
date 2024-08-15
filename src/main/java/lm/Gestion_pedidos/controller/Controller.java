@@ -57,10 +57,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import lm.Gestion_pedidos.model.Company;
 import lm.Gestion_pedidos.model.Order;
 import lm.Gestion_pedidos.model.OrderProduct;
+import lm.Gestion_pedidos.service.CompanyService;
 import lm.Gestion_pedidos.service.OrderProductService;
 import lm.Gestion_pedidos.service.OrderService;
+import lm.Gestion_pedidos.view.Setting;
+import lm.Gestion_pedidos.view.Statistics;
 
 /**
  *
@@ -106,11 +110,16 @@ public class Controller {
     @Autowired
     private OrderProductService orderProductService;
     
+    @Autowired
+    private CompanyService companyService;
+    
     private Homepage homepage;
     private ManageCategory manageCategory;
     private ManageProduct manageProduct;
     private ManageIngredient manageIngredient;
     private ManageCustomer manageCustomer;
+    private Setting setting;
+    private Statistics statistics;
     
 
     public void viewHomePage() {
@@ -123,6 +132,12 @@ public class Controller {
         modificationsPrice = BigDecimal.ZERO;
         total = BigDecimal.ZERO;
         setCategory();
+        Company company = companyService.fingCompanyById(1L);
+        String companyName = "Nombre de la empresa";
+        if (company != null) {
+            companyName = company.getName();
+        }
+        homepage.getTxtCompanyName().setText(companyName);
         
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
         Category category = categoryService.findCategoryByName(selectedItem);
@@ -157,10 +172,8 @@ public class Controller {
                     homepage.getCategorys().setSelectedIndex(1);
                 } else {
                     homepage.getCategorys().setSelectedIndex(0);
-                }
-                
+                }    
             }
-        
         });
         manageProduct.setVisible(true);  
     }
@@ -180,9 +193,21 @@ public class Controller {
         manageCustomer.setModal(true);
         fillTableCustomer();
         clearViewCustomer(phone);
-        manageCustomer.setVisible(true);
+        manageCustomer.setVisible(true); 
+    }
+    
+    
+    private void openStatistics() {
         
     }
+    
+    private void openSettings() {
+        setting.setLocationRelativeTo(null);
+        setting.setResizable(false);
+        setting.setModal(true);
+        setting.setVisible(true);
+    }
+    
     
     @Autowired
     public void setHomepage(Homepage homepage) {
@@ -192,6 +217,8 @@ public class Controller {
         this.homepage.getBtnProduct().addActionListener(e -> openManageProducts());
         this.homepage.getBtnIngredient().addActionListener(e -> openManageIngredients());
         this.homepage.getBtnCustomer().addActionListener(e -> openManageCustomer(""));
+        this.homepage.getBtnSetting().addActionListener(e -> openSettings());
+        this.homepage.getBtnStatistics().addActionListener(e -> openStatistics());
         this.homepage.getBtnAdd().addActionListener(e -> addForTheOrder());
         this.homepage.getBtnAdd2().addActionListener(e -> addForTheOrder());
         this.homepage.getBtnRemoveIngredient().addActionListener(e -> removeIngredient());
@@ -342,9 +369,6 @@ public class Controller {
                     manageProduct.getPriceTxt().setText(price.toString());
                     updateIngredientsInProduct(listIngredientsProduct);
                     
-                    // Añadir al producto para Modificarlo
-                    //productSelectedToModify.setProductId(id);
-                    
                     
                     listIdIngredientsInProduct = updateIdIngredientesInProduct(listIngredientsProduct);
                     
@@ -383,7 +407,6 @@ public class Controller {
                     BigDecimal priceIngredient = (BigDecimal) target.getValueAt(selectedRow, 2);
                     manageIngredient.getEdtNameIngredient().setText(nameIngredient);
                     manageIngredient.getEdtPriceIngredient().setText(priceIngredient.toString());
-
                 }  
             }            
         });
@@ -423,14 +446,24 @@ public class Controller {
                     manageCustomer.getEdtNameCustomer().setText(name);
                     manageCustomer.getEdtAddresCustomer().setText(addres);
                     manageCustomer.getEdtPhoneCustomer().setText(phone);
-                    manageCustomer.getEdtStatusCustomer().setText(status);
-                    
-                    
+                    manageCustomer.getEdtStatusCustomer().setText(status);   
                 }
-            }
-            
-        });
-                
+            } 
+        });           
+    }
+    
+    @Autowired
+    private void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
+        
+        
+    }
+    
+    @Autowired
+    private void setSettings(Setting setting) {
+        this.setting = setting;
+        
+        this.setting.getSaveSettings().addActionListener(e -> saveSettings());
     }
     
     private void setCategory() {
@@ -1289,8 +1322,8 @@ public class Controller {
 
     private void printOrder(String address, BigDecimal total, Order order) {
         try {
-            String fileName = order.getOrderId() + "-" + order.getDate().getYear() + "-" + order.getCustomer().getCustomerId() + ".pdf";
-            PdfWriter writer = new PdfWriter(new FileOutputStream(fileName));
+            String fileName = order.getOrderId() + "-" + order.getDate().getYear() + "-" + order.getCustomer().getCustomerId();
+            PdfWriter writer = new PdfWriter(new FileOutputStream(fileName+ ".pdf"));
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
             
@@ -1306,18 +1339,22 @@ public class Controller {
                     .setFontColor(blue)
                     .setTextAlignment(TextAlignment.RIGHT);
 
-            /*
+            Company company = companyService.fingCompanyById(1l);
+            if (company == null) {
+                JOptionPane.showMessageDialog(homepage, "Introduzca los datos de la empresa");
+                return;
+            }
+            
             Paragraph companyDetails = new Paragraph()
-                    .add(datosEmpresa[0] + "\n")
-                    .add(datosEmpresa[1] + "\n")
-                    .add("CIF: " + datosEmpresa[2] + "\n")
-                    .add("Teléfono: " + datosEmpresa[3] + "\n")
-                    .add("Email: " + datosEmpresa[4] + "\n")
+                    .add(company.getName() + "\n")
+                    .add(company.getAddress() + "\n")
+                    .add("CIF: " + company.getCif() + "\n")
+                    .add("Teléfono: " + company.getPhone() + "\n")
                     .setTextAlignment(TextAlignment.RIGHT);
 
             document.add(title);
             document.add(companyDetails);
-            */
+            
             
             document.add(new Paragraph("\n"));
             
@@ -1368,7 +1405,7 @@ public class Controller {
             document.close();
             
             // Abrir el archivo PDF automáticamente
-            File pdfFile = new File(fileName);
+            File pdfFile = new File(fileName+".pdf");
             if (pdfFile.exists()) {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().open(pdfFile);
@@ -1376,11 +1413,31 @@ public class Controller {
                     JOptionPane.showMessageDialog(null, "No se puede abrir el archivo automáticamente.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "El archivo no se pudo generar.");
+                JOptionPane.showMessageDialog(null, "El archivo no se pudo abrir.");
             }
             
             
         } catch (IOException | NumberFormatException e) {
         }
+    }
+
+    private void saveSettings() {
+        Long id = 1l;
+        String name = setting.getSettingsName().getText();
+        String address = setting.getSettingsAddress().getText();
+        String cif = setting.getSettingsCif().getText();
+        String phone = setting.getSettingsPhone().getText();
+        if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || cif.isEmpty()) {
+            JOptionPane.showMessageDialog(setting, "Introduzca todos los datos de la empresa");
+            return;
+        }
+        Company company = new Company(id, name, phone, address, cif);
+        companyService.saveCompany(company);
+        homepage.getTxtCompanyName().setText(company.getName());
+        JOptionPane.showMessageDialog(setting, "Datos guardados correctamente");
+        setting.dispose();
+        
+        
+        
     }
 }

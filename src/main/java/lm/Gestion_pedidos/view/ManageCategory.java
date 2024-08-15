@@ -48,20 +48,34 @@ public class ManageCategory extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         categoryName = new javax.swing.JTextField();
         CategorySave = new javax.swing.JButton();
+        categoryDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         categoryTable = new javax.swing.JTable();
-        categoryDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(26, 44, 68));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         categoryName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel1.add(categoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 200, -1));
 
+        CategorySave.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CategorySave.setText("Guardar");
+        jPanel1.add(CategorySave, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, -1, -1));
+
+        categoryDelete.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        categoryDelete.setText("Eliminar Categoría");
+        jPanel1.add(categoryDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, -1, -1));
+
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 110));
 
         categoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -76,38 +90,17 @@ public class ManageCategory extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(categoryTable);
 
-        categoryDelete.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        categoryDelete.setText("Eliminar Categoría");
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 670, 200));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(categoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(CategorySave)
-                        .addGap(18, 18, 18)
-                        .addComponent(categoryDelete)))
-                .addGap(15, 15, 15))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(categoryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CategorySave)
-                    .addComponent(categoryDelete))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -125,6 +118,7 @@ public class ManageCategory extends javax.swing.JDialog {
     private javax.swing.JTextField categoryName;
     private javax.swing.JTable categoryTable;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
