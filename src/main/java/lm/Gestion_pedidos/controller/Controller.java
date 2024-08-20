@@ -53,12 +53,14 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import java.awt.Desktop;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Set;
+import javax.swing.JTextField;
 import lm.Gestion_pedidos.model.Company;
 import lm.Gestion_pedidos.model.Order;
 import lm.Gestion_pedidos.model.OrderProduct;
@@ -275,6 +277,10 @@ public class Controller {
             }
             
         });
+        
+        limitPhoneCharacters(this.homepage.getEdtPhoneCustomer());
+        
+                
     }
     
     @Autowired
@@ -386,6 +392,10 @@ public class Controller {
  
     @Autowired
     public void setManageIngredient(ManageIngredient manageIngredient) {
+        String price = this.manageIngredient.getEdtPriceIngredient().getText();
+        String name = this.manageIngredient.getEdtNameIngredient().getText();
+        // coget el campo en lugar del string, prdría servir para más campos, comprobar el campo con el texto por defecto y demás
+        
         this.manageIngredient = manageIngredient;
         
         this.manageIngredient.getBtnSaveIngredient().addActionListener(e -> saveOrModifyIngredient());
@@ -393,6 +403,7 @@ public class Controller {
         
         //permite guardar un ingrediente con la tecla enter desde el textField de precio
         this.manageIngredient.getEdtPriceIngredient().addActionListener((ActionEvent e) -> {
+
             saveOrModifyIngredient();
             this.manageIngredient.getEdtNameIngredient().requestFocus();
         });
@@ -414,6 +425,8 @@ public class Controller {
                 }  
             }            
         });
+        
+        
     }
     
     @Autowired
@@ -453,7 +466,11 @@ public class Controller {
                     manageCustomer.getEdtStatusCustomer().setText(status);   
                 }
             } 
-        });           
+        });
+        
+        limitPhoneCharacters(manageCustomer.getEdtPhoneCustomer());
+
+        
     }
     
     @Autowired
@@ -1512,6 +1529,22 @@ public class Controller {
         );
 
         return months.indexOf(month.toUpperCase()) + 1;
+    }
+
+    private void limitPhoneCharacters(JTextField edtPhone) {
+        edtPhone.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume();
+                }
+                
+                if (edtPhone.getText().length() >= 9) {
+                    e.consume();
+                }    
+            }
+        });
     }
 
     
