@@ -38,6 +38,10 @@ public class Homepage extends javax.swing.JFrame {
         return btnCustomer;
     }
     
+    public JButton getBtnDemo() {
+        return btnDemo;
+    }
+    
     public JButton getBtnIngredient() {
         return btnIngredient;
     }
@@ -173,6 +177,7 @@ public class Homepage extends javax.swing.JFrame {
         btnStatistics = new javax.swing.JButton();
         btnSettings = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        btnDemo = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         customerPhone = new javax.swing.JTextField();
         customerAddres = new javax.swing.JLabel();
@@ -264,6 +269,12 @@ public class Homepage extends javax.swing.JFrame {
         btnExit.setText("Salir");
         btnExit.setBorder(null);
 
+        btnDemo.setBackground(new java.awt.Color(26, 44, 68));
+        btnDemo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnDemo.setForeground(new java.awt.Color(255, 255, 255));
+        btnDemo.setText("Cargar datos demo");
+        btnDemo.setBorder(null);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -271,7 +282,9 @@ public class Homepage extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(companyName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 404, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 198, Short.MAX_VALUE)
+                .addComponent(btnDemo)
+                .addGap(52, 52, 52)
                 .addComponent(btnCustomer)
                 .addGap(18, 18, 18)
                 .addComponent(btnIngredient)
@@ -299,7 +312,8 @@ public class Homepage extends javax.swing.JFrame {
                     .addComponent(btnProduct)
                     .addComponent(btnIngredient)
                     .addComponent(btnSettings)
-                    .addComponent(btnExit))
+                    .addComponent(btnExit)
+                    .addComponent(btnDemo))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -632,6 +646,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton btnCategory;
     private javax.swing.JButton btnConfirmOrder;
     private javax.swing.JButton btnCustomer;
+    private javax.swing.JButton btnDemo;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnIngredient;
     private javax.swing.JButton btnProduct;

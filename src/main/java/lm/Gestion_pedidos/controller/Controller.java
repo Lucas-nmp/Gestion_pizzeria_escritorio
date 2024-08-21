@@ -59,6 +59,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Random;
 import java.util.Set;
 import javax.swing.JTextField;
 import lm.Gestion_pedidos.model.Company;
@@ -236,6 +237,8 @@ public class Controller {
         this.homepage.getBtnConfirmOrder().addActionListener(e -> confirmOrder());
         this.homepage.getBtnRemoveFromOrder().addActionListener(e -> removeFromOrder());
         
+        this.homepage.getBtnDemo().addActionListener(e -> loadDemoData());
+        
         
         this.homepage.getEdtPhoneCustomer().addActionListener((ActionEvent e) -> {
             String phone = homepage.getEdtPhoneCustomer().getText();
@@ -392,9 +395,7 @@ public class Controller {
  
     @Autowired
     public void setManageIngredient(ManageIngredient manageIngredient) {
-        String price = this.manageIngredient.getEdtPriceIngredient().getText();
-        String name = this.manageIngredient.getEdtNameIngredient().getText();
-        // coget el campo en lugar del string, prdría servir para más campos, comprobar el campo con el texto por defecto y demás
+        
         
         this.manageIngredient = manageIngredient;
         
@@ -963,18 +964,7 @@ public class Controller {
     private void setCategory(String string) {
         manageProduct.getCategoryTxt().setText(string);
     }
-    /*
-    private void deleteProduct() {
-        if (productSelectedToModify != null) {
-            List<ProductIngredient> listProductIngredient = productIngredientService.findByProduct(productSelectedToModify);
-            productIngredientService.deleteAll(listProductIngredient);
-            productService.deleteProduct(productSelectedToModify);
-            JOptionPane.showMessageDialog(manageProduct, "Producto eliminado correctamente");
-            fillTableProduct();
-            clearViewProduct();
-        }
-    }
-    */
+    
     
     private void deleteProduct() {
         JTable target = manageProduct.getTableProducts();
@@ -1104,10 +1094,6 @@ public class Controller {
         fillTableCustomer();   
     }
         
-        
-        
-    
-
     private void clearViewCustomer(String phone) {
         manageCustomer.getEdtNameCustomer().setText("");
         manageCustomer.getEdtAddresCustomer().setText("");
@@ -1545,6 +1531,197 @@ public class Controller {
                 }    
             }
         });
+    }
+    
+    public void loadDemoData(){
+       
+        
+        String[] categorys = {"Pizzas", "Pasta", "Carne", "Tortillas", "Bocadillos", "Aperitivos", "Bebidas"};
+        for (String name : categorys) {
+            Category category = new Category(null, name);
+            categoryService.addCategory(category);
+        }
+        // "Masa casera", "tomate", "orégano",
+        String ingredients[] = {"mozzarella", "cebolla", "york", "olivas", "champiñón", "anchoas", "alcaparras",
+                "espárragos", "alcachofas", "roquefort", "pimiento", "guindilla", "pepinillos", "pepperoni", "bacon", "atún", "calamares", "gambas", "ajo", 
+                "anchoas", "salsa barbacoa", "carne", "chorizo", "maíz", "tomate natural", "nata", "kebab de pollo", "salmón", "carne con tomate", "salchichas", "huevo",
+                "pollo", "jamón serrano", "emmental", "edam", "piña", "palitos de mar", "Sin lactosa"};
+        
+        BigDecimal prices[] = {BigDecimal.valueOf(0.80), BigDecimal.valueOf(0.40), BigDecimal.valueOf(0.50), BigDecimal.valueOf(0.60), BigDecimal.valueOf(0.70)};
+        
+        for (String name : ingredients) {
+            Ingredient ingredient = new Ingredient();
+            ingredient.setName(name);
+            Random random = new Random();
+            int randomIndex = random.nextInt(prices.length);
+            ingredient.setPrice(prices[randomIndex]);
+            ingredientService.addModifyIngredient(ingredient); 
+        }
+        
+        loadPizzas();
+        loadCustomers();
+        generateRandomOrders(10000);
+        fillCategorys(homepage.getCategorys());
+        fillIngredients(homepage.getIngredientModify());
+        
+        
+    }
+    
+    private void loadPizzas() {
+        Random random = new Random();
+        List<Ingredient> ingredients = ingredientService.getAllIngredients();
+        
+        String pizzas[] = {"Pericote", "Roquefort", "Olimpia", "Ciccio", "Don Pepino", "Bacon", "Fruto del mar", "Vegetal", "Diávolo", "Napolitana", "Atún", "Barbacoa",
+                "4 Estaciones", "Primavera", "Prosciutto", "York", "Filipensas", "Carbonara", "Finiculi", "Siciliana", "Pepperoni", "Láctea", "Kebab", "Bella Napoli", 
+                "Margherita", "Gamsal", "Bolognesa" , "Santiago", "pollinata", "Serrana", "Fungi", "4 Quesos", "Pollo", "Piña", "Hawaiana"};
+        
+        BigDecimal prices[] = {BigDecimal.valueOf(7.50), BigDecimal.valueOf(7.70),BigDecimal.valueOf(8.00), BigDecimal.valueOf(8.20), BigDecimal.valueOf(8.50), BigDecimal.valueOf(9.00), BigDecimal.valueOf(9.50)};
+        
+        for (String name : pizzas) {
+            Category category = categoryService.findCategoryByName("Pizzas");
+            Product product = new Product();
+            product.setName(name);
+            product.setCategory(category);
+
+            // Asignar precio aleatorio
+            int randomIndex = random.nextInt(prices.length);
+            product.setPrice(prices[randomIndex]);
+
+            // Guardar el producto
+            productService.saveModifyProduct(product);
+            
+            // Asignar entre 2 y 4 ingredientes aleatorios
+            int numIngredients = random.nextInt(5) + 2; // Genera un número aleatorio entre 2 y 4
+            Set<Ingredient> selectedIngredients = new HashSet<>(); // Para evitar ingredientes duplicados
+
+            while (selectedIngredients.size() < numIngredients) {
+                randomIndex = random.nextInt(ingredients.size());
+                selectedIngredients.add(ingredients.get(randomIndex));  
+            }  
+            for (Ingredient in : selectedIngredients) {
+                ProductIngredient prIn = new ProductIngredient(null, product, in);
+                productIngredientService.saveProductIngredient(prIn);
+            }
+        }
+
+    }
+
+    private void loadCustomers() {
+        List<String> nombres = Arrays.asList(
+            "Antonio", "María", "Manuel", "Carmen", "José", "Ana", "Francisco", "Laura", "David", "Isabel", 
+            "Juan", "Marta", "Javier", "Lucía", "Carlos", "Sara", "Miguel", "Paula", "Daniel", "Claudia", 
+            "Pedro", "Patricia", "Alejandro", "Sofía", "Rafael", "Elena", "Raúl", "Irene", "Adrián", "Silvia", 
+            "Álvaro", "Rosa", "Sergio", "Cristina", "Luis", "Beatriz", "Fernando", "Victoria", "Jorge", "Eva", 
+            "Pablo", "Nuria", "Roberto", "Alicia", "Alberto", "Natalia", "Mario", "Julia", "Andrés", "Teresa"
+        );
+        
+        List<String> apellidos = Arrays.asList(
+            "García", "Martínez", "López", "Sánchez", "Rodríguez", "Fernández", "Pérez", "González", "Gómez", "Ruiz", 
+            "Díaz", "Hernández", "Muñoz", "Álvarez", "Moreno", "Jiménez", "Romero", "Torres", "Navarro", "Gutiérrez", 
+            "Ramos", "Gil", "Vázquez", "Serrano", "Molina", "Blanco", "Castro", "Ortiz", "Rubio", "Marín", 
+            "Suárez", "Sanz", "Medina", "Vega", "Domínguez", "Fuentes", "Cabrera", "Iglesias", "Reyes", "Rivas"
+        );
+        
+        List<String> calles = Arrays.asList(
+            "Calle Mayor", "Avenida de la Constitución", "Calle Real", "Paseo de la Castellana", "Calle del Carmen", 
+            "Calle de los Olmos", "Calle Gran Vía", "Calle de la Paz", "Calle San Juan", "Calle del Sol", 
+            "Calle del Mar", "Calle de la Estrella", "Avenida de España", "Calle del Río", "Calle del Prado", 
+            "Calle del Valle", "Calle de la Iglesia", "Calle de la Libertad", "Calle Nueva", "Calle del Molino", 
+            "Calle de las Flores", "Calle de la Fuente", "Calle del Pilar", "Calle de San Pedro", "Calle de la Luna", 
+            "Calle del Agua", "Calle de los Pinos", "Calle de San Antonio", "Calle del Norte", "Calle del Cid", 
+            "Calle de Santa Ana", "Calle del Pozo", "Calle del Aire", "Calle del Olivo", "Calle de la Amistad", 
+            "Calle de los Abetos", "Calle del Almendro", "Calle del Álamo", "Calle de la Cruz", "Calle del Roble", 
+            "Calle de los Naranjos", "Calle de la Estación", "Calle del Castillo", "Calle del Fuego", "Calle del Bosque", 
+            "Calle del Coloso", "Calle de los Laureles", "Calle de la Encina", "Calle del Arenal", "Calle de las Rosas"
+        );
+        
+        List<String> numeros = Arrays.asList("1º", "1ºB", "1ºA", "2º", "2ºB", "2ºA", "3º", "3ºB", "3ºA" );
+        
+        Random random = new Random();
+        for (int i=0; i<1000; i++) {
+            int index = random.nextInt(nombres.size());
+            String nombre = nombres.get(index);
+            
+            
+            index = random.nextInt(apellidos.size());
+            String apellido = apellidos.get(index);
+            
+            index = random.nextInt(calles.size());
+            String calle = calles.get(index);
+            
+            index = random.nextInt(numeros.size());
+            String numero = numeros.get(index);
+            String direccion = calle +" " + numero;
+            
+            String telefono = generatePhone();
+            
+            Customer customer = new Customer();
+            customer.setName(nombre + " " + apellido);
+            customer.setAddress(direccion);
+            customer.setPhone(telefono);
+            customerService.addCustomer(customer);
+        }
+        
+        
+    }
+    
+    private String generatePhone() {
+        int n = 600000000;
+        int m = 699999999;
+        int phone = (int)Math.floor(Math.random()*(n-m+1)+m);
+        return String.valueOf(phone);
+    }
+    
+    
+    public void generateRandomOrders(int numberOfOrders) {
+        Random random = new Random();
+
+        // Obtener todos los clientes y productos disponibles
+        List<Customer> customers = customerService.findAllCustomers();
+        List<Product> products = productService.findAllProducts();
+
+        // Generar las órdenes
+        for (int i = 0; i < numberOfOrders; i++) {
+            // Seleccionar un cliente aleatorio
+            Customer randomCustomer = customers.get(random.nextInt(customers.size()));
+
+            // Crear una nueva orden
+            Order order = new Order();
+            order.setCustomer(randomCustomer);
+
+            // Generar una fecha aleatoria del último año
+            LocalDate randomDate = LocalDate.now().minusDays(random.nextInt(365));
+            order.setDate(randomDate);
+
+            // Crear una lista de productos para esta orden (entre 1 y 5 productos aleatorios)
+            int numberOfProducts = random.nextInt(5) + 1; // Entre 1 y 5 productos
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            List<OrderProduct> orderProducts = new ArrayList<>();
+
+            for (int j = 0; j < numberOfProducts; j++) {
+                // Seleccionar un producto aleatorio
+                Product randomProduct = products.get(random.nextInt(products.size()));
+
+                // Crear una nueva instancia de OrderProduct
+                OrderProduct orderProduct = new OrderProduct();
+                orderProduct.setOrder(order);
+                orderProduct.setProduct(randomProduct);
+                orderProduct.setPriceWithModifications(randomProduct.getPrice()); // Usamos el precio del producto
+
+                // Añadir el producto a la lista de productos de la orden
+                orderProducts.add(orderProduct);
+
+                // Sumar el precio al total de la orden
+                totalPrice = totalPrice.add(randomProduct.getPrice());
+            }
+
+            // Asignar el total y la lista de productos a la orden
+            order.setTotalPrice(totalPrice);
+            order.setOrderProducts(orderProducts);
+
+            // Guardar la orden en la base de datos
+            orderService.addOrder(order);
+        }
     }
 
     
