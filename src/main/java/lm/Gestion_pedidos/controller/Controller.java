@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.annotation.Target;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +57,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Random;
 import java.util.Set;
 import javax.swing.JTextField;
@@ -1479,6 +1477,7 @@ public class Controller {
         int totalOrdersForYear = 0;
         int totalOrdersForMonth = 0;
         
+        BigDecimal totalIncomeForYear = BigDecimal.ZERO;
         BigDecimal totalIncomeForMonth = BigDecimal.ZERO;
         Set<Customer> uniqueCustomers = new HashSet<>(); 
         
@@ -1487,12 +1486,14 @@ public class Controller {
         for (Order order : orders) {
             if(year == order.getDate().getYear()) {
                 totalOrdersForYear++;
+                totalIncomeForYear = totalIncomeForYear.add(order.getTotalPrice());
             }
             
             if (year == order.getDate().getYear() && monthNumber == order.getDate().getMonthValue()) {
                 totalOrdersForMonth++;
                 totalIncomeForMonth = totalIncomeForMonth.add(order.getTotalPrice());
-            }  
+            } 
+            
             
             uniqueCustomers.add(order.getCustomer());
         }
@@ -1504,6 +1505,7 @@ public class Controller {
         statistics.getTotalCustomersForMonth().setText(String.valueOf(totalCustomersForMonth));
         statistics.getTotalIncomeForMonth().setText(totalIncomeForMonth.toString());
         statistics.getTotalOrdersForYear().setText(String.valueOf(totalOrdersForYear));
+        statistics.getTotalIncomeForYear().setText(totalIncomeForYear.toString());
         
         
     }
@@ -1536,16 +1538,17 @@ public class Controller {
     public void loadDemoData(){
        
         
-        String[] categorys = {"Pizzas", "Pasta", "Carne", "Tortillas", "Bocadillos", "Aperitivos", "Bebidas"};
+        String[] categorys = {"Pizzas", "Platos preparados", "Tortillas", "Bocadillos", "Aperitivos", "Bebidas"};
         for (String name : categorys) {
             Category category = new Category(null, name);
             categoryService.addCategory(category);
         }
         // "Masa casera", "tomate", "orégano",
-        String ingredients[] = {"mozzarella", "cebolla", "york", "olivas", "champiñón", "anchoas", "alcaparras",
-                "espárragos", "alcachofas", "roquefort", "pimiento", "guindilla", "pepinillos", "pepperoni", "bacon", "atún", "calamares", "gambas", "ajo", 
-                "anchoas", "salsa barbacoa", "carne", "chorizo", "maíz", "tomate natural", "nata", "kebab de pollo", "salmón", "carne con tomate", "salchichas", "huevo",
-                "pollo", "jamón serrano", "emmental", "edam", "piña", "palitos de mar", "Sin lactosa"};
+        String ingredients[] = {"mozzarella",  "york", "olivas", "champiñón", "anchoas", "alcaparras", "bacon", "atún",
+                "espárragos", "alcachofas", "roquefort", "pimiento", "guindilla", "pepinillos", "pepperoni",  "calamares", "gambas", "ajo", 
+                "anchoas","cebolla", "salsa barbacoa", "carne", "chorizo", "maíz", "tomate natural", "nata", "kebab de pollo", "salmón", "carne con tomate", "salchichas", "huevo",
+                "pollo", "jamón serrano", "emmental", "edam", "piña", "palitos de mar", "Sin lactosa", "Bebida", "lechuga", "Plato preparado", "Aperitivo",
+                "Salchica", "queso", "Tortilla"};
         
         BigDecimal prices[] = {BigDecimal.valueOf(0.80), BigDecimal.valueOf(0.40), BigDecimal.valueOf(0.50), BigDecimal.valueOf(0.60), BigDecimal.valueOf(0.70)};
         
@@ -1559,7 +1562,12 @@ public class Controller {
         }
         
         loadPizzas();
+        loadDrinks();
         loadCustomers();
+        loadSnaks();
+        loadSandwichs();
+        loadPreparedDishes();
+        loadTortillas();
         generateRandomOrders(10000);
         fillCategorys(homepage.getCategorys());
         fillIngredients(homepage.getIngredientModify());
@@ -1605,6 +1613,69 @@ public class Controller {
         }
 
     }
+    
+    private void loadDrinks() {
+        //Ingredient i = ingredientService.findIngredientById(Long.MIN_VALUE) plato preparado 41, aperitivo 42, salchicha 43, queso 44, bebida 39
+        Ingredient ingredient = ingredientService.findIngredientById(39l);
+        Category category = categoryService.findCategoryByName("Bebidas");
+        BigDecimal price = BigDecimal.valueOf(1.20);
+        String names[] = {"Coca-cola", "Fanta Naranja", "Fanta Limón", "Acuarius", "Cerveza", "Agua"};
+        
+        saveProduct(names, category, price, ingredient);
+        
+    }
+    
+    private void loadSnaks() {
+        Ingredient ingredient = ingredientService.findIngredientById(42l);
+        Category category = categoryService.findCategoryByName("Aperitivos");
+        BigDecimal price = BigDecimal.valueOf(1.50);
+        String[] names = {"olivas rellenas de anchoa", "Pepinillos", "Olivas violadas", "Banderillas picantes"};   
+        
+        saveProduct(names, category, price, ingredient);
+    }
+    
+    private void loadTortillas() {
+        Ingredient ingredient = ingredientService.findIngredientById(45l);
+        Category category = categoryService.findCategoryByName("Tortillas");
+        BigDecimal price = BigDecimal.valueOf(4.00);
+        String[] names = {"Francesa", "Jamón", "Gambas"};   
+        
+        saveProduct(names, category, price, ingredient);
+    }
+    
+    private void loadPreparedDishes() {
+        //Ingredient i = ingredientService.findIngredientById(Long.MIN_VALUE) plato preparado 41, aperitivo 42, salchicha 43, queso 44, bebida 39
+        Ingredient ingredient = ingredientService.findIngredientById(41l);
+        Category category = categoryService.findCategoryByName("Platos preparados");
+        BigDecimal price = BigDecimal.valueOf(5.00);
+        String names[] = {"Lasaña", "Macarrones", "Callos"};
+        
+        saveProduct(names, category, price, ingredient);
+    }
+    
+    private void loadSandwichs() {
+        Ingredient ingredient = ingredientService.findIngredientById(43l);
+        Category category = categoryService.findCategoryByName("Bocadillos");
+        BigDecimal price = BigDecimal.valueOf(4.00);
+        String names[] = {"Lomo", "Hamburguesa", "Hamburguesa completa", "Perrito", "Bacon", "Sandwich"};
+        
+        saveProduct(names, category, price, ingredient);
+        
+    }
+    
+ 
+    private void saveProduct(String[] names, Category category, BigDecimal price, Ingredient ingredient) {
+        for (String name : names) {
+            Product product = new Product();
+            product.setCategory(category);
+            product.setName(name);
+            product.setPrice(price);
+            productService.saveModifyProduct(product);
+            ProductIngredient prIn = new ProductIngredient(null, product, ingredient);
+            productIngredientService.saveProductIngredient(prIn);
+        }
+    }
+    
 
     private void loadCustomers() {
         List<String> nombres = Arrays.asList(
@@ -1723,6 +1794,8 @@ public class Controller {
             orderService.addOrder(order);
         }
     }
+
+    
 
     
 }

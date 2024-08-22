@@ -32,6 +32,10 @@ public class Statistics extends javax.swing.JDialog {
         return totalIncomeForMonth;
     }
     
+    public JLabel getTotalIncomeForYear() {
+        return totalIncomeForYear;
+    }
+    
     public JLabel getTotalOrdersForYear() {
         return totalOrdersForYear;
     }
@@ -70,7 +74,7 @@ public class Statistics extends javax.swing.JDialog {
         totalOrdersForYear = new javax.swing.JLabel();
         month = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        totalIncomeForYear = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -123,9 +127,9 @@ public class Statistics extends javax.swing.JDialog {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Total ingresado en el año en curso");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("0");
+        totalIncomeForYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        totalIncomeForYear.setForeground(new java.awt.Color(255, 255, 255));
+        totalIncomeForYear.setText("0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -137,7 +141,7 @@ public class Statistics extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7))
+                        .addComponent(totalIncomeForYear))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -184,7 +188,7 @@ public class Statistics extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7))
+                    .addComponent(totalIncomeForYear))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -212,10 +216,10 @@ public class Statistics extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JComboBox<String> month;
     private javax.swing.JLabel totalIncomeForMonth;
+    private javax.swing.JLabel totalIncomeForYear;
     private javax.swing.JLabel totalOrdersForMonth;
     private javax.swing.JLabel totalOrdersForYear;
     // End of variables declaration//GEN-END:variables
