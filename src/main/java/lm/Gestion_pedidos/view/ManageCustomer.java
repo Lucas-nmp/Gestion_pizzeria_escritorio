@@ -86,12 +86,16 @@ public class ManageCustomer extends javax.swing.JDialog {
         jPanel2.setBackground(new java.awt.Color(26, 44, 68));
 
         manageCustomerName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerName.setForeground(new java.awt.Color(204, 204, 204));
 
         manageCustomerAddres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerAddres.setForeground(new java.awt.Color(204, 204, 204));
 
         manageCustomerPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerPhone.setForeground(new java.awt.Color(204, 204, 204));
 
         manageCustomerStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerStatus.setForeground(new java.awt.Color(204, 204, 204));
 
         manageCustomerLookForCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageCustomerLookForCustomer.setText("Buscar");

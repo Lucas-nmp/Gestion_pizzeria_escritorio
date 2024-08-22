@@ -279,6 +279,15 @@ public class Controller {
             
         });
         
+        this.homepage.getEdtPhoneCustomer().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                homepage.getEdtPhoneCustomer().setText("");
+            }
+            
+        });
+        
+        
         limitPhoneCharacters(this.homepage.getEdtPhoneCustomer());
         
                 
@@ -442,8 +451,7 @@ public class Controller {
         
         this.manageCustomer.getEdtAddresCustomer().addActionListener((ActionEvent e) -> {
             saveOrModifyCustomer();
-            clearViewCustomer("");
-            manageCustomer.dispose();
+            
         });
         
         
@@ -467,10 +475,91 @@ public class Controller {
             } 
         });
         
+        this.manageCustomer.getEdtNameCustomer().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                JTextField fieldName =  manageCustomer.getEdtNameCustomer();
+                checkFieldFocusGained(fieldName, "Nombre");
+                
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField fieldName =  manageCustomer.getEdtNameCustomer();
+                checkFieldFocusLost(fieldName, "Nombre");
+                
+            }
+
+ 
+        });
+        
+        
+        
+        this.manageCustomer.getEdtAddresCustomer().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                JTextField fieldName = manageCustomer.getEdtAddresCustomer();
+                checkFieldFocusGained(fieldName, "Dirección");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField fieldName = manageCustomer.getEdtAddresCustomer();
+                checkFieldFocusLost(fieldName, "Dirección");
+            }
+        });
+        
+        this.manageCustomer.getEdtPhoneCustomer().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                JTextField fieldName = manageCustomer.getEdtPhoneCustomer();
+                checkFieldFocusGained(fieldName, "Teléfono");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField fieldName = manageCustomer.getEdtPhoneCustomer();
+                checkFieldFocusLost(fieldName, "Teléfono");
+            }
+        });
+        
+        this.manageCustomer.getEdtStatusCustomer().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                JTextField fieldName = manageCustomer.getEdtStatusCustomer();
+                checkFieldFocusGained(fieldName, "Observaciones");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField fieldName = manageCustomer.getEdtStatusCustomer();
+                checkFieldFocusLost(fieldName, "Observaciones");
+            }
+            
+            
+        });
+        
         limitPhoneCharacters(manageCustomer.getEdtPhoneCustomer());
 
         
     }
+    
+    private void checkFieldFocusGained(JTextField fieldName, String texto) {
+        if (fieldName.getText().equals(texto)) {
+            fieldName.setText("");
+            fieldName.setForeground(java.awt.Color.BLACK);
+        }
+    }  
+    
+    private void checkFieldFocusLost(JTextField fieldName, String texto) {
+        if (fieldName.getText().equals(texto) || fieldName.getText().isEmpty()) {
+            fieldName.setText(texto);
+            fieldName.setForeground(java.awt.Color.GRAY);
+        }
+    }
+    
+    
+
     
     @Autowired
     private void setStatistics(Statistics statistics) {
@@ -1052,7 +1141,7 @@ public class Controller {
     private void saveOrModifyCustomer() {
         JTable target = manageCustomer.getTableCustomer();
         int selectedRow = target.getSelectedRow();
-        
+        String message = "Cliente añadido correctamente";
         String name = manageCustomer.getEdtNameCustomer().getText();
         String phone = manageCustomer.getEdtPhoneCustomer().getText();
         String addres = manageCustomer.getEdtAddresCustomer().getText();
@@ -1065,6 +1154,7 @@ public class Controller {
         Customer customer;
         
         if (selectedRow != -1) {
+            message = "Cliente modificado correctamente";
             Long id = (Long) target.getValueAt(selectedRow, 0);
             customer = customerService.findCustomerById(id);
             
@@ -1083,20 +1173,33 @@ public class Controller {
         customer.setName(name);
         customer.setAddress(addres);
         customer.setPhone(phone);
+        if(status.equals("Observaciones")) {
+            status = "";
+        }
         customer.setStatus(status);
 
         customerService.addCustomer(customer);
 
         clearViewCustomer("");
-        JOptionPane.showMessageDialog(manageCustomer, "Cliente añadido/modificado Correctamente");
-        fillTableCustomer();   
+        JOptionPane.showMessageDialog(manageCustomer, message);
+        fillTableCustomer(); 
+        manageCustomer.dispose();
     }
         
     private void clearViewCustomer(String phone) {
-        manageCustomer.getEdtNameCustomer().setText("");
-        manageCustomer.getEdtAddresCustomer().setText("");
-        manageCustomer.getEdtPhoneCustomer().setText(phone);
-        manageCustomer.getEdtStatusCustomer().setText("");
+        manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.GRAY);
+        manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.GRAY);
+        manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.GRAY);
+        manageCustomer.getEdtNameCustomer().setText("Nombre");
+        manageCustomer.getEdtAddresCustomer().setText("Dirección");
+        manageCustomer.getEdtStatusCustomer().setText("Observaciones");
+        if (phone.isEmpty()) {
+            manageCustomer.getEdtPhoneCustomer().setText("Teléfono");
+        } else {
+            manageCustomer.getEdtPhoneCustomer().setText(phone);
+        }
+        
+        
     }
 
     private void fillTableCustomer() {
@@ -1126,8 +1229,8 @@ public class Controller {
         if (name.equals("Nombre") || name.isEmpty()) {
             JOptionPane.showMessageDialog(manageCustomer, "El nombre no puede estar vacío");
             return false;
-        } else if(phone.equals("Teléfono") || phone.isEmpty()) {
-            JOptionPane.showMessageDialog(manageCustomer, "El teléfono no puede estar vacío");
+        } else if(phone.equals("Teléfono") || phone.isEmpty() || phone.length()<9) {
+            JOptionPane.showMessageDialog(manageCustomer, "El teléfono no tine el formato correcto");
             return false;
         } else if (addres.equals("Dirección") || addres.isEmpty()) {
             JOptionPane.showMessageDialog(manageCustomer, "La dirección no puede estar vacía");
@@ -1536,19 +1639,43 @@ public class Controller {
     }
     
     public void loadDemoData(){
-       
+
+        List<Category> categorys = categoryService.getAllCategorys();
+        if (categorys.isEmpty()) {
+            loadCategorys();
+            loadIngredients();
+            loadPizzas();
+            loadDrinks();
+            loadCustomers();
+            loadSnaks();
+            loadSandwichs();
+            loadPreparedDishes();
+            loadTortillas();
+            generateRandomOrders(10000);
+            fillCategorys(homepage.getCategorys());
+            fillIngredients(homepage.getIngredientModify());
+        } else {
+            JOptionPane.showMessageDialog(homepage, "Ya hay datos en la base de datos");
+        }
         
+        
+        
+    }
+    
+    private void loadCategorys() {
         String[] categorys = {"Pizzas", "Platos preparados", "Tortillas", "Bocadillos", "Aperitivos", "Bebidas"};
         for (String name : categorys) {
             Category category = new Category(null, name);
             categoryService.addCategory(category);
         }
-        // "Masa casera", "tomate", "orégano",
+    }
+    
+    private void loadIngredients() {
         String ingredients[] = {"mozzarella",  "york", "olivas", "champiñón", "anchoas", "alcaparras", "bacon", "atún",
                 "espárragos", "alcachofas", "roquefort", "pimiento", "guindilla", "pepinillos", "pepperoni",  "calamares", "gambas", "ajo", 
                 "anchoas","cebolla", "salsa barbacoa", "carne", "chorizo", "maíz", "tomate natural", "nata", "kebab de pollo", "salmón", "carne con tomate", "salchichas", "huevo",
                 "pollo", "jamón serrano", "emmental", "edam", "piña", "palitos de mar", "Sin lactosa", "Bebida", "lechuga", "Plato preparado", "Aperitivo",
-                "Salchica", "queso", "Tortilla"};
+                "Bocadillo", "queso", "Tortilla"};
         
         BigDecimal prices[] = {BigDecimal.valueOf(0.80), BigDecimal.valueOf(0.40), BigDecimal.valueOf(0.50), BigDecimal.valueOf(0.60), BigDecimal.valueOf(0.70)};
         
@@ -1560,19 +1687,6 @@ public class Controller {
             ingredient.setPrice(prices[randomIndex]);
             ingredientService.addModifyIngredient(ingredient); 
         }
-        
-        loadPizzas();
-        loadDrinks();
-        loadCustomers();
-        loadSnaks();
-        loadSandwichs();
-        loadPreparedDishes();
-        loadTortillas();
-        generateRandomOrders(10000);
-        fillCategorys(homepage.getCategorys());
-        fillIngredients(homepage.getIngredientModify());
-        
-        
     }
     
     private void loadPizzas() {
