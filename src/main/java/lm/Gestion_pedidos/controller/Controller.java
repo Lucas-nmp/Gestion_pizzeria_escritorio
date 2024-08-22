@@ -368,7 +368,6 @@ public class Controller {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1) {
                     listIngredientsProduct.clear();
-                    //productSelectedToModify = new Product();
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
                     
@@ -468,9 +467,13 @@ public class Controller {
                     String status = (String) target.getValueAt(selectedRow, 4);
                     
                     manageCustomer.getEdtNameCustomer().setText(name);
+                    manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.BLACK);
                     manageCustomer.getEdtAddresCustomer().setText(addres);
+                    manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.BLACK);
                     manageCustomer.getEdtPhoneCustomer().setText(phone);
+                    manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.BLACK);
                     manageCustomer.getEdtStatusCustomer().setText(status);   
+                    manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.BLACK);
                 }
             } 
         });
@@ -1190,6 +1193,7 @@ public class Controller {
         manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.GRAY);
         manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.GRAY);
         manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.GRAY);
+        manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.GRAY);
         manageCustomer.getEdtNameCustomer().setText("Nombre");
         manageCustomer.getEdtAddresCustomer().setText("Dirección");
         manageCustomer.getEdtStatusCustomer().setText("Observaciones");
@@ -1671,7 +1675,7 @@ public class Controller {
     }
     
     private void loadIngredients() {
-        String ingredients[] = {"mozzarella",  "york", "olivas", "champiñón", "anchoas", "alcaparras", "bacon", "atún",
+        String ingredients[] = {"mozzarella",  "york", "olivas", "champiñón", "alcaparras", "bacon", "atún",
                 "espárragos", "alcachofas", "roquefort", "pimiento", "guindilla", "pepinillos", "pepperoni",  "calamares", "gambas", "ajo", 
                 "anchoas","cebolla", "salsa barbacoa", "carne", "chorizo", "maíz", "tomate natural", "nata", "kebab de pollo", "salmón", "carne con tomate", "salchichas", "huevo",
                 "pollo", "jamón serrano", "emmental", "edam", "piña", "palitos de mar", "Sin lactosa", "Bebida", "lechuga", "Plato preparado", "Aperitivo",
@@ -1730,7 +1734,7 @@ public class Controller {
     
     private void loadDrinks() {
         //Ingredient i = ingredientService.findIngredientById(Long.MIN_VALUE) plato preparado 41, aperitivo 42, salchicha 43, queso 44, bebida 39
-        Ingredient ingredient = ingredientService.findIngredientById(39l);
+        Ingredient ingredient = ingredientService.findIngredientById(38l);
         Category category = categoryService.findCategoryByName("Bebidas");
         BigDecimal price = BigDecimal.valueOf(1.20);
         String names[] = {"Coca-cola", "Fanta Naranja", "Fanta Limón", "Acuarius", "Cerveza", "Agua"};
@@ -1740,7 +1744,7 @@ public class Controller {
     }
     
     private void loadSnaks() {
-        Ingredient ingredient = ingredientService.findIngredientById(42l);
+        Ingredient ingredient = ingredientService.findIngredientById(41l);
         Category category = categoryService.findCategoryByName("Aperitivos");
         BigDecimal price = BigDecimal.valueOf(1.50);
         String[] names = {"olivas rellenas de anchoa", "Pepinillos", "Olivas violadas", "Banderillas picantes"};   
@@ -1749,7 +1753,7 @@ public class Controller {
     }
     
     private void loadTortillas() {
-        Ingredient ingredient = ingredientService.findIngredientById(45l);
+        Ingredient ingredient = ingredientService.findIngredientById(44l);
         Category category = categoryService.findCategoryByName("Tortillas");
         BigDecimal price = BigDecimal.valueOf(4.00);
         String[] names = {"Francesa", "Jamón", "Gambas"};   
@@ -1759,7 +1763,7 @@ public class Controller {
     
     private void loadPreparedDishes() {
         //Ingredient i = ingredientService.findIngredientById(Long.MIN_VALUE) plato preparado 41, aperitivo 42, salchicha 43, queso 44, bebida 39
-        Ingredient ingredient = ingredientService.findIngredientById(41l);
+        Ingredient ingredient = ingredientService.findIngredientById(40l);
         Category category = categoryService.findCategoryByName("Platos preparados");
         BigDecimal price = BigDecimal.valueOf(5.00);
         String names[] = {"Lasaña", "Macarrones", "Callos"};
@@ -1768,7 +1772,7 @@ public class Controller {
     }
     
     private void loadSandwichs() {
-        Ingredient ingredient = ingredientService.findIngredientById(43l);
+        Ingredient ingredient = ingredientService.findIngredientById(42l);
         Category category = categoryService.findCategoryByName("Bocadillos");
         BigDecimal price = BigDecimal.valueOf(4.00);
         String names[] = {"Lomo", "Hamburguesa", "Hamburguesa completa", "Perrito", "Bacon", "Sandwich"};
