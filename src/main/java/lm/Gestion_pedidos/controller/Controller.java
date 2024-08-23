@@ -279,14 +279,42 @@ public class Controller {
             
         });
         
-        this.homepage.getEdtPhoneCustomer().addMouseListener(new MouseAdapter() {
+        this.homepage.getEdtPhoneCustomer().addFocusListener(new FocusAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
-                homepage.getEdtPhoneCustomer().setText("");
+            public void focusGained(FocusEvent e) {
+                JTextField field = homepage.getEdtPhoneCustomer();
+                String texto = "Teléfono";
+                checkFieldFocusGained(field, texto);
             }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField field = homepage.getEdtPhoneCustomer();
+                String texto = "Teléfono";
+                checkFieldFocusLost(field, texto);
+            }
+            
             
         });
         
+        this.homepage.getEdtAlternativeAddres().addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                JTextField field = homepage.getEdtAlternativeAddres();
+                String texto = "Dirección alternativa";
+                checkFieldFocusGained(field, texto);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField field = homepage.getEdtAlternativeAddres();
+                String texto = "Dirección alternativa";
+                checkFieldFocusLost(field, texto);
+            }
+            
+            
+            
+        });
         
         limitPhoneCharacters(this.homepage.getEdtPhoneCustomer());
         
