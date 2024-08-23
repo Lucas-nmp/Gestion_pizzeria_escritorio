@@ -124,102 +124,9 @@ public class Controller {
     private Setting setting;
     private Statistics statistics;
     
-
+    
     public void viewHomePage() {
-        homepage.setLocationRelativeTo(null);
-        homepage.setResizable(false);
-        fillIngredients(homepage.getIngredientModify());
-        fillCategorys(homepage.getCategorys()); 
-        fillHeadersOrder();
-        modifications = new HashSet<>();
-        modificationsPrice = BigDecimal.ZERO;
-        total = BigDecimal.ZERO;
-        setCategory();
-        Company company = companyService.fingCompanyById(1L);
-        String companyName = "Nombre de la empresa";
-        if (company != null) {
-            companyName = company.getName();
-        }
-        homepage.getTxtCompanyName().setText(companyName);
-        
-        String selectedItem = (String) homepage.getCategorys().getSelectedItem();
-        Category category = categoryService.findCategoryByName(selectedItem);
-        
-        fillTableProduct(category);
-        homepage.setVisible(true);  
-    }
-    
-    private void openManageCategory() {
-        
-        manageCategory.setLocationRelativeTo(null);
-        manageCategory.setResizable(false);
-        fillTableCategory();
-        cleanCategory();
-        manageCategory.setModal(true);
-        manageCategory.setVisible(true);  
-    }
-    
-    private void openManageProducts() {
-        manageProduct.setLocationRelativeTo(null);
-        manageProduct.setResizable(false);
-        manageProduct.setModal(true);
-        fillIngredients(manageProduct.getBoxIngredients());
-        fillCategorys(manageProduct.getBoxCategory());
-        fillTableProduct();
-        clearViewProduct();
-        manageProduct.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                int itemCount = homepage.getCategorys().getItemCount();
-                if (itemCount > 1) {
-                    homepage.getCategorys().setSelectedIndex(1);
-                } else {
-                    homepage.getCategorys().setSelectedIndex(0);
-                }    
-            }
-        });
-        manageProduct.setVisible(true);  
-    }
-    
-    private void openManageIngredients() {
-        manageIngredient.setLocationRelativeTo(null);
-        manageIngredient.setResizable(false);
-        manageIngredient.setModal(true);
-        fillTableIngredients();
-        cleanDataIngredient();
-        manageIngredient.setVisible(true);
-    }
-    
-    private void openManageCustomer(String phone) {
-        manageCustomer.setLocationRelativeTo(null);
-        manageCustomer.setResizable(false);
-        manageCustomer.setModal(true);
-        fillTableCustomer();
-        clearViewCustomer(phone);
-        manageCustomer.setVisible(true); 
-    }
-    
-    
-    private void openStatistics() {
-        statistics.setLocationRelativeTo(null);
-        statistics.setResizable(false);
-        statistics.setModal(true);
-        fillMonth();
-        statistics.setVisible(true);
-        
-    }
-    
-    private void openSettings() {
-        setting.setLocationRelativeTo(null);
-        setting.setResizable(false);
-        setting.setModal(true);
-        setting.setVisible(true);
-    }
-    
-    
-    @Autowired
-    public void setHomepage(Homepage homepage) {
-        this.homepage = homepage;
+        this.homepage = new Homepage();
         
         this.homepage.getBtnCategory().addActionListener(e -> openManageCategory());
         this.homepage.getBtnProduct().addActionListener(e -> openManageProducts());
@@ -262,7 +169,7 @@ public class Controller {
                         if (response == JOptionPane.YES_OPTION) {
                             DefaultTableModel model = (DefaultTableModel) target.getModel();
                             model.removeRow(selectedRow); // Eliminar la fila del modelo
-                        }*/
+                        } */
                     }
                 }
             }
@@ -318,12 +225,33 @@ public class Controller {
         
         limitPhoneCharacters(this.homepage.getEdtPhoneCustomer());
         
-                
+        homepage.setLocationRelativeTo(null);
+        homepage.setResizable(false);
+        fillIngredients(homepage.getIngredientModify());
+        fillCategorys(homepage.getCategorys()); 
+        fillHeadersOrder();
+        modifications = new HashSet<>();
+        modificationsPrice = BigDecimal.ZERO;
+        total = BigDecimal.ZERO;
+        setCategory();
+        Company company = companyService.fingCompanyById(1L);
+        String companyName = "Nombre de la empresa";
+        if (company != null) {
+            companyName = company.getName();
+        }
+        homepage.getTxtCompanyName().setText(companyName);
+        
+        String selectedItem = (String) homepage.getCategorys().getSelectedItem();
+        Category category = categoryService.findCategoryByName(selectedItem);
+        
+        fillTableProduct(category);
+        homepage.setVisible(true);  
     }
     
-    @Autowired
-    public void setManageCategory(ManageCategory manageCategory) {
-        this.manageCategory = manageCategory;
+    
+    private void openManageCategory() {
+        this.manageCategory = new ManageCategory();
+        
         this.manageCategory.getDeleteCategory().addActionListener(e -> deleteCategory());
         this.manageCategory.getCategorySave().addActionListener(e -> {
             saveOrModifyCategory();
@@ -353,11 +281,17 @@ public class Controller {
             }
             
         });  
+        
+        manageCategory.setLocationRelativeTo(null);
+        manageCategory.setResizable(false);
+        fillTableCategory();
+        cleanCategory();
+        manageCategory.setModal(true);
+        manageCategory.setVisible(true);  
     }
     
-    @Autowired
-    public void setManageProduct(ManageProduct manageProduct) {
-        this.manageProduct = manageProduct;
+    private void openManageProducts() {
+        this.manageProduct = new ManageProduct();
         
         this.manageProduct.getBtnAddIngredient().addActionListener(e -> addIngredientToProduct());
         this.manageProduct.getBtnDeleteIngredient().addActionListener(e -> deleteIngredientFromProduct());
@@ -424,14 +358,30 @@ public class Controller {
                 }
             }  
         });    
+        
+        manageProduct.setLocationRelativeTo(null);
+        manageProduct.setResizable(false);
+        manageProduct.setModal(true);
+        fillIngredients(manageProduct.getBoxIngredients());
+        fillCategorys(manageProduct.getBoxCategory());
+        fillTableProduct();
+        clearViewProduct();
+        manageProduct.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                int itemCount = homepage.getCategorys().getItemCount();
+                if (itemCount > 1) {
+                    homepage.getCategorys().setSelectedIndex(1);
+                } else {
+                    homepage.getCategorys().setSelectedIndex(0);
+                }    
+            }
+        });
+        manageProduct.setVisible(true);  
     }
     
- 
-    @Autowired
-    public void setManageIngredient(ManageIngredient manageIngredient) {
-        
-        
-        this.manageIngredient = manageIngredient;
+    private void openManageIngredients() {
+        this.manageIngredient = new ManageIngredient();
         
         this.manageIngredient.getBtnSaveIngredient().addActionListener(e -> saveOrModifyIngredient());
         this.manageIngredient.getBtnDeleteIngredient().addActionListener(e -> deleteIngredient());
@@ -461,12 +411,16 @@ public class Controller {
             }            
         });
         
-        
+        manageIngredient.setLocationRelativeTo(null);
+        manageIngredient.setResizable(false);
+        manageIngredient.setModal(true);
+        fillTableIngredients();
+        cleanDataIngredient();
+        manageIngredient.setVisible(true);
     }
     
-    @Autowired
-    public void setManageCustomer(ManageCustomer manageCustomer) {
-        this.manageCustomer = manageCustomer;
+    private void openManageCustomer(String phone) {
+        this.manageCustomer = new ManageCustomer();
         
         this.manageCustomer.getBtnDeleteCustomer().addActionListener(e -> deleteCustomer());
         this.manageCustomer.getBtnLookForCustomer().addActionListener(e -> lookForCustomer());
@@ -571,9 +525,41 @@ public class Controller {
         });
         
         limitPhoneCharacters(manageCustomer.getEdtPhoneCustomer());
-
+        
+        manageCustomer.setLocationRelativeTo(null);
+        manageCustomer.setResizable(false);
+        manageCustomer.setModal(true);
+        fillTableCustomer();
+        clearViewCustomer(phone);
+        manageCustomer.setVisible(true); 
+    }
+    
+    
+    private void openStatistics() {
+        this.statistics = new Statistics();
+        
+        this.statistics.getBoxMonth().addActionListener(e -> handleMonthSelection());
+        
+        statistics.setLocationRelativeTo(null);
+        statistics.setResizable(false);
+        statistics.setModal(true);
+        fillMonth();
+        statistics.setVisible(true);
         
     }
+    
+    private void openSettings() {
+        this.setting = new Setting();
+        
+        this.setting.getSaveSettings().addActionListener(e -> saveSettings());
+        
+        setting.setLocationRelativeTo(null);
+        setting.setResizable(false);
+        setting.setModal(true);
+        setting.setVisible(true);
+    }
+    
+
     
     private void checkFieldFocusGained(JTextField fieldName, String texto) {
         if (fieldName.getText().equals(texto)) {
@@ -590,23 +576,6 @@ public class Controller {
     }
     
     
-
-    
-    @Autowired
-    private void setStatistics(Statistics statistics) {
-        this.statistics = statistics;  
-        
-        this.statistics.getBoxMonth().addActionListener(e -> handleMonthSelection());
-                
-              
-    }
-    
-    @Autowired
-    private void setSettings(Setting setting) {
-        this.setting = setting;
-        
-        this.setting.getSaveSettings().addActionListener(e -> saveSettings());
-    }
     
     private void setCategory() {
         int itemCount = homepage.getCategorys().getItemCount();
@@ -706,7 +675,7 @@ public class Controller {
         String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
         model.setColumnIdentifiers(headers);
         homepage.getTableProducts().setModel(model);
-        manageProduct.getTableProducts().setModel(model);
+        //manageProduct.getTableProducts().setModel(model);   #################################################
     }
     
     private void fillTableProduct(Category category) {
@@ -728,7 +697,7 @@ public class Controller {
         });   
         
         columnWidthProductHomepage(homepage.getTableProducts());
-        columnWidthProductManageProduct(manageProduct.getTableProducts());
+        //columnWidthProductManageProduct(manageProduct.getTableProducts());   #################################################
     
     }
     
@@ -752,7 +721,7 @@ public class Controller {
         });   
         
         columnWidthProductHomepage(homepage.getTableProducts());
-        columnWidthProductManageProduct(manageProduct.getTableProducts());
+        //columnWidthProductManageProduct(manageProduct.getTableProducts());   #################################################
     }
     
     private HashSet<String> getIngredientsInProductById(Long productId) {
@@ -1636,7 +1605,6 @@ public class Controller {
         int totalCustomersForMonth = uniqueCustomers.size();
         
         statistics.getTotalOrdersForMonth().setText(String.valueOf(totalOrdersForMonth));
-        statistics.getBestCustomer().setText(String.valueOf(""));
         statistics.getTotalCustomersForMonth().setText(String.valueOf(totalCustomersForMonth));
         statistics.getTotalIncomeForMonth().setText(totalIncomeForMonth.toString());
         statistics.getTotalOrdersForYear().setText(String.valueOf(totalOrdersForYear));

@@ -3,20 +3,19 @@ package lm.Gestion_pedidos.view;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 /**
  *
  * @author Lucas
  */
-@Component
+
 public class ManageIngredient extends javax.swing.JDialog {
 
     /**
      * Creates new form ManageIngredient
      */
-    @Autowired
+    
     public ManageIngredient() {
         initComponents();
     }

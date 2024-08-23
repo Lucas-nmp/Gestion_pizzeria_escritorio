@@ -10,19 +10,17 @@ import javax.swing.JTextField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author Lucas
- */
-@Component
+
+
 public class Homepage extends javax.swing.JFrame {
 
     /**
      * Creates new form Homepage
      */
-    @Autowired
+    
     public Homepage() {
         initComponents();
+    
     }
     
     public JButton getBtnAdd() {

@@ -2,24 +2,22 @@ package lm.Gestion_pedidos.view;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 /**
  *
  * @author Lucas
  */
-@Component
+
 public class ManageProduct extends javax.swing.JDialog {
 
     /**
      * Creates new form ManageProduct
      */
-    @Autowired
+
     public ManageProduct() { 
         initComponents();
     }

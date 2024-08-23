@@ -1,26 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package lm.Gestion_pedidos.view;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 /**
  *
  * @author Lucas
  */
-@Component
+
 public class ManageCustomer extends javax.swing.JDialog {
 
     /**
      * Creates new form ManageCustomer
      */
-    @Autowired
+    
     public ManageCustomer() {
         initComponents();
     }
