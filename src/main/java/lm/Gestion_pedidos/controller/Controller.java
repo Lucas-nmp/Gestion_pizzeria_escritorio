@@ -364,7 +364,12 @@ public class Controller {
         manageProduct.setModal(true);
         fillIngredients(manageProduct.getBoxIngredients());
         fillCategorys(manageProduct.getBoxCategory());
-        fillTableProduct();
+        String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = manageProduct.getTableProducts();
+        fillTableHeaders(model, headers, table);
+        fillTableProduct(model);
+        columnWidthProductManageProduct(manageProduct.getTableProducts());
         clearViewProduct();
         manageProduct.addWindowListener(new WindowAdapter() {
             @Override
@@ -432,6 +437,7 @@ public class Controller {
         
         this.manageCustomer.getEdtAddresCustomer().addActionListener((ActionEvent e) -> {
             saveOrModifyCustomer();
+            manageCustomer.dispose();
             
         });
         
@@ -529,7 +535,13 @@ public class Controller {
         manageCustomer.setLocationRelativeTo(null);
         manageCustomer.setResizable(false);
         manageCustomer.setModal(true);
-        fillTableCustomer();
+        
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"ID" ,"Nombre", "Dirección", "Teléfono", "Observaciones"};
+        JTable table = manageCustomer.getTableCustomer();
+        fillTableHeaders(model, headers, table);
+        
+        fillTableCustomer(model);
         clearViewCustomer(phone);
         manageCustomer.setVisible(true); 
     }
@@ -670,6 +682,11 @@ public class Controller {
         }
     }
     
+    private void fillTableHeaders(DefaultTableModel model, String[] headers, JTable table) {
+        model.setColumnIdentifiers(headers);
+        table.setModel(model);
+    }
+    
     
     private void fillHeadersTableProducts(DefaultTableModel model) {
         String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
@@ -701,7 +718,24 @@ public class Controller {
     
     }
     
-
+    private void fillTableProduct(DefaultTableModel model) {
+        model.setRowCount(0);
+        List<Product> listProducts = productService.findAllProducts();
+        
+        listProducts.forEach((product) -> {
+            HashSet<String> ingredientList = getIngredientsInProductById(product.getProductId());
+            Object[] productLine = {
+                product.getProductId(), 
+                product.getName(), 
+                String.join(", ", ingredientList), 
+                product.getPrice()
+                   
+            };
+            model.addRow(productLine);
+        });   
+    }
+    
+    /*
     private void fillTableProduct() {
         DefaultTableModel model = new DefaultTableModel();
         fillHeadersTableProducts(model);
@@ -722,7 +756,7 @@ public class Controller {
         
         columnWidthProductHomepage(homepage.getTableProducts());
         //columnWidthProductManageProduct(manageProduct.getTableProducts());   #################################################
-    }
+    }*/
     
     private HashSet<String> getIngredientsInProductById(Long productId) {
         List<Long> listIdsIngredients = productIngredientService.findIngredientIdsByProductId(productId);
@@ -882,10 +916,15 @@ public class Controller {
             productIngredientService.saveProductIngredient(productIngredient);
         }
         JOptionPane.showMessageDialog(manageProduct, message);
-        fillTableProduct();
+        //DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
+         DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
+        fillTableProduct(model);
+        
         clearViewProduct();
             
     }
+    
+    
     
 
     private boolean validateInputs(String categoryName, String name, String price) {
@@ -1065,7 +1104,8 @@ public class Controller {
                 productIngredientService.deleteAll(listProductIngredient);
                 productService.deleteProduct(product);
                 JOptionPane.showMessageDialog(manageProduct, "Producto eliminado correctamente");
-                fillTableProduct();
+                DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
+                fillTableProduct(model);
                 clearViewProduct();
             } catch (DataIntegrityViolationException e) {
                 JOptionPane.showMessageDialog(manageProduct, "El producto está en algún pedido, no se puede eliminar. Pruebe a modificarlo");
@@ -1095,7 +1135,9 @@ public class Controller {
             JOptionPane.showMessageDialog(manageCustomer, "Cliente no eliminado");
         } finally {
             clearViewCustomer("");
-            fillTableCustomer();
+            DefaultTableModel model = (DefaultTableModel) manageCustomer.getTableCustomer().getModel();
+            model.setRowCount(0);
+            fillTableCustomer(model);
         }
     }
 
@@ -1182,8 +1224,9 @@ public class Controller {
 
         clearViewCustomer("");
         JOptionPane.showMessageDialog(manageCustomer, message);
-        fillTableCustomer(); 
-        manageCustomer.dispose();
+        DefaultTableModel model = (DefaultTableModel) manageCustomer.getTableCustomer().getModel();
+        fillTableCustomer(model); 
+        //manageCustomer.dispose();
     }
         
     private void clearViewCustomer(String phone) {
@@ -1203,11 +1246,11 @@ public class Controller {
         
     }
 
-    private void fillTableCustomer() {
-        DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"ID" ,"Nombre", "Dirección", "Teléfono", "Observaciones"};
-        model.setColumnIdentifiers(headers);
-        manageCustomer.getTableCustomer().setModel(model);
+    private void fillTableCustomer(DefaultTableModel model) {
+        //DefaultTableModel model = new DefaultTableModel();
+        //String[] headers = {"ID" ,"Nombre", "Dirección", "Teléfono", "Observaciones"};
+        //model.setColumnIdentifiers(headers);
+        //manageCustomer.getTableCustomer().setModel(model);
         
         List<Customer> listCustomer = customerService.findAllCustomers();
         if (!listCustomer.isEmpty()) {
