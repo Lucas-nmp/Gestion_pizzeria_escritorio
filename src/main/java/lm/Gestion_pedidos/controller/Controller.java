@@ -231,7 +231,7 @@ public class Controller {
         fillCategorys(homepage.getCategorys()); 
         
         DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"ID", "Producto", "Observaciones", "PVP"};
+        String[] headers = {"ID", "Producto", "Observaciones", "PVP"}; // Añadir cantidad de producto
         JTable table = homepage.getTableOrder();
         fillTableHeaders(model, headers, table);
         columnWidthOrderTable(homepage.getTableOrder());
@@ -436,6 +436,12 @@ public class Controller {
         manageIngredient.setLocationRelativeTo(null);
         manageIngredient.setResizable(false);
         manageIngredient.setModal(true);
+        
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"Nº", "Ingrediente", "Precio"};
+        JTable table = manageIngredient.getTableIngredient();
+        fillTableHeaders(model, headers, table);
+        
         fillTableIngredients();
         cleanDataIngredient();
         manageIngredient.setVisible(true);
@@ -774,10 +780,8 @@ public class Controller {
     
     
     private void fillTableIngredients() {
-        DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"Nº", "Ingrediente", "Precio"};
-        model.setColumnIdentifiers(headers);
-        manageIngredient.getTableIngredient().setModel(model);
+        DefaultTableModel model = (DefaultTableModel) manageIngredient.getTableIngredient().getModel();
+        model.setRowCount(0);
         
         List<Ingredient> listIngredients = ingredientService.getAllIngredients();
         if (listIngredients.isEmpty()) {
@@ -800,7 +804,7 @@ public class Controller {
 
     private void fillCategorys(JComboBox boxCategorys) {
         List<Category> listCategorys = categoryService.getAllCategorys();
-        //JComboBox listCategory = homepage.getCategorys();
+        
         boxCategorys.setPreferredSize(new Dimension(100, 25));
         boxCategorys.setMaximumSize(new Dimension(100, 25));
         if (listCategorys.isEmpty()) {
@@ -810,7 +814,7 @@ public class Controller {
             boxCategorys.removeAllItems();
             boxCategorys.addItem("Seleccionar"); 
             listCategorys.forEach((category) -> {
-                //String item = category.getCategoryId() + ", " + category.getName();
+                
                 String item = category.getName();
                 boxCategorys.addItem(item);
             });
@@ -1267,7 +1271,8 @@ public class Controller {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(1).setPreferredWidth(80); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(327); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(327);
+        // añadir hueco para la cantidad
         table.getColumnModel().getColumn(3).setPreferredWidth(40);  
     }
 
@@ -1287,8 +1292,9 @@ public class Controller {
             Object[] rowData = {
                 product.getProductId(),
                 product.getName(),  
-                String.join(", ", modifications),                                    
-                modificationsPrice = modificationsPrice.add(product.getPrice())   
+                String.join(", ", modifications), 
+                // añadir un campo cantidad
+                modificationsPrice = modificationsPrice.add(product.getPrice())    // multiplicar el precio por la cantidad
             };
             total = total.add(modificationsPrice);
             homepage.getTxtTotalPrice().setText(total.toString());
@@ -1328,21 +1334,23 @@ public class Controller {
     }
     
     private void checkObservations() {
-        String observations = homepage.getEdtObservations().getText();
+        String observations = homepage.getEdtObservations().getText().trim();  // Elimina espacios en blanco al principio y al final
 
-        try {
-            String[] dto = observations.split(" ");
-            if (dto.length > 0) {
-                // Intenta convertir el primer elemento a un número
-                BigDecimal descuento = new BigDecimal(dto[0]);
-                // Resta el descuento a modificationsPrice y guarda el resultado
-                modificationsPrice = modificationsPrice.subtract(descuento);
+        if (!observations.isEmpty()) {
+            try {
+                String[] dto = observations.split(" ");
+                if (dto.length > 0) {
+                    // Intenta convertir el primer elemento a un número
+                    BigDecimal descuento = new BigDecimal(dto[0]);
+                    // Resta el descuento a modificationsPrice y guarda el resultado
+                    modificationsPrice = modificationsPrice.subtract(descuento);
+                }
+            } catch (NumberFormatException e) {
+                // Manejar excepciones si el primer elemento no es un número
             }
-        } catch (NumberFormatException e) {
-            
-        }
 
-        modifications.add(observations);
+            modifications.add(observations);  // Solo se agrega si no está vacío
+        }
     }
     
     private void clearChecks() {
