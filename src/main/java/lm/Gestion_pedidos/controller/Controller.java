@@ -229,7 +229,19 @@ public class Controller {
         homepage.setResizable(false);
         fillIngredients(homepage.getIngredientModify());
         fillCategorys(homepage.getCategorys()); 
-        fillHeadersOrder();
+        
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"ID", "Producto", "Observaciones", "PVP"};
+        JTable table = homepage.getTableOrder();
+        fillTableHeaders(model, headers, table);
+        columnWidthOrderTable(homepage.getTableOrder());
+        
+        DefaultTableModel modelProduct = new DefaultTableModel();
+        String[] headersProduct = {"Nº", "Nombre", "Ingredientes", "PVP"};
+        JTable tableProduct = homepage.getTableProducts();
+        fillTableHeaders(modelProduct, headersProduct, tableProduct);
+        
+        
         modifications = new HashSet<>();
         modificationsPrice = BigDecimal.ZERO;
         total = BigDecimal.ZERO;
@@ -284,6 +296,11 @@ public class Controller {
         
         manageCategory.setLocationRelativeTo(null);
         manageCategory.setResizable(false);
+        
+        DefaultTableModel model = new DefaultTableModel();
+        String[] headers = {"ID", "Nombre"};
+        JTable table = manageCategory.getCategoryTable();
+        fillTableHeaders(model, headers, table);
         fillTableCategory();
         cleanCategory();
         manageCategory.setModal(true);
@@ -368,7 +385,7 @@ public class Controller {
         DefaultTableModel model = new DefaultTableModel();
         JTable table = manageProduct.getTableProducts();
         fillTableHeaders(model, headers, table);
-        fillTableProduct(model);
+        fillTableProduct();
         columnWidthProductManageProduct(manageProduct.getTableProducts());
         clearViewProduct();
         manageProduct.addWindowListener(new WindowAdapter() {
@@ -541,7 +558,7 @@ public class Controller {
         JTable table = manageCustomer.getTableCustomer();
         fillTableHeaders(model, headers, table);
         
-        fillTableCustomer(model);
+        fillTableCustomer();
         clearViewCustomer(phone);
         manageCustomer.setVisible(true); 
     }
@@ -648,13 +665,9 @@ public class Controller {
         }
     }
     
-    
     private void fillTableCategory() {
-        DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"ID", "Nombre"};
-        model.setColumnIdentifiers(headers);
-        manageCategory.getCategoryTable().setModel(model);
-        
+        DefaultTableModel model = (DefaultTableModel) manageCategory.getCategoryTable().getModel();
+        model.setRowCount(0);
         List<Category> listCategorys = categoryService.getAllCategorys();
         listCategorys.forEach((category) -> {
             Object[] categoryLine = {
@@ -664,6 +677,7 @@ public class Controller {
             model.addRow(categoryLine);
         });   
     }
+    
     
     private void handleCategorySelection() {
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
@@ -688,16 +702,9 @@ public class Controller {
     }
     
     
-    private void fillHeadersTableProducts(DefaultTableModel model) {
-        String[] headers = {"Nº", "Nombre", "Ingredientes", "PVP"};
-        model.setColumnIdentifiers(headers);
-        homepage.getTableProducts().setModel(model);
-        //manageProduct.getTableProducts().setModel(model);   #################################################
-    }
-    
     private void fillTableProduct(Category category) {
-        DefaultTableModel model = new DefaultTableModel();
-        fillHeadersTableProducts(model);
+        DefaultTableModel model = (DefaultTableModel) homepage.getTableProducts().getModel();
+        model.setRowCount(0);
         
         List<Product> listProducts = productService.getProductByCategory(category);
         
@@ -714,11 +721,11 @@ public class Controller {
         });   
         
         columnWidthProductHomepage(homepage.getTableProducts());
-        //columnWidthProductManageProduct(manageProduct.getTableProducts());   #################################################
-    
+
     }
     
-    private void fillTableProduct(DefaultTableModel model) {
+    private void fillTableProduct() {
+        DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
         model.setRowCount(0);
         List<Product> listProducts = productService.findAllProducts();
         
@@ -735,29 +742,7 @@ public class Controller {
         });   
     }
     
-    /*
-    private void fillTableProduct() {
-        DefaultTableModel model = new DefaultTableModel();
-        fillHeadersTableProducts(model);
-        
-        List<Product> listProducts = productService.findAllProducts();
-        
-        listProducts.forEach((product) -> {
-            HashSet<String> ingredientList = getIngredientsInProductById(product.getProductId());
-            Object[] productLine = {
-                product.getProductId(), 
-                product.getName(), 
-                String.join(", ", ingredientList), 
-                product.getPrice()
-                   
-            };
-            model.addRow(productLine);
-        });   
-        
-        columnWidthProductHomepage(homepage.getTableProducts());
-        //columnWidthProductManageProduct(manageProduct.getTableProducts());   #################################################
-    }*/
-    
+
     private HashSet<String> getIngredientsInProductById(Long productId) {
         List<Long> listIdsIngredients = productIngredientService.findIngredientIdsByProductId(productId);
         HashSet<String> listNameIngredients = new HashSet<>();
@@ -917,8 +902,7 @@ public class Controller {
         }
         JOptionPane.showMessageDialog(manageProduct, message);
         //DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
-         DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
-        fillTableProduct(model);
+        fillTableProduct();
         
         clearViewProduct();
             
@@ -1104,8 +1088,7 @@ public class Controller {
                 productIngredientService.deleteAll(listProductIngredient);
                 productService.deleteProduct(product);
                 JOptionPane.showMessageDialog(manageProduct, "Producto eliminado correctamente");
-                DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
-                fillTableProduct(model);
+                fillTableProduct();
                 clearViewProduct();
             } catch (DataIntegrityViolationException e) {
                 JOptionPane.showMessageDialog(manageProduct, "El producto está en algún pedido, no se puede eliminar. Pruebe a modificarlo");
@@ -1135,9 +1118,7 @@ public class Controller {
             JOptionPane.showMessageDialog(manageCustomer, "Cliente no eliminado");
         } finally {
             clearViewCustomer("");
-            DefaultTableModel model = (DefaultTableModel) manageCustomer.getTableCustomer().getModel();
-            model.setRowCount(0);
-            fillTableCustomer(model);
+            fillTableCustomer();
         }
     }
 
@@ -1224,8 +1205,7 @@ public class Controller {
 
         clearViewCustomer("");
         JOptionPane.showMessageDialog(manageCustomer, message);
-        DefaultTableModel model = (DefaultTableModel) manageCustomer.getTableCustomer().getModel();
-        fillTableCustomer(model); 
+        fillTableCustomer(); 
         //manageCustomer.dispose();
     }
         
@@ -1246,12 +1226,9 @@ public class Controller {
         
     }
 
-    private void fillTableCustomer(DefaultTableModel model) {
-        //DefaultTableModel model = new DefaultTableModel();
-        //String[] headers = {"ID" ,"Nombre", "Dirección", "Teléfono", "Observaciones"};
-        //model.setColumnIdentifiers(headers);
-        //manageCustomer.getTableCustomer().setModel(model);
-        
+    private void fillTableCustomer() {
+        DefaultTableModel model = (DefaultTableModel) manageCustomer.getTableCustomer().getModel();
+        model.setRowCount(0);
         List<Customer> listCustomer = customerService.findAllCustomers();
         if (!listCustomer.isEmpty()) {
             listCustomer.forEach((customer) -> {
@@ -1285,14 +1262,6 @@ public class Controller {
         
     }
     
-    private void fillHeadersOrder() {
-        DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"ID", "Producto", "Observaciones", "PVP"};
-        model.setColumnIdentifiers(headers);
-        homepage.getTableOrder().setModel(model);
-        columnWidthOrderTable(homepage.getTableOrder());
-        
-    }
     
     private void columnWidthOrderTable(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
