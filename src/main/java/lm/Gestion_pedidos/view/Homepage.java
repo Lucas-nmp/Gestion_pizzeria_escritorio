@@ -124,6 +124,10 @@ public class Homepage extends javax.swing.JFrame {
         return Category;
     }
     
+    public JComboBox getAmount() {
+        return boxAmount;
+    }
+    
     public JComboBox getIngredientModify() {
         return boxIngredientModify;
     }
@@ -212,6 +216,8 @@ public class Homepage extends javax.swing.JFrame {
         BtnRemoveFromOrder = new javax.swing.JButton();
         btnCancelOrder = new javax.swing.JButton();
         btnConfirmOrder = new javax.swing.JButton();
+        boxAmount = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -325,11 +331,11 @@ public class Homepage extends javax.swing.JFrame {
         customerPhone.setText("Teléfono");
         customerPhone.setBorder(null);
 
-        customerAddres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        customerAddres.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         customerAddres.setForeground(new java.awt.Color(255, 255, 255));
         customerAddres.setText("Dirección ");
 
-        customerName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        customerName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         customerName.setForeground(new java.awt.Color(255, 255, 255));
         customerName.setText("Nombre");
 
@@ -372,7 +378,7 @@ public class Homepage extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1510, 120));
@@ -510,6 +516,13 @@ public class Homepage extends javax.swing.JFrame {
         btnConfirmOrder.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnConfirmOrder.setText("Confirmar pedido");
 
+        boxAmount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        boxAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Unidades");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -529,7 +542,12 @@ public class Homepage extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel7)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(boxIngredientModify, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(boxIngredientModify, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(boxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ingredientAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -587,7 +605,10 @@ public class Homepage extends javax.swing.JFrame {
                             .addComponent(boxIngredientModify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ingredientAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ingredientRemove)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ingredientRemove)
+                            .addComponent(boxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
                         .addGap(29, 29, 29)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(checkDoubleCheese)
@@ -639,6 +660,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton BtnRemoveFromOrder;
     private javax.swing.JComboBox<String> Category;
     private javax.swing.JTable ProductTable;
+    private javax.swing.JComboBox<String> boxAmount;
     private javax.swing.JComboBox<String> boxIngredientModify;
     private javax.swing.JButton btnCancelOrder;
     private javax.swing.JButton btnCategory;
@@ -664,6 +686,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton homepageBtnAdd2;
     private javax.swing.JButton ingredientAdd;
     private javax.swing.JButton ingredientRemove;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

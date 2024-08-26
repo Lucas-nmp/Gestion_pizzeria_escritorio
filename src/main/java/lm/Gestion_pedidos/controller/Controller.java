@@ -231,7 +231,7 @@ public class Controller {
         fillCategorys(homepage.getCategorys()); 
         
         DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"ID", "Producto", "Observaciones", "PVP"}; // Añadir cantidad de producto
+        String[] headers = {"ID", "Producto", "Observaciones","Unds.", "PVP"}; // Añadir cantidad de producto
         JTable table = homepage.getTableOrder();
         fillTableHeaders(model, headers, table);
         columnWidthOrderTable(homepage.getTableOrder());
@@ -633,7 +633,7 @@ public class Controller {
         }
 
         Category category = new Category();
-        if (selectedRow != -1) { // Modificar categoría existente
+        if (selectedRow != -1) { 
             Long id = (Long) target.getValueAt(selectedRow, 0);
             category.setCategoryId(id);
         }
@@ -905,7 +905,7 @@ public class Controller {
             productIngredientService.saveProductIngredient(productIngredient);
         }
         JOptionPane.showMessageDialog(manageProduct, message);
-        //DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
+        
         fillTableProduct();
         
         clearViewProduct();
@@ -1271,9 +1271,9 @@ public class Controller {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(1).setPreferredWidth(80); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(327);
-        // añadir hueco para la cantidad
-        table.getColumnModel().getColumn(3).setPreferredWidth(40);  
+        table.getColumnModel().getColumn(2).setPreferredWidth(297);
+        table.getColumnModel().getColumn(3).setPreferredWidth(30);
+        table.getColumnModel().getColumn(4).setPreferredWidth(40);  
     }
 
     private void addForTheOrder() {
@@ -1288,15 +1288,20 @@ public class Controller {
             Long id = (Long) target.getValueAt(selectedRow, 0);
             Product product = productService.findProductById(id);
             
+            int quantity = Integer.parseInt(homepage.getAmount().getSelectedItem().toString());
+
+            // Calcular el precio total basado en la cantidad
+            BigDecimal totalPriceForItem = product.getPrice().add(modificationsPrice).multiply(new BigDecimal(quantity));
+            
             DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
             Object[] rowData = {
                 product.getProductId(),
                 product.getName(),  
                 String.join(", ", modifications), 
-                // añadir un campo cantidad
-                modificationsPrice = modificationsPrice.add(product.getPrice())    // multiplicar el precio por la cantidad
+                quantity,
+                totalPriceForItem
             };
-            total = total.add(modificationsPrice);
+            total = total.add(totalPriceForItem);
             homepage.getTxtTotalPrice().setText(total.toString());
             
             model.addRow(rowData);
@@ -1306,6 +1311,7 @@ public class Controller {
             clearChecks();
             modificationsPrice = BigDecimal.ZERO;
             target.clearSelection();
+            homepage.getAmount().setSelectedIndex(0);
         } else {
             JOptionPane.showMessageDialog(homepage, "Seleccione un producto"); 
         }
@@ -1440,8 +1446,7 @@ public class Controller {
         
         orderService.addOrder(order);
 
-        // Crear una lista para almacenar los productos del pedido
-        //List<OrderProduct> OrderProducts = new ArrayList<>();
+        
         for (int i = 0; i<rowCount; i++) {
             Product product = productService.findProductById((Long) model.getValueAt(i, 0));
             String observation = (String) model.getValueAt(i, 2);
@@ -1465,9 +1470,9 @@ public class Controller {
         total = total.subtract(price);
         homepage.getTxtTotalPrice().setText(total.toString());
 
-        if (selectedRow != -1) { // Verificar que se haya seleccionado una fila
+        if (selectedRow != -1) { 
             DefaultTableModel model = (DefaultTableModel) target.getModel();
-            model.removeRow(selectedRow); // Eliminar la fila del modelo
+            model.removeRow(selectedRow); 
         } else {
             JOptionPane.showMessageDialog(homepage, "Seleccione una fila para eliminar");
         }
