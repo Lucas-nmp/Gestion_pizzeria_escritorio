@@ -1271,8 +1271,8 @@ public class Controller {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(1).setPreferredWidth(80); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(297);
-        table.getColumnModel().getColumn(3).setPreferredWidth(30);
+        table.getColumnModel().getColumn(2).setPreferredWidth(290);
+        table.getColumnModel().getColumn(3).setPreferredWidth(37);
         table.getColumnModel().getColumn(4).setPreferredWidth(40);  
     }
 
@@ -1466,7 +1466,7 @@ public class Controller {
         
         JTable target = homepage.getTableOrder();
         int selectedRow = target.getSelectedRow();
-        BigDecimal price = (BigDecimal) target.getValueAt(selectedRow, 3);
+        BigDecimal price = (BigDecimal) target.getValueAt(selectedRow, 4);
         total = total.subtract(price);
         homepage.getTxtTotalPrice().setText(total.toString());
 
