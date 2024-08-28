@@ -1817,7 +1817,7 @@ public class Controller {
     
 
     private void loadCustomers() {
-        List<String> nombres = Arrays.asList(
+        List<String> names = Arrays.asList(
             "Antonio", "María", "Manuel", "Carmen", "José", "Ana", "Francisco", "Laura", "David", "Isabel", 
             "Juan", "Marta", "Javier", "Lucía", "Carlos", "Sara", "Miguel", "Paula", "Daniel", "Claudia", 
             "Pedro", "Patricia", "Alejandro", "Sofía", "Rafael", "Elena", "Raúl", "Irene", "Adrián", "Silvia", 
@@ -1825,14 +1825,14 @@ public class Controller {
             "Pablo", "Nuria", "Roberto", "Alicia", "Alberto", "Natalia", "Mario", "Julia", "Andrés", "Teresa"
         );
         
-        List<String> apellidos = Arrays.asList(
+        List<String> surnames = Arrays.asList(
             "García", "Martínez", "López", "Sánchez", "Rodríguez", "Fernández", "Pérez", "González", "Gómez", "Ruiz", 
             "Díaz", "Hernández", "Muñoz", "Álvarez", "Moreno", "Jiménez", "Romero", "Torres", "Navarro", "Gutiérrez", 
             "Ramos", "Gil", "Vázquez", "Serrano", "Molina", "Blanco", "Castro", "Ortiz", "Rubio", "Marín", 
             "Suárez", "Sanz", "Medina", "Vega", "Domínguez", "Fuentes", "Cabrera", "Iglesias", "Reyes", "Rivas"
         );
         
-        List<String> calles = Arrays.asList(
+        List<String> streets = Arrays.asList(
             "Calle Mayor", "Avenida de la Constitución", "Calle Real", "Paseo de la Castellana", "Calle del Carmen", 
             "Calle de los Olmos", "Calle Gran Vía", "Calle de la Paz", "Calle San Juan", "Calle del Sol", 
             "Calle del Mar", "Calle de la Estrella", "Avenida de España", "Calle del Río", "Calle del Prado", 
@@ -1845,31 +1845,38 @@ public class Controller {
             "Calle del Coloso", "Calle de los Laureles", "Calle de la Encina", "Calle del Arenal", "Calle de las Rosas"
         );
         
-        List<String> numeros = Arrays.asList("1º", "1ºB", "1ºA", "2º", "2ºB", "2ºA", "3º", "3ºB", "3ºA" );
+        List<String> numbers = Arrays.asList("1º", "1ºB", "1ºA", "2º", "2ºB", "2ºA", "3º", "3ºB", "3ºA" );
         
         Random random = new Random();
         for (int i=0; i<1000; i++) {
-            int index = random.nextInt(nombres.size());
-            String nombre = nombres.get(index);
+            int index = random.nextInt(names.size());
+            String name = names.get(index);
             
+            index = random.nextInt(surnames.size());
+            String surname = surnames.get(index);
             
-            index = random.nextInt(apellidos.size());
-            String apellido = apellidos.get(index);
+            index = random.nextInt(streets.size());
+            String street = streets.get(index);
             
-            index = random.nextInt(calles.size());
-            String calle = calles.get(index);
-            
-            index = random.nextInt(numeros.size());
-            String numero = numeros.get(index);
-            String direccion = calle +" " + numero;
-            
-            String telefono = generatePhone();
-            
+            index = random.nextInt(numbers.size());
+            String number = numbers.get(index);
+            String address = street + " " + number;
+
+            String phone;
+            Customer cExist;
+
+            do {
+                phone = generatePhone();
+                cExist = customerService.findCustomerByPhone(phone);
+            } while (cExist != null);  // Repetir hasta que no se encuentre un cliente con el mismo teléfono
+
             Customer customer = new Customer();
-            customer.setName(nombre + " " + apellido);
-            customer.setAddress(direccion);
-            customer.setPhone(telefono);
+            customer.setName(name + " " + surname);
+            customer.setAddress(address);
+            customer.setPhone(phone);
+
             customerService.addCustomer(customer);
+
         }
         
         
