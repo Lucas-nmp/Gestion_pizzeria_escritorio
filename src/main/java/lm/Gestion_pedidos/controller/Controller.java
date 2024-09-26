@@ -73,8 +73,7 @@ import lm.Gestion_pedidos.view.Statistics;
  *
  * @author Lucas
  * 
- * TODO: agrandar el area de trabajo del homePage para que se puedan ver los ingredientes de los productos y poder añadir un botón de añadir producto al pedido
- * cambiar el foco al ingresar una categoría con enter o un ingrediente
+
  * 
  */
 @Component
@@ -231,7 +230,7 @@ public class Controller {
         fillCategorys(homepage.getCategorys()); 
         
         DefaultTableModel model = new DefaultTableModel();
-        String[] headers = {"ID", "Producto", "Observaciones","Unds.", "PVP"}; // Añadir cantidad de producto
+        String[] headers = {"ID", "Producto", "Observaciones","Unds.", "PVP"}; 
         JTable table = homepage.getTableOrder();
         fillTableHeaders(model, headers, table);
         columnWidthOrderTable(homepage.getTableOrder());
@@ -1271,7 +1270,7 @@ public class Controller {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(1).setPreferredWidth(80); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(290);
+        table.getColumnModel().getColumn(2).setPreferredWidth(250);
         table.getColumnModel().getColumn(3).setPreferredWidth(37);
         table.getColumnModel().getColumn(4).setPreferredWidth(40);  
     }
