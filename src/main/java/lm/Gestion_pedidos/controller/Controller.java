@@ -57,8 +57,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 import lm.Gestion_pedidos.model.Company;
 import lm.Gestion_pedidos.model.Order;
@@ -68,6 +71,8 @@ import lm.Gestion_pedidos.service.OrderProductService;
 import lm.Gestion_pedidos.service.OrderService;
 import lm.Gestion_pedidos.view.Setting;
 import lm.Gestion_pedidos.view.Statistics;
+import org.springframework.boot.SpringApplication;
+import static org.springframework.boot.SpringApplication.main;
 
 /**
  *
@@ -140,6 +145,7 @@ public class Controller {
         this.homepage.getBtnCancelOrder().addActionListener(e -> clearOrderData());
         this.homepage.getBtnConfirmOrder().addActionListener(e -> confirmOrder());
         this.homepage.getBtnRemoveFromOrder().addActionListener(e -> removeFromOrder());
+        this.homepage.getBtnExit().addActionListener(e -> closeApp());
         
         this.homepage.getBtnDemo().addActionListener(e -> loadDemoData());
         
@@ -225,7 +231,7 @@ public class Controller {
         limitPhoneCharacters(this.homepage.getEdtPhoneCustomer());
         
         homepage.setLocationRelativeTo(null);
-        homepage.setResizable(false);
+        homepage.setResizable(true);
         fillIngredients(homepage.getIngredientModify());
         fillCategorys(homepage.getCategorys()); 
         
@@ -582,8 +588,16 @@ public class Controller {
         
     }
     
-    private void openSettings() {
+    public void openSettings() {
         this.setting = new Setting();
+        
+        Company company = companyService.fingCompanyById(1l);
+        if (company != null) {
+            setting.getSettingsName().setText(company.getName());
+            setting.getSettingsAddress().setText(company.getAddress());
+            setting.getSettingsCif().setText(company.getCif());
+            setting.getSettingsPhone().setText(company.getPhone());
+        }
         
         this.setting.getSaveSettings().addActionListener(e -> saveSettings());
         
@@ -1132,7 +1146,7 @@ public class Controller {
                 openManageCustomer(phone);
             } else {
                 String status = customer.getStatus();
-                if (!status.isEmpty()) {
+                if (status != null && !status.isEmpty()) {
                     JOptionPane.showMessageDialog(homepage, status);
                 } 
                 homepage.getTxtAddresCustomer().setText(customer.getAddress());
@@ -1417,46 +1431,55 @@ public class Controller {
     }
 
     private void confirmOrder() {
-        if (homepage.getTxtOrderPhoneCustomer().getText().equals("Teléfono")) {
-            JOptionPane.showMessageDialog(homepage, "Seleccione un cliente");
-            return;
-        }
-        String address = homepage.getEdtAlternativeAddres().getText();
-        if (address.isEmpty() || address.equals("Dirección alternativa")) {
-            address = homepage.getTxtAddresCustomer().getText();
-        }
-        homepage.getTxtOrderAddresCustomer().setText(address);
-        String phone = homepage.getTxtOrderPhoneCustomer().getText();
-        Customer customer = customerService.findCustomerByPhone(phone);
-        
-        LocalDate orderDate = LocalDate.now();
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setDate(orderDate);
-        order.setTotalPrice(total);
-        
-        DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
-        int rowCount = model.getRowCount();
-        
-        if (rowCount == 0) {
-            JOptionPane.showMessageDialog(homepage, "Seleccione al menos un producto");
-            return;
-        }
-        
-        orderService.addOrder(order);
+        Company company = companyService.fingCompanyById(1l);
+        if (company != null) {
+            if (homepage.getTxtOrderPhoneCustomer().getText().equals("Teléfono")) {
+                JOptionPane.showMessageDialog(homepage, "Seleccione un cliente");
+                return;
+            }
+            String address = homepage.getEdtAlternativeAddres().getText();
+            if (address.isEmpty() || address.equals("Dirección alternativa")) {
+                address = homepage.getTxtAddresCustomer().getText();
+            }
+            homepage.getTxtOrderAddresCustomer().setText(address);
+            String phone = homepage.getTxtOrderPhoneCustomer().getText();
+            Customer customer = customerService.findCustomerByPhone(phone);
 
-        
-        for (int i = 0; i<rowCount; i++) {
-            Product product = productService.findProductById((Long) model.getValueAt(i, 0));
-            String observation = (String) model.getValueAt(i, 2);
-            BigDecimal price = (BigDecimal) model.getValueAt(i, 3);
-            OrderProduct orderProduct = new OrderProduct(null, order, product, observation, price);
-            orderProductService.saveOrderProduct(orderProduct);
+            LocalDate orderDate = LocalDate.now();
+            Order order = new Order();
+            order.setCustomer(customer);
+            order.setDate(orderDate);
+            order.setTotalPrice(total);
+
+            DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
+            int rowCount = model.getRowCount();
+
+            if (rowCount == 0) {
+                JOptionPane.showMessageDialog(homepage, "Seleccione al menos un producto");
+                return;
+            }
+
+            orderService.addOrder(order);
+
+
+            for (int i = 0; i<rowCount; i++) {
+                Product product = productService.findProductById((Long) model.getValueAt(i, 0));
+                String observation = (String) model.getValueAt(i, 2);
+                Integer amount = (Integer) model.getValueAt(i, 3);
+                BigDecimal price = (BigDecimal) model.getValueAt(i, 4);
+                
+                OrderProduct orderProduct = new OrderProduct(null, order, product, amount, observation, price);
+                orderProductService.saveOrderProduct(orderProduct);
+            }
+
+            printOrder(address, total, order);
+
+            clearOrderData();
+            
+        } else {
+            JOptionPane.showMessageDialog(homepage, "Introduzca los datos de la empresa");
         }
-        
-        printOrder(address, total, order);
-        
-        clearOrderData();
+            
   
     }
 
@@ -1498,10 +1521,7 @@ public class Controller {
                     .setTextAlignment(TextAlignment.RIGHT);
 
             Company company = companyService.fingCompanyById(1l);
-            if (company == null) {
-                JOptionPane.showMessageDialog(homepage, "Introduzca los datos de la empresa");
-                return;
-            }
+            
             
             Paragraph companyDetails = new Paragraph()
                     .add(company.getName() + "\n")
@@ -1531,11 +1551,12 @@ public class Controller {
             
 
             // Tabla de productos
-            float[] columnWidths = {1, 5, 1}; // Ancho de las columnas
+            float[] columnWidths = {1, 4, 1, 1}; // Ancho de las columnas
             Table table = new Table(UnitValue.createPercentArray(columnWidths));
             table.setWidth(UnitValue.createPercentValue(100));
             table.addHeaderCell(new Cell().add(new Paragraph("Producto").setBold()));
             table.addHeaderCell(new Cell().add(new Paragraph("Observaciones").setBold()));
+            table.addHeaderCell(new Cell().add(new Paragraph("Cantidad").setBold()));
             table.addHeaderCell(new Cell().add(new Paragraph("Precio").setBold()));
 
             List<OrderProduct> listOrderProduct = orderProductService.getOrdersProductByOrder(order);
@@ -1544,6 +1565,7 @@ public class Controller {
             for (OrderProduct product : listOrderProduct) {
                 table.addCell(new Paragraph(product.getProduct().getName()));
                 table.addCell(new Paragraph(product.getObservations()));
+                table.addCell(new Paragraph(product.getAmount().toString()));
                 table.addCell(new Paragraph(product.getPriceWithModifications().toString()));
                
                 
@@ -1585,15 +1607,46 @@ public class Controller {
         String address = setting.getSettingsAddress().getText();
         String cif = setting.getSettingsCif().getText();
         String phone = setting.getSettingsPhone().getText();
+        String userName = setting.getUserName().getText();
+        char[] password = setting.getPassword().getPassword();
         if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || cif.isEmpty()) {
-            JOptionPane.showMessageDialog(setting, "Introduzca todos los datos de la empresa");
+            JOptionPane.showMessageDialog(setting, "Introduzca todos los datos de la empresa y la conexión");
             return;
         }
         Company company = new Company(id, name, phone, address, cif);
         companyService.saveCompany(company);
         homepage.getTxtCompanyName().setText(company.getName());
+        
         JOptionPane.showMessageDialog(setting, "Datos guardados correctamente");
         setting.dispose();  
+    }
+    
+    // Sigue sin funcionar, preguntar si hace falta esto o no 
+    private void updateBdConn(String userName, char[] password) throws Exception {
+        
+         String propertiesPath = "src/main/resources/application.properties";
+         try (FileOutputStream output = new FileOutputStream(propertiesPath)) {
+            Properties properties = new Properties();
+
+            // Cargar las propiedades existentes
+            properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
+            
+            String passwordStr = new String(password);
+
+            // Modificar las propiedades
+            properties.setProperty("spring.datasource.username", userName);
+            properties.setProperty("spring.datasource.password", passwordStr);
+
+            // Guardar las propiedades
+            properties.store(output, null);
+            
+            // Reinicia el contexto de la aplicación
+            SpringApplication.exit(context, () -> 0);
+            main(new String[]{});
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void seeStatistics(String month) {
@@ -1939,6 +1992,13 @@ public class Controller {
             orderService.addOrder(order);
         }
     }
+
+    private void closeApp() {
+        System.exit(0);
+        
+    }
+
+   
 
     
 

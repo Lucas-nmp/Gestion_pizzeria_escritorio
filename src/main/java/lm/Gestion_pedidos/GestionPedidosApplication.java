@@ -19,8 +19,13 @@ public class GestionPedidosApplication {
             
             EventQueue.invokeLater(() -> {
                 Controller controller = contextSpring.getBean(Controller.class);
+                
                 controller.viewHomePage();
+                
             });
 	}
+
+    
+    
 
 }

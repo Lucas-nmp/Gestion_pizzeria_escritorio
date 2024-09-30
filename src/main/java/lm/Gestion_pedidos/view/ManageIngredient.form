@@ -68,10 +68,10 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="manageIngredientSaveIngredient" min="-2" pref="111" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="manageIngredientDeleteIngredient" min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="manageIngredientDeleteIngredient" min="-2" pref="170" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="35" max="32767" attributes="0"/>
+                      <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
