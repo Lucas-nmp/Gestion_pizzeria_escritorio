@@ -154,6 +154,11 @@ public class Controller {
             String phone = homepage.getEdtPhoneCustomer().getText();
             lookForCustomer(phone);
         });
+        
+        this.homepage.getEdtAlternativeAddres().addActionListener((ActionEvent e) -> {
+            String alternativeAddress = homepage.getEdtAlternativeAddres().getText();
+            homepage.getTxtOrderAddresCustomer().setText(alternativeAddress);
+        });
           
         this.homepage.getCategorys().addActionListener( e -> handleCategorySelection());
         
