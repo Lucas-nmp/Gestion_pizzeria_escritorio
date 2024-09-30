@@ -43,6 +43,10 @@ public class Statistics extends javax.swing.JDialog {
     public JComboBox getBoxMonth() {
         return month;
     }
+    
+    public JLabel getBestCustomer() {
+        return bestCustomer;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,6 +69,8 @@ public class Statistics extends javax.swing.JDialog {
         month = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         totalIncomeForYear = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        bestCustomer = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -80,7 +86,7 @@ public class Statistics extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Clientes totales");
+        jLabel3.setText("Clientes totales en el mes");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,6 +119,14 @@ public class Statistics extends javax.swing.JDialog {
         totalIncomeForYear.setForeground(new java.awt.Color(255, 255, 255));
         totalIncomeForYear.setText("0");
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Cliente del mes:");
+
+        bestCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        bestCustomer.setForeground(new java.awt.Color(255, 255, 255));
+        bestCustomer.setText("0");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -120,21 +134,27 @@ public class Statistics extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(61, 61, 61)
-                        .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(totalOrdersForYear)
-                    .addComponent(customersForMonth)
-                    .addComponent(totalIncomeForMonth)
-                    .addComponent(totalOrdersForMonth)
-                    .addComponent(totalIncomeForYear))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(61, 61, 61)
+                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(totalOrdersForYear)
+                            .addComponent(customersForMonth)
+                            .addComponent(totalIncomeForMonth)
+                            .addComponent(totalOrdersForMonth)
+                            .addComponent(totalIncomeForYear)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(bestCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(53, 53, 53))
         );
         jPanel1Layout.setVerticalGroup(
@@ -155,13 +175,17 @@ public class Statistics extends javax.swing.JDialog {
                     .addComponent(customersForMonth))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(bestCustomer))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(totalOrdersForYear))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(totalIncomeForYear))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -180,10 +204,12 @@ public class Statistics extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bestCustomer;
     private javax.swing.JLabel customersForMonth;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;

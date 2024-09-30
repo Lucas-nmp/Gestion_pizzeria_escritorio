@@ -28,10 +28,5 @@ public class OrderService {
         return orderRepository.findById(id).orElse(null);
     }
     
-    // buscar el último pedido del cliente
-    // buscar pedidos por cliente
-    // por rango de fecha
-    // del último mes
-    // del último año
-    // el total de pedido por fechas 
+
 }

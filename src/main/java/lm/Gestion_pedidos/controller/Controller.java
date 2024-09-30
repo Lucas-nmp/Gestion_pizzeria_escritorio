@@ -57,6 +57,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -1665,8 +1667,13 @@ public class Controller {
         
         BigDecimal totalIncomeForYear = BigDecimal.ZERO;
         BigDecimal totalIncomeForMonth = BigDecimal.ZERO;
+        // Almacena clientes únicos para contar cuántos clientes diferentes hay en el mes
         Set<Customer> uniqueCustomers = new HashSet<>(); 
         
+        // Map para almacenar el número de pedidos por cliente
+        Map<Customer, Integer> ordersByCustomer = new HashMap<>();
+        
+        // Obtener el número del mes a partir del nombre del mes
         int monthNumber = getMonthNumber(month);
         
         for (Order order : orders) {
@@ -1678,10 +1685,23 @@ public class Controller {
             if (year == order.getDate().getYear() && monthNumber == order.getDate().getMonthValue()) {
                 totalOrdersForMonth++;
                 totalIncomeForMonth = totalIncomeForMonth.add(order.getTotalPrice());
-            } 
-            
-            
-            uniqueCustomers.add(order.getCustomer());
+                
+                // Agregar el cliente al set para contar clientes únicos
+                uniqueCustomers.add(order.getCustomer());
+                
+                // Actualizar el número de pedidos por cliente
+                ordersByCustomer.put(order.getCustomer(), ordersByCustomer.getOrDefault(order.getCustomer(), 0) + 1);
+            }  
+        }
+        
+        // Determinar el cliente con más pedidos
+        Customer topCustomer = null;
+        int maxOrders = 0;
+        for (Map.Entry<Customer, Integer> entry : ordersByCustomer.entrySet()) {
+            if (entry.getValue() > maxOrders) {
+                maxOrders = entry.getValue();
+                topCustomer = entry.getKey();
+            }
         }
         
         int totalCustomersForMonth = uniqueCustomers.size();
@@ -1691,6 +1711,14 @@ public class Controller {
         statistics.getTotalIncomeForMonth().setText(totalIncomeForMonth.toString());
         statistics.getTotalOrdersForYear().setText(String.valueOf(totalOrdersForYear));
         statistics.getTotalIncomeForYear().setText(totalIncomeForYear.toString());
+        if (topCustomer != null) {
+            String bestCustomer = String.format("%s, tlf. %s (%d pedidos).", topCustomer.getName(), topCustomer.getPhone(), maxOrders);
+            //statistics.getBestCustomer().setText(topCustomer.getName() + ", " + topCustomer.getPhone());
+            statistics.getBestCustomer().setText(bestCustomer);
+        } else {
+            statistics.getBestCustomer().setText("No hay pedidos en el mes seleccionado");
+        }
+        
         
         
     }
