@@ -161,6 +161,7 @@ public class Controller {
         JButton btnSettings = this.homepage.getBtnSetting();
         JButton btnStatistics = this.homepage.getBtnStatistics();
         JButton btnExit = this.homepage.getBtnExit();
+        JButton btnDeme = this.homepage.getBtnDemo();
         
         activateHoverEffect(btnCategory, java.awt.Color.green);
         activateHoverEffect(btnProduct, java.awt.Color.green);
@@ -169,6 +170,7 @@ public class Controller {
         activateHoverEffect(btnSettings, java.awt.Color.green);
         activateHoverEffect(btnStatistics, java.awt.Color.green);
         activateHoverEffect(btnExit, java.awt.Color.red);
+        activateHoverEffect(btnDeme, java.awt.Color.orange);
         
         
         
@@ -218,6 +220,9 @@ public class Controller {
             
         });
         
+        activateFocusEfect(this.homepage.getEdtPhoneCustomer(), "Teléfono");
+        
+        /*
         this.homepage.getEdtPhoneCustomer().addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -235,6 +240,7 @@ public class Controller {
             
             
         });
+        */
         
         this.homepage.getEdtAlternativeAddres().addFocusListener(new FocusAdapter() {
             @Override
@@ -483,6 +489,12 @@ public class Controller {
             }            
         });
         
+        JButton btnDeleteIngredient = this.manageIngredient.getBtnDeleteIngredient();
+        JButton btnSaveIngredient = this.manageIngredient.getBtnSaveIngredient();
+        
+        activateHoverEffect(btnDeleteIngredient, java.awt.Color.red);
+        activateHoverEffect(btnSaveIngredient, java.awt.Color.green);
+        
         manageIngredient.setLocationRelativeTo(null);
         manageIngredient.setResizable(false);
         manageIngredient.setModal(true);
@@ -648,7 +660,11 @@ public class Controller {
             setting.getSettingsPhone().setText(company.getPhone());
         }
         
-        this.setting.getSaveSettings().addActionListener(e -> saveSettings());
+        JButton btnSave = this.setting.getSaveSettings();
+        
+        activateHoverEffect(btnSave, java.awt.Color.green);
+        
+        btnSave.addActionListener(e -> saveSettings());
         
         setting.setLocationRelativeTo(null);
         setting.setResizable(false);
@@ -1656,8 +1672,10 @@ public class Controller {
         String address = setting.getSettingsAddress().getText();
         String cif = setting.getSettingsCif().getText();
         String phone = setting.getSettingsPhone().getText();
+        
         String userName = setting.getUserName().getText();
         char[] password = setting.getPassword().getPassword();
+        
         if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || cif.isEmpty()) {
             JOptionPane.showMessageDialog(setting, "Introduzca todos los datos de la empresa y la conexión");
             return;
@@ -1804,6 +1822,25 @@ public class Controller {
             }
             
         });
+    }
+    
+        private void activateFocusEfect(JTextField field, String text) {
+            field.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                String texto = text;
+                checkFieldFocusGained(field, texto);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String texto = text;
+                checkFieldFocusLost(field, texto);
+            }
+            
+            
+        });
+        
     }
     
     
@@ -2091,14 +2128,6 @@ public class Controller {
         
     }
 
-    
-
-    
-    
-
-   
-
-    
-
-    
+  
+ 
 }

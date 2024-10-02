@@ -57,6 +57,8 @@ public class ManageIngredient extends javax.swing.JDialog {
         manageIngredientDeleteIngredient = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         manageIngredientTable = new javax.swing.JTable();
 
@@ -66,15 +68,27 @@ public class ManageIngredient extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(26, 44, 68));
 
+        manageIngredientName.setBackground(new java.awt.Color(26, 44, 68));
         manageIngredientName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageIngredientName.setForeground(new java.awt.Color(255, 255, 255));
+        manageIngredientName.setBorder(null);
 
+        manageIngredientPrice.setBackground(new java.awt.Color(26, 44, 68));
         manageIngredientPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageIngredientPrice.setForeground(new java.awt.Color(255, 255, 255));
+        manageIngredientPrice.setBorder(null);
 
-        manageIngredientSaveIngredient.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageIngredientSaveIngredient.setBackground(new java.awt.Color(26, 44, 68));
+        manageIngredientSaveIngredient.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageIngredientSaveIngredient.setForeground(new java.awt.Color(255, 255, 255));
         manageIngredientSaveIngredient.setText("Guardar");
+        manageIngredientSaveIngredient.setBorder(null);
 
-        manageIngredientDeleteIngredient.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageIngredientDeleteIngredient.setBackground(new java.awt.Color(26, 44, 68));
+        manageIngredientDeleteIngredient.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageIngredientDeleteIngredient.setForeground(new java.awt.Color(255, 255, 255));
         manageIngredientDeleteIngredient.setText("Eliminar Ingrediente");
+        manageIngredientDeleteIngredient.setBorder(null);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -84,30 +98,37 @@ public class ManageIngredient extends javax.swing.JDialog {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Precio");
 
+        jSeparator1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(manageIngredientName, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1)
+                    .addComponent(manageIngredientName, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(manageIngredientPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(manageIngredientPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(manageIngredientSaveIngredient, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(manageIngredientDeleteIngredient, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                        .addComponent(manageIngredientDeleteIngredient)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
@@ -117,10 +138,14 @@ public class ManageIngredient extends javax.swing.JDialog {
                     .addComponent(manageIngredientPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(manageIngredientSaveIngredient)
                     .addComponent(manageIngredientDeleteIngredient))
-                .addGap(46, 46, 46))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 13, Short.MAX_VALUE)
+                    .addComponent(jSeparator2))
+                .addGap(30, 30, 30))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 120));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 120));
 
         manageIngredientTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageIngredientTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -163,6 +188,8 @@ public class ManageIngredient extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton manageIngredientDeleteIngredient;
     private javax.swing.JTextField manageIngredientName;
     private javax.swing.JTextField manageIngredientPrice;
