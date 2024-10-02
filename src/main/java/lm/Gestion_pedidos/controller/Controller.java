@@ -64,6 +64,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JTextField;
 import lm.Gestion_pedidos.model.Company;
 import lm.Gestion_pedidos.model.Order;
@@ -150,6 +151,25 @@ public class Controller {
         this.homepage.getBtnExit().addActionListener(e -> closeApp());
         
         this.homepage.getBtnDemo().addActionListener(e -> loadDemoData());
+        
+        
+        // Visuales
+        JButton btnCategory = this.homepage.getBtnCategory();
+        JButton btnProduct = this.homepage.getBtnProduct();
+        JButton btnIngredient = this.homepage.getBtnIngredient();
+        JButton btnCustomer = this.homepage.getBtnCustomer();
+        JButton btnSettings = this.homepage.getBtnSetting();
+        JButton btnStatistics = this.homepage.getBtnStatistics();
+        JButton btnExit = this.homepage.getBtnExit();
+        
+        activateHoverEffect(btnCategory, java.awt.Color.green);
+        activateHoverEffect(btnProduct, java.awt.Color.green);
+        activateHoverEffect(btnIngredient, java.awt.Color.green);
+        activateHoverEffect(btnCustomer, java.awt.Color.green);
+        activateHoverEffect(btnSettings, java.awt.Color.green);
+        activateHoverEffect(btnStatistics, java.awt.Color.green);
+        activateHoverEffect(btnExit, java.awt.Color.red);
+        
         
         
         this.homepage.getEdtPhoneCustomer().addActionListener((ActionEvent e) -> {
@@ -306,6 +326,12 @@ public class Controller {
             
         });  
         
+        JButton btnSave = this.manageCategory.getCategorySave();
+        JButton btnDelete = this.manageCategory.getDeleteCategory();
+        
+        activateHoverEffect(btnSave, java.awt.Color.green);
+        activateHoverEffect(btnDelete, java.awt.Color.red);
+        
         manageCategory.setLocationRelativeTo(null);
         manageCategory.setResizable(false);
         
@@ -337,6 +363,18 @@ public class Controller {
                 setNameProduct(manageProduct.getEdtNameProduct().getText()); 
             }
         });
+        
+        JButton btnAddIngredient = this.manageProduct.getBtnAddIngredient();
+        JButton btnDeleteIngredient = this.manageProduct.getBtnDeleteIngredient();
+        JButton btnSaveProduct = this.manageProduct.getBtnSaveProduct();
+        JButton btnDeleteProduct = this.manageProduct.getBtnDeleteProduct();
+        
+        activateHoverEffect(btnAddIngredient, java.awt.Color.green);
+        activateHoverEffect(btnDeleteIngredient, java.awt.Color.red);
+        activateHoverEffect(btnSaveProduct, java.awt.Color.green);
+        activateHoverEffect(btnDeleteProduct, java.awt.Color.red);
+        
+        
                 
         this.manageProduct.getEdtPriceProduct().addActionListener((ActionEvent e) -> {
             setPriceProduct(manageProduct.getEdtPriceProduct().getText()); 
@@ -476,6 +514,13 @@ public class Controller {
             
         });
         
+        JButton btnSave = this.manageCustomer.getBtnSaveCustomer();
+        JButton btnDelete = this.manageCustomer.getBtnDeleteCustomer();
+        JButton btnLookFor = this.manageCustomer.getBtnLookForCustomer();
+        
+        activateHoverEffect(btnSave, java.awt.Color.green);
+        activateHoverEffect(btnDelete, java.awt.Color.red);
+        activateHoverEffect(btnLookFor, java.awt.Color.blue);
         
         
         this.manageCustomer.getTableCustomer().addMouseListener(new MouseAdapter() {
@@ -490,13 +535,14 @@ public class Controller {
                     String status = (String) target.getValueAt(selectedRow, 4);
                     
                     manageCustomer.getEdtNameCustomer().setText(name);
-                    manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.BLACK);
+                    manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.WHITE);
                     manageCustomer.getEdtAddresCustomer().setText(addres);
-                    manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.BLACK);
+                    manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.WHITE);
                     manageCustomer.getEdtPhoneCustomer().setText(phone);
-                    manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.BLACK);
+                    manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.WHITE);
                     manageCustomer.getEdtStatusCustomer().setText(status);   
-                    manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.BLACK);
+                    manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.WHITE);
+                    
                 }
             } 
         });
@@ -505,18 +551,14 @@ public class Controller {
             @Override
             public void focusGained(FocusEvent e) {
                 JTextField fieldName =  manageCustomer.getEdtNameCustomer();
-                checkFieldFocusGained(fieldName, "Nombre");
-                
+                checkFieldFocusGained(fieldName, "Nombre");   
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 JTextField fieldName =  manageCustomer.getEdtNameCustomer();
-                checkFieldFocusLost(fieldName, "Nombre");
-                
+                checkFieldFocusLost(fieldName, "Nombre");  
             }
-
- 
         });
         
         
@@ -619,7 +661,7 @@ public class Controller {
     private void checkFieldFocusGained(JTextField fieldName, String texto) {
         if (fieldName.getText().equals(texto)) {
             fieldName.setText("");
-            fieldName.setForeground(java.awt.Color.BLACK);
+            fieldName.setForeground(java.awt.Color.WHITE);
         }
     }  
     
@@ -1748,6 +1790,24 @@ public class Controller {
         });
     }
     
+    
+    private void activateHoverEffect(JButton button, java.awt.Color color) {
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setForeground(color);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setForeground(java.awt.Color.WHITE);
+            }
+            
+        });
+    }
+    
+    
+    // Para cargar datos de demostración
     public void loadDemoData(){
 
         List<Category> categorys = categoryService.getAllCategorys();
@@ -2030,6 +2090,11 @@ public class Controller {
         System.exit(0);
         
     }
+
+    
+
+    
+    
 
    
 

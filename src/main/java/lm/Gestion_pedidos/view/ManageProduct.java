@@ -101,6 +101,8 @@ public class ManageProduct extends javax.swing.JDialog {
         manageProductIngredients = new javax.swing.JLabel();
         manageProductSaveProduct = new javax.swing.JButton();
         manageProductDeleteProduct = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         manageProductTable = new javax.swing.JTable();
@@ -124,13 +126,19 @@ public class ManageProduct extends javax.swing.JDialog {
         manageProductCategorysBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductCategorysBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        manageProductEdtName.setBackground(new java.awt.Color(26, 44, 68));
         manageProductEdtName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageProductEdtName.setForeground(new java.awt.Color(255, 255, 255));
+        manageProductEdtName.setBorder(null);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Precio");
 
+        manageProductEdtPrice.setBackground(new java.awt.Color(26, 44, 68));
         manageProductEdtPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageProductEdtPrice.setForeground(new java.awt.Color(255, 255, 255));
+        manageProductEdtPrice.setBorder(null);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -139,11 +147,17 @@ public class ManageProduct extends javax.swing.JDialog {
         manageProductIngredientsBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductIngredientsBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        manageProductAddIngredient.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageProductAddIngredient.setBackground(new java.awt.Color(26, 44, 68));
+        manageProductAddIngredient.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageProductAddIngredient.setForeground(new java.awt.Color(255, 255, 255));
         manageProductAddIngredient.setText("Añadir ingrediente");
+        manageProductAddIngredient.setBorder(null);
 
-        manageProductDeleteIngredient.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageProductDeleteIngredient.setBackground(new java.awt.Color(26, 44, 68));
+        manageProductDeleteIngredient.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageProductDeleteIngredient.setForeground(new java.awt.Color(255, 255, 255));
         manageProductDeleteIngredient.setText("Quitar ingrediente");
+        manageProductDeleteIngredient.setBorder(null);
 
         manageProductCategory.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         manageProductCategory.setForeground(new java.awt.Color(255, 255, 255));
@@ -161,11 +175,22 @@ public class ManageProduct extends javax.swing.JDialog {
         manageProductIngredients.setForeground(new java.awt.Color(255, 255, 255));
         manageProductIngredients.setText("Ingredientes");
 
-        manageProductSaveProduct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        manageProductSaveProduct.setText("GuardarProducto");
+        manageProductSaveProduct.setBackground(new java.awt.Color(26, 44, 68));
+        manageProductSaveProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageProductSaveProduct.setForeground(new java.awt.Color(255, 255, 255));
+        manageProductSaveProduct.setText("Guardar Producto");
+        manageProductSaveProduct.setActionCommand("Guardar Producto");
+        manageProductSaveProduct.setBorder(null);
 
-        manageProductDeleteProduct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageProductDeleteProduct.setBackground(new java.awt.Color(26, 44, 68));
+        manageProductDeleteProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageProductDeleteProduct.setForeground(new java.awt.Color(255, 255, 255));
         manageProductDeleteProduct.setText("Eliminar Producto");
+        manageProductDeleteProduct.setBorder(null);
+
+        jSeparator1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jSeparator2.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -178,15 +203,19 @@ public class ManageProduct extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(manageProductCategorysBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(25, 25, 25)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(manageProductEdtName, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1)
+                    .addComponent(manageProductEdtName, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                     .addComponent(jLabel2)
-                    .addComponent(manageProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(manageProductName, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(manageProductPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(manageProductEdtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(manageProductPrice, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(manageProductEdtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(manageProductIngredients, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -195,18 +224,17 @@ public class ManageProduct extends javax.swing.JDialog {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(manageProductIngredientsBox, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(25, 25, 25)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(manageProductAddIngredient)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(manageProductDeleteIngredient))
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(manageProductSaveProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(manageProductDeleteProduct))))
-                            .addComponent(jLabel4))
+                                .addComponent(manageProductAddIngredient)
+                                .addGap(18, 18, 18)
+                                .addComponent(manageProductDeleteIngredient))
+                            .addComponent(jLabel4)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(167, 167, 167)
+                                .addComponent(manageProductSaveProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(manageProductDeleteProduct)))
                         .addGap(11, 11, 11)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +253,11 @@ public class ManageProduct extends javax.swing.JDialog {
                     .addComponent(manageProductIngredientsBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(manageProductAddIngredient)
                     .addComponent(manageProductDeleteIngredient))
-                .addGap(35, 35, 35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(manageProductCategory)
                     .addComponent(manageProductName)
@@ -235,7 +267,7 @@ public class ManageProduct extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(manageProductSaveProduct)
                     .addComponent(manageProductDeleteProduct))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 220));
@@ -278,6 +310,8 @@ public class ManageProduct extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton manageProductAddIngredient;
     private javax.swing.JLabel manageProductCategory;
     private javax.swing.JComboBox<String> manageProductCategorysBox;

@@ -53,6 +53,7 @@ public class ManageCategory extends javax.swing.JDialog {
         categoryName = new javax.swing.JTextField();
         CategorySave = new javax.swing.JButton();
         categoryDelete = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         categoryTable = new javax.swing.JTable();
 
@@ -64,16 +65,28 @@ public class ManageCategory extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(26, 44, 68));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        categoryName.setBackground(new java.awt.Color(26, 44, 68));
         categoryName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel1.add(categoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 200, -1));
+        categoryName.setForeground(new java.awt.Color(255, 255, 255));
+        categoryName.setBorder(null);
+        jPanel1.add(categoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 210, -1));
 
-        CategorySave.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        CategorySave.setBackground(new java.awt.Color(26, 44, 68));
+        CategorySave.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        CategorySave.setForeground(new java.awt.Color(255, 255, 255));
         CategorySave.setText("Guardar");
+        CategorySave.setBorder(null);
         jPanel1.add(CategorySave, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, -1, -1));
 
-        categoryDelete.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        categoryDelete.setBackground(new java.awt.Color(26, 44, 68));
+        categoryDelete.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        categoryDelete.setForeground(new java.awt.Color(255, 255, 255));
         categoryDelete.setText("Eliminar Categoría");
-        jPanel1.add(categoryDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, -1, -1));
+        categoryDelete.setBorder(null);
+        jPanel1.add(categoryDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 40, -1, -1));
+
+        jSeparator1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 210, 10));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 110));
 
@@ -120,5 +133,6 @@ public class ManageCategory extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

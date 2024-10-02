@@ -70,6 +70,10 @@ public class ManageCustomer extends javax.swing.JDialog {
         manageCustomerLookForCustomer = new javax.swing.JButton();
         manageCustomerSaveCustomer = new javax.swing.JButton();
         manageCustomerDeleteCustomer = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         manageCustomerTable = new javax.swing.JTable();
@@ -79,27 +83,53 @@ public class ManageCustomer extends javax.swing.JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(26, 44, 68));
+        jPanel2.setForeground(new java.awt.Color(255, 255, 255));
 
+        manageCustomerName.setBackground(new java.awt.Color(26, 44, 68));
         manageCustomerName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        manageCustomerName.setForeground(new java.awt.Color(204, 204, 204));
+        manageCustomerName.setForeground(new java.awt.Color(255, 255, 255));
+        manageCustomerName.setBorder(null);
 
+        manageCustomerAddres.setBackground(new java.awt.Color(26, 44, 68));
         manageCustomerAddres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        manageCustomerAddres.setForeground(new java.awt.Color(204, 204, 204));
+        manageCustomerAddres.setForeground(new java.awt.Color(255, 255, 255));
+        manageCustomerAddres.setBorder(null);
 
+        manageCustomerPhone.setBackground(new java.awt.Color(26, 44, 68));
         manageCustomerPhone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        manageCustomerPhone.setForeground(new java.awt.Color(204, 204, 204));
+        manageCustomerPhone.setForeground(new java.awt.Color(255, 255, 255));
+        manageCustomerPhone.setBorder(null);
 
+        manageCustomerStatus.setBackground(new java.awt.Color(26, 44, 68));
         manageCustomerStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        manageCustomerStatus.setForeground(new java.awt.Color(204, 204, 204));
+        manageCustomerStatus.setForeground(new java.awt.Color(255, 255, 255));
+        manageCustomerStatus.setBorder(null);
 
-        manageCustomerLookForCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerLookForCustomer.setBackground(new java.awt.Color(26, 44, 68));
+        manageCustomerLookForCustomer.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageCustomerLookForCustomer.setForeground(new java.awt.Color(255, 255, 255));
         manageCustomerLookForCustomer.setText("Buscar");
+        manageCustomerLookForCustomer.setBorder(null);
 
-        manageCustomerSaveCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerSaveCustomer.setBackground(new java.awt.Color(26, 44, 68));
+        manageCustomerSaveCustomer.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageCustomerSaveCustomer.setForeground(new java.awt.Color(255, 255, 255));
         manageCustomerSaveCustomer.setText("Guardar");
+        manageCustomerSaveCustomer.setBorder(null);
 
-        manageCustomerDeleteCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        manageCustomerDeleteCustomer.setBackground(new java.awt.Color(26, 44, 68));
+        manageCustomerDeleteCustomer.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        manageCustomerDeleteCustomer.setForeground(new java.awt.Color(255, 255, 255));
         manageCustomerDeleteCustomer.setText("Eliminar");
+        manageCustomerDeleteCustomer.setBorder(null);
+
+        jSeparator1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jSeparator2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jSeparator3.setBackground(new java.awt.Color(255, 255, 255));
+
+        jSeparator4.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -109,20 +139,29 @@ public class ManageCustomer extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(manageCustomerLookForCustomer)
-                        .addGap(50, 50, 50)
-                        .addComponent(manageCustomerSaveCustomer)
-                        .addGap(53, 53, 53)
-                        .addComponent(manageCustomerDeleteCustomer))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(manageCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(manageCustomerPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(manageCustomerAddres, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
-                            .addComponent(manageCustomerStatus))))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(manageCustomerLookForCustomer)
+                            .addGap(50, 50, 50)
+                            .addComponent(manageCustomerSaveCustomer)
+                            .addGap(53, 53, 53)
+                            .addComponent(manageCustomerDeleteCustomer))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(manageCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(manageCustomerPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(manageCustomerStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(manageCustomerAddres, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,19 +170,27 @@ public class ManageCustomer extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(manageCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(manageCustomerAddres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+                    .addComponent(jSeparator2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(manageCustomerPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(manageCustomerStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(manageCustomerLookForCustomer)
                     .addComponent(manageCustomerSaveCustomer)
                     .addComponent(manageCustomerDeleteCustomer))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 150));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 180));
 
         manageCustomerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -162,16 +209,17 @@ public class ManageCustomer extends javax.swing.JDialog {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1050, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 940, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 1, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1050, 290));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 940, 290));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,6 +242,10 @@ public class ManageCustomer extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField manageCustomerAddres;
     private javax.swing.JButton manageCustomerDeleteCustomer;
     private javax.swing.JButton manageCustomerLookForCustomer;
