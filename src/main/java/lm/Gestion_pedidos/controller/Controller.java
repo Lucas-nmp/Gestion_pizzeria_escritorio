@@ -172,6 +172,9 @@ public class Controller {
         activateHoverEffect(btnExit, java.awt.Color.red);
         activateHoverEffect(btnDeme, java.awt.Color.orange);
         
+        activateFocusEfect(this.homepage.getEdtPhoneCustomer(), "Teléfono");
+        activateFocusEfect(this.homepage.getEdtAlternativeAddres(), "Dirección alternativa");
+        
         
         
         this.homepage.getEdtPhoneCustomer().addActionListener((ActionEvent e) -> {
@@ -220,46 +223,7 @@ public class Controller {
             
         });
         
-        activateFocusEfect(this.homepage.getEdtPhoneCustomer(), "Teléfono");
-        
-        /*
-        this.homepage.getEdtPhoneCustomer().addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                JTextField field = homepage.getEdtPhoneCustomer();
-                String texto = "Teléfono";
-                checkFieldFocusGained(field, texto);
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField field = homepage.getEdtPhoneCustomer();
-                String texto = "Teléfono";
-                checkFieldFocusLost(field, texto);
-            }
-            
-            
-        });
-        */
-        
-        this.homepage.getEdtAlternativeAddres().addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                JTextField field = homepage.getEdtAlternativeAddres();
-                String texto = "Dirección alternativa";
-                checkFieldFocusGained(field, texto);
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField field = homepage.getEdtAlternativeAddres();
-                String texto = "Dirección alternativa";
-                checkFieldFocusLost(field, texto);
-            }
-            
-            
-            
-        });
+       
         
         limitPhoneCharacters(this.homepage.getEdtPhoneCustomer());
         
@@ -534,6 +498,11 @@ public class Controller {
         activateHoverEffect(btnDelete, java.awt.Color.red);
         activateHoverEffect(btnLookFor, java.awt.Color.blue);
         
+        activateFocusEfect(this.manageCustomer.getEdtNameCustomer(), "Nombre");
+        activateFocusEfect(this.manageCustomer.getEdtAddresCustomer(), "Dirección");
+        activateFocusEfect(this.manageCustomer.getEdtPhoneCustomer(), "Teléfono");
+        activateFocusEfect(this.manageCustomer.getEdtStatusCustomer(), "Observaciones");
+        
         
         this.manageCustomer.getTableCustomer().addMouseListener(new MouseAdapter() {
             @Override
@@ -559,65 +528,9 @@ public class Controller {
             } 
         });
         
-        this.manageCustomer.getEdtNameCustomer().addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                JTextField fieldName =  manageCustomer.getEdtNameCustomer();
-                checkFieldFocusGained(fieldName, "Nombre");   
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField fieldName =  manageCustomer.getEdtNameCustomer();
-                checkFieldFocusLost(fieldName, "Nombre");  
-            }
-        });
         
         
         
-        this.manageCustomer.getEdtAddresCustomer().addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                JTextField fieldName = manageCustomer.getEdtAddresCustomer();
-                checkFieldFocusGained(fieldName, "Dirección");
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField fieldName = manageCustomer.getEdtAddresCustomer();
-                checkFieldFocusLost(fieldName, "Dirección");
-            }
-        });
-        
-        this.manageCustomer.getEdtPhoneCustomer().addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                JTextField fieldName = manageCustomer.getEdtPhoneCustomer();
-                checkFieldFocusGained(fieldName, "Teléfono");
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField fieldName = manageCustomer.getEdtPhoneCustomer();
-                checkFieldFocusLost(fieldName, "Teléfono");
-            }
-        });
-        
-        this.manageCustomer.getEdtStatusCustomer().addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                JTextField fieldName = manageCustomer.getEdtStatusCustomer();
-                checkFieldFocusGained(fieldName, "Observaciones");
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                JTextField fieldName = manageCustomer.getEdtStatusCustomer();
-                checkFieldFocusLost(fieldName, "Observaciones");
-            }
-            
-            
-        });
         
         limitPhoneCharacters(manageCustomer.getEdtPhoneCustomer());
         
