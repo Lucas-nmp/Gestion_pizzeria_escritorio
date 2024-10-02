@@ -87,7 +87,6 @@ import static org.springframework.boot.SpringApplication.main;
 @Component
 public class Controller {
     
-    
     private HashSet<String> listIngredientsProduct = new HashSet<>();
     private HashSet<Long> listIdIngredientsInProduct = new HashSet<>();
     private HashSet<String> modifications;
@@ -131,7 +130,48 @@ public class Controller {
     private Setting setting;
     private Statistics statistics;
     
-    
+    /**
+    * Configura y gestiona la vista principal de la aplicación, estableciendo interacciones, efectos visuales 
+    * y comportamientos para cada componente de la vista "Homepage".
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Inicializa la vista principal (`Homepage`).</li>
+    *   <li>Establece las acciones y eventos de cada botón en la interfaz, incluyendo abrir vistas de gestión como
+    *       categorías, productos, ingredientes, clientes y configuraciones.</li>
+    *   <li>Aplica efectos visuales a los botones, como el cambio de color cuando el ratón pasa por encima (hover).</li>
+    *   <li>Configura eventos de enfoque para los campos de texto (`JTextField`) en la vista principal.</li>
+    *   <li>Controla el evento de búsqueda de clientes por número de teléfono al presionar la tecla "Enter".</li>
+    *   <li>Configura y personaliza las tablas (`JTable`) de la vista principal, asignando modelos de datos y
+    *       añadiendo funcionalidades de eliminación y selección de elementos.</li>
+    *   <li>Rellena las listas desplegables (`ComboBox`) con las categorías e ingredientes disponibles.</li>
+    *   <li>Gestiona la información de la empresa en la interfaz.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Botones de la interfaz (`JButton`): `BtnCategory`, `BtnProduct`, `BtnIngredient`, `BtnCustomer`, `BtnSetting`, `BtnStatistics`, `BtnExit`, `BtnDemo`, y botones adicionales para la gestión de pedidos.</li>
+    *   <li>Campos de texto (`JTextField`): `EdtPhoneCustomer` para capturar el teléfono del cliente y `EdtAlternativeAddress` para direcciones alternativas.</li>
+    *   <li>Tablas (`JTable`): `TableOrder` para gestionar los productos del pedido y `TableProducts` para visualizar productos disponibles.</li>
+    *   <li>Listas desplegables (`ComboBox`): `Categorys` para seleccionar categorías de productos.</li>
+    * </ul>
+    * 
+    * <b>Excepciones:</b>
+    * <ul>
+    *   <li>Se muestran mensajes de error o advertencia en cuadros de diálogo (`JOptionPane`) si no se encuentran datos o si el usuario realiza una acción inválida.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Establece el comportamiento para limitar la cantidad de caracteres permitidos en el campo de teléfono del cliente.</li>
+    *   <li>Inicializa variables como `modifications`, `modificationsPrice` y `total` para gestionar las modificaciones de los pedidos.</li>
+    *   <li>Configura la información de la empresa en la interfaz, como el nombre de la compañía, y rellena la tabla de productos basándose en la categoría seleccionada.</li>
+    *   <li>Hace visible la interfaz (`Homepage`) y la centra en la pantalla.</li>
+    * </ul>
+    */
     public void viewHomePage() {
         this.homepage = new Homepage();
         
@@ -263,6 +303,40 @@ public class Controller {
     }
     
     
+    /**
+    * Abre la vista que gestiona las categorías, configurando los eventos y componentes visuales de la ventana "Category".
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * <b>Acciones principales:</b>
+    * <ul>
+    *  <li>Inicializa la vista `ManageCategory` y establece sus parámetros de tamaño y posición.</li>
+    *  <li>Configura las acciones para los botones de guardar y eliminar categorías, así como para el campo de nombre de la categoría (`CategoryName`).</li>
+    *  <li>Aplica efectos visuales de "hover" a los botones de la interfaz, cambiando el color de las letras según corresponda.</li>
+    *  <li>Gestiona la selección de filas en la tabla de categorías (`CategoryTable`), mostrando la información de la categoría seleccionada en los campos de texto.</li>
+    *  <li>Configura la tabla de categorías (`CategoryTable`) con los encabezados y el modelo de datos necesario.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Botones de la interfaz (`JButton`): `CategorySave` para guardar o modificar una categoría, y `DeleteCategory` para eliminarla.</li>
+    *   <li>Campo de texto (`JTextField`): `CategoryName` para capturar el nombre de la categoría y realizar operaciones de guardado al presionar "Enter".</li>
+    *   <li>Tabla (`JTable`): `CategoryTable` para visualizar y seleccionar categorías almacenadas.</li>
+    * </ul>
+    * 
+    * <b>Excepciones:</b>
+    * <ul>
+    *   <li>Se muestran mensajes de confirmación (`JOptionPane`) cuando se selecciona una fila para su eliminación, y mensajes de advertencia en caso de errores o datos vacíos.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Rellena la tabla de categorías (`fillTableCategory()`) con los datos actuales de la base de datos.</li>
+    *   <li>Limpia los campos de texto (`cleanCategory()`) tras guardar o modificar una categoría.</li>
+    *   <li>Actualiza la lista de categorías disponible en la vista principal (`Homepage`) tras realizar cambios.</li>
+    *   <li>Hace visible la ventana de `ManageCategory` como una ventana modal, bloqueando la interacción con la vista principal hasta su cierre.</li>
+    * </ul>
+     */
     private void openManageCategory() {
         this.manageCategory = new ManageCategory();
         
@@ -315,6 +389,47 @@ public class Controller {
         manageCategory.setVisible(true);  
     }
     
+    
+    
+    /**
+    * Abre la vista que gestiona los productos, configurando los eventos y componentes visuales de la ventana `ManageProduct`.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Inicializa la vista `ManageProduct` y establece sus parámetros de tamaño y posición.</li>
+    *   <li>Configura las acciones para los botones de añadir y eliminar ingredientes, guardar y eliminar productos, así como para los campos de nombre y precio de producto.</li>
+    *   <li>Aplica efectos visuales de "hover" a los botones de la interfaz, cambiando el color del texto según corresponda.</li>
+    *   <li>Gestiona la selección de filas en la tabla productos (`TableProducts`), mostrando la información del producto seleccionado en los campos de texto, incluyendo su nombre, categoría, ingredientes y precio.</li>
+    *   <li>Configura la tabla de productos (`TableProducts`) con los encabezados y el modelo de datos necesario.</li>
+    *   <li>Actualiza la lista de categorías e ingredientes disponibles en la vista (`BoxCategory` y `BoxIngredients`).</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Botones de la interfaz (`JButton`): `BtnAddIngredient` para añadir ingredientes al producto, `BtnDeleteIngredient` para eliminarlos, `BtnSaveProduct` para guardar o modificar un producto, y `BtnDeleteProduct` para eliminarlo.</li>
+    *   <li>Campos de texto (`JTextField`): `EdtNameProduct` y `EdtPriceProduct` para capturar el nombre y precio del producto, con eventos de validación y enfoque.</li>
+    *   <li>Listas desplegables (`ComboBox`): `BoxCategory` para seleccionar la categoría de un producto y `BoxIngredients` para gestionar sus ingredientes.</li>
+    *   <li>Tabla (`JTable`): `TableProducts` para visualizar y seleccionar productos almacenados.</li>
+    * </ul>
+    * 
+    * <b>Excepciones:</b>
+    * <ul>
+    *   <li>Se muestran mensajes de confirmación (`JOptionPane`) cuando se selecciona un producto para su eliminación, y mensajes de advertencia en caso de errores o datos vacíos.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Rellena la tabla de productos (`fillTableProduct()`) con los datos actuales de la base de datos.</li>
+    *   <li>Actualiza la lista de ingredientes y categorías disponibles en los `ComboBox` de la vista.</li>
+    *   <li>Actualiza los ingredientes y sus identificadores (`listIngredientsProduct` y `listIdIngredientsInProduct`) tras seleccionar un producto.</li>
+    *   <li>Limpia los campos de texto (`clearViewProduct()`) tras guardar o modificar un producto.</li>
+    *   <li>Hace visible la ventana de `ManageProduct` como una ventana modal, bloqueando la interacción con la vista principal hasta su cierre.</li>
+    *   <li>Se asegura de que, tras cerrar la ventana de `ManageProduct`, se actualice la lista de categorías seleccionada en la vista principal (`Homepage`).</li>
+    * </ul>
+    */
     private void openManageProducts() {
         this.manageProduct = new ManageProduct();
         
@@ -1004,7 +1119,32 @@ public class Controller {
         manageProduct.getIngredientsTxt().setText(String.join(", ", listIngredientProducts));
         manageProduct.getBoxIngredients().setSelectedIndex(0);
     }
-
+    
+    /**
+    * Elimina un ingrediente seleccionado de la tabla de ingredientes.
+    * <p>
+    * Este método obtiene la fila seleccionada de la tabla en la vista `manageIngredient`. 
+    * Si no hay ninguna fila seleccionada, muestra un mensaje de advertencia al usuario.
+    * En caso de que haya un ingrediente seleccionado, se obtiene el identificador de dicho ingrediente,
+    * se busca en la base de datos y se elimina utilizando el servicio `ingredientService`.
+    * Después de la eliminación, se actualiza la tabla de ingredientes y se limpia cualquier dato relacionado.
+    * </p>
+    * 
+    * <b>Proceso:</b>
+    * <ul>
+    *   <li>Obtiene la fila seleccionada de la tabla de ingredientes.</li>
+    *   <li>Verifica si hay un ingrediente seleccionado.</li>
+    *   <li>Busca el ingrediente en la base de datos usando su ID.</li>
+    *   <li>Elimina el ingrediente utilizando `ingredientService`.</li>
+    *   <li>Muestra un mensaje de confirmación o error según el resultado.</li>
+    *   <li>Actualiza la tabla de ingredientes y limpia datos asociados.</li>
+    * </ul>
+    * 
+    * <b>Excepciones:</b>
+    * <ul>
+    *   <li>En caso de que no se pueda eliminar el ingrediente, se captura la excepción y se muestra un mensaje de error.</li>
+    * </ul>
+    */
     private void deleteIngredient() {
         JTable target = manageIngredient.getTableIngredient();
         int selectedRow = target.getSelectedRow();
