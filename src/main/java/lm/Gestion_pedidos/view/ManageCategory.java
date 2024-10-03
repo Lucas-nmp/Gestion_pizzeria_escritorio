@@ -54,6 +54,7 @@ public class ManageCategory extends javax.swing.JDialog {
         CategorySave = new javax.swing.JButton();
         categoryDelete = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         categoryTable = new javax.swing.JTable();
 
@@ -87,6 +88,10 @@ public class ManageCategory extends javax.swing.JDialog {
 
         jSeparator1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 210, 10));
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Nombre de la categoría");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 110));
 
@@ -130,6 +135,7 @@ public class ManageCategory extends javax.swing.JDialog {
     private javax.swing.JButton categoryDelete;
     private javax.swing.JTextField categoryName;
     private javax.swing.JTable categoryTable;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

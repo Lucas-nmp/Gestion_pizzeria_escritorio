@@ -287,21 +287,21 @@ public class Homepage extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(companyName, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
-                .addComponent(btnDemo)
                 .addGap(18, 18, 18)
+                .addComponent(btnDemo)
+                .addGap(57, 57, 57)
                 .addComponent(btnCustomer)
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addComponent(btnIngredient)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(btnProduct)
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addComponent(btnCategory)
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addComponent(btnStatistics)
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
                 .addComponent(btnSettings)
-                .addGap(29, 29, 29)
+                .addGap(18, 18, 18)
                 .addComponent(btnExit)
                 .addGap(43, 43, 43))
         );
@@ -366,7 +366,7 @@ public class Homepage extends javax.swing.JFrame {
                         .addGap(73, 73, 73)
                         .addComponent(customerName, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(customerAlternativeAddres, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -450,15 +450,17 @@ public class Homepage extends javax.swing.JFrame {
         checkWithoutCheese.setText("Sin queso");
         checkWithoutCheese.setBorder(null);
 
-        ingredientRemove.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        ingredientRemove.setForeground(new java.awt.Color(255, 0, 0));
+        ingredientRemove.setBackground(new java.awt.Color(120, 168, 252));
+        ingredientRemove.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        ingredientRemove.setForeground(new java.awt.Color(255, 255, 255));
         ingredientRemove.setText("Quitar ");
-        ingredientRemove.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ingredientRemove.setBorder(null);
 
-        ingredientAdd.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        ingredientAdd.setForeground(new java.awt.Color(0, 204, 51));
+        ingredientAdd.setBackground(new java.awt.Color(120, 168, 252));
+        ingredientAdd.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        ingredientAdd.setForeground(new java.awt.Color(255, 255, 255));
         ingredientAdd.setText("Añadir");
-        ingredientAdd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ingredientAdd.setBorder(null);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -508,24 +510,36 @@ public class Homepage extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Añadir / Quitar ingredientes");
 
-        homepageBtnAdd2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        homepageBtnAdd2.setBackground(new java.awt.Color(120, 168, 252));
+        homepageBtnAdd2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        homepageBtnAdd2.setForeground(new java.awt.Color(255, 255, 255));
         homepageBtnAdd2.setText("AÑADIR AL PEDIDO");
-        homepageBtnAdd2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        homepageBtnAdd2.setBorder(null);
 
-        homepageBtnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        homepageBtnAdd.setBackground(new java.awt.Color(120, 168, 252));
+        homepageBtnAdd.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        homepageBtnAdd.setForeground(new java.awt.Color(255, 255, 255));
         homepageBtnAdd.setText("AÑADIR AL PEDIDO");
-        homepageBtnAdd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        homepageBtnAdd.setBorder(null);
 
-        BtnRemoveFromOrder.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        BtnRemoveFromOrder.setBackground(new java.awt.Color(120, 168, 252));
+        BtnRemoveFromOrder.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        BtnRemoveFromOrder.setForeground(new java.awt.Color(255, 255, 255));
         BtnRemoveFromOrder.setText("Quitar del pedido");
+        BtnRemoveFromOrder.setBorder(null);
 
-        btnCancelOrder.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnCancelOrder.setForeground(new java.awt.Color(255, 0, 0));
+        btnCancelOrder.setBackground(new java.awt.Color(120, 168, 252));
+        btnCancelOrder.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCancelOrder.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelOrder.setText("Cancelar pedido");
+        btnCancelOrder.setBorder(null);
 
+        btnConfirmOrder.setBackground(new java.awt.Color(120, 168, 252));
         btnConfirmOrder.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnConfirmOrder.setForeground(new java.awt.Color(0, 204, 51));
-        btnConfirmOrder.setText("Confirmar pedido");
+        btnConfirmOrder.setForeground(new java.awt.Color(255, 255, 255));
+        btnConfirmOrder.setText("Confirmar");
+        btnConfirmOrder.setActionCommand("Confirmar");
+        btnConfirmOrder.setBorder(null);
 
         boxAmount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         boxAmount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
@@ -577,15 +591,15 @@ public class Homepage extends javax.swing.JFrame {
                             .addComponent(homepageBtnAdd2, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(27, 27, 27)))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(BtnRemoveFromOrder)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BtnRemoveFromOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
                         .addComponent(btnCancelOrder)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnConfirmOrder)))
-                .addGap(17, 17, 17))
+                        .addGap(34, 34, 34)
+                        .addComponent(btnConfirmOrder))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -601,7 +615,7 @@ public class Homepage extends javax.swing.JFrame {
                             .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -655,7 +669,7 @@ public class Homepage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1409, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1386, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

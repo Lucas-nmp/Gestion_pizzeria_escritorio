@@ -78,11 +78,13 @@ import org.springframework.boot.SpringApplication;
 import static org.springframework.boot.SpringApplication.main;
 
 /**
- *
- * @author Lucas
+ * Esta clase gestiona la lógica principal de la aplicación, encargándose de
+ * coordinar la interacción entre las diferentes vistas y modelos de la aplicación.
  * 
-
+ * Proporciona métodos para la gestión de pedidos, productos, clientes y
+ * configuraciones del sistema.
  * 
+ * @author Lucas Morandeira Parejo
  */
 @Component
 public class Controller {
@@ -202,6 +204,13 @@ public class Controller {
         JButton btnStatistics = this.homepage.getBtnStatistics();
         JButton btnExit = this.homepage.getBtnExit();
         JButton btnDeme = this.homepage.getBtnDemo();
+        JButton btnConfirm = this.homepage.getBtnConfirmOrder();
+        JButton btnAdd = this.homepage.getBtnAdd();
+        JButton btnAdd2 = this.homepage.getBtnAdd2();
+        JButton btnCancel = this.homepage.getBtnCancelOrder();
+        JButton btnRemoveFrom = this.homepage.getBtnRemoveFromOrder();
+        JButton btnAddIngredient = this.homepage.getBtnAddIngredient();
+        JButton btnRemoveIngredient = this.homepage.getBtnRemoveIngredient();
         
         activateHoverEffect(btnCategory, java.awt.Color.green);
         activateHoverEffect(btnProduct, java.awt.Color.green);
@@ -211,6 +220,14 @@ public class Controller {
         activateHoverEffect(btnStatistics, java.awt.Color.green);
         activateHoverEffect(btnExit, java.awt.Color.red);
         activateHoverEffect(btnDeme, java.awt.Color.orange);
+        activateHoverEffect(btnConfirm, java.awt.Color.green);
+        activateHoverEffect(btnAdd, java.awt.Color.green);
+        activateHoverEffect(btnAdd2, java.awt.Color.green);
+        activateHoverEffect(btnCancel, java.awt.Color.red);
+        activateHoverEffect(btnRemoveFrom, java.awt.Color.red);
+        activateHoverEffect(btnRemoveIngredient, java.awt.Color.red);
+        activateHoverEffect(btnAddIngredient, java.awt.Color.green);
+        
         
         activateFocusEfect(this.homepage.getEdtPhoneCustomer(), "Teléfono");
         activateFocusEfect(this.homepage.getEdtAlternativeAddres(), "Dirección alternativa");
@@ -287,7 +304,8 @@ public class Controller {
         modifications = new HashSet<>();
         modificationsPrice = BigDecimal.ZERO;
         total = BigDecimal.ZERO;
-        setCategory();
+        
+        selectValidItemComboBox(this.homepage.getCategorys());
         Company company = companyService.fingCompanyById(1L);
         String companyName = "Nombre de la empresa";
         if (company != null) {
@@ -501,12 +519,9 @@ public class Controller {
                     manageProduct.getNameTxt().setText(name);
                     manageProduct.getPriceTxt().setText(price.toString());
                     updateIngredientsInProduct(listIngredientsProduct);
-                    
-                    
+                                        
                     listIdIngredientsInProduct = updateIdIngredientesInProduct(listIngredientsProduct);
-                    
-                    
-  
+
                 }
             }  
         });    
@@ -537,6 +552,43 @@ public class Controller {
         manageProduct.setVisible(true);  
     }
     
+    
+    /**
+    * Abre la vista que gestiona los ingredientes, configurando los eventos y componentes visuales de la ventana `ManageIngredient`.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Inicializa la vista `ManageIngredient` y establece sus parámetros de tamaño y posición en pantalla.</li>
+    *   <li>Configura las acciones para los botones de guardar y eliminar ingredientes, así como para los campos de nombre y precio del ingrediente.</li>
+    *   <li>Aplica efectos visuales de "hover" a los botones de la interfaz, cambiando el color del texto según corresponda (verde para guardar y rojo para eliminar).</li>
+    *   <li>Gestiona la selección de filas en la tabla de ingredientes (`TableIngredient`), mostrando la información del ingrediente seleccionado en los campos de texto correspondientes, incluyendo su nombre y precio.</li>
+    *   <li>Configura la tabla de ingredientes (`TableIngredient`) con los encabezados y el modelo de datos necesario para mostrar la información.</li>
+    *   <li>Establece el orden de enfoque de los campos de texto, permitiendo moverse entre los campos de nombre y precio usando la tecla Enter.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Botones de la interfaz (`JButton`): `BtnSaveIngredient` para guardar o modificar un ingrediente, y `BtnDeleteIngredient` para eliminar un ingrediente.</li>
+    *   <li>Campos de texto (`JTextField`): `EdtNameIngredient` y `EdtPriceIngredient` para capturar el nombre y precio del ingrediente, con eventos de validación y enfoque.</li>
+    *   <li>Tabla (`JTable`): `TableIngredient` para visualizar y seleccionar ingredientes almacenados.</li>
+    * </ul>
+    * 
+    * <b>Excepciones:</b>
+    * <ul>
+    *   <li>Se muestran mensajes de confirmación (`JOptionPane`) cuando se selecciona un ingrediente para su eliminación, y mensajes de advertencia en caso de errores o datos vacíos.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Rellena la tabla de ingredientes (`fillTableIngredients()`) con los datos actuales de la base de datos.</li>
+    *   <li>Limpia los campos de texto (`cleanDataIngredient()`) tras guardar o modificar un ingrediente.</li>
+    *   <li>Hace visible la ventana de `ManageIngredient` como una ventana modal, bloqueando la interacción con la vista principal hasta su cierre.</li>
+    *   <li>Aplica efectos de hover a los botones de la ventana, mejorando la experiencia visual del usuario.</li>
+    * </ul>
+    */
     private void openManageIngredients() {
         this.manageIngredient = new ManageIngredient();
         
@@ -588,6 +640,45 @@ public class Controller {
         manageIngredient.setVisible(true);
     }
     
+    
+    /**
+    * Abre la vista que gestiona los clientes, configurando los eventos y componentes visuales de la ventana `ManageCustomer`.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Inicializa la vista `ManageCustomer` y establece sus parámetros de tamaño y posición en pantalla.</li>
+    *   <li>Configura las acciones para los botones de guardar, eliminar y buscar clientes, así como para los campos de nombre, dirección, teléfono y observaciones del cliente.</li>
+    *   <li>Aplica efectos visuales de "hover" a los botones de la interfaz, cambiando el color del texto según corresponda (verde para guardar, rojo para eliminar, y azul para buscar).</li>
+    *   <li>Gestiona la selección de filas en la tabla de clientes (`TableCustomer`), mostrando la información del cliente seleccionado en los campos de texto correspondientes, incluyendo su nombre, dirección, teléfono y observaciones.</li>
+    *   <li>Configura la tabla de clientes (`TableCustomer`) con los encabezados y el modelo de datos necesario para mostrar la información.</li>
+    *   <li>Limita la cantidad de caracteres permitidos en el campo de texto del teléfono (`EdtPhoneCustomer`).</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Botones de la interfaz (`JButton`): `BtnSaveCustomer` para guardar o modificar un cliente, `BtnDeleteCustomer` para eliminar un cliente, y `BtnLookForCustomer` para buscar un cliente por teléfono.</li>
+    *   <li>Campos de texto (`JTextField`): `EdtNameCustomer` para capturar el nombre del cliente, `EdtAddresCustomer` para la dirección, `EdtPhoneCustomer` para el número de teléfono, y `EdtStatusCustomer` para observaciones adicionales del cliente. Se configuran eventos de validación y enfoque para cada campo de texto.</li>
+    *   <li>Tabla (`JTable`): `TableCustomer` para visualizar y seleccionar clientes almacenados en la base de datos.</li>
+    * </ul>
+    * 
+    * <b>Excepciones:</b>
+    * <ul>
+    *   <li>Se muestran mensajes de confirmación (`JOptionPane`) cuando se selecciona un cliente para su eliminación, y mensajes de advertencia en caso de errores o datos vacíos.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Rellena la tabla de clientes (`fillTableCustomer()`) con los datos actuales de la base de datos.</li>
+    *   <li>Limpia los campos de texto (`clearViewCustomer(phone)`) tras guardar o modificar un cliente, utilizando el número de teléfono como referencia inicial.</li>
+    *   <li>Hace visible la ventana de `ManageCustomer` como una ventana modal, bloqueando la interacción con la vista principal hasta su cierre.</li>
+    *   <li>Aplica efectos visuales a los campos de texto, destacando el enfoque activo con texto de ayuda (placeholders).</li>
+    * </ul>
+    * 
+    * @param phone Número de teléfono del cliente a buscar inicialmente en la vista. Si se proporciona, se utiliza para filtrar y mostrar el cliente correspondiente en la tabla.
+    */
     private void openManageCustomer(String phone) {
         this.manageCustomer = new ManageCustomer();
         
@@ -664,6 +755,29 @@ public class Controller {
     }
     
     
+    /**
+    * Abre la vista de estadísticas, configurando los eventos y componentes visuales de la ventana `Statistics`.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Inicializa la vista `Statistics` y establece su ubicación en el centro de la pantalla.</li>
+    *   <li>Configura la acción del `ComboBox` de meses (`BoxMonth`), llamando al método `handleMonthSelection()` cuando se selecciona un nuevo mes.</li>
+    *   <li>Rellena la lista de meses disponibles en el `ComboBox` mediante el método `fillMonth()`.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>ComboBox (`JComboBox`): `BoxMonth` para seleccionar el mes del que se quieren ver las estadísticas.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Hace visible la ventana de `Statistics` como una ventana modal, bloqueando la interacción con la vista principal hasta su cierre.</li>
+    * </ul>
+    */
     private void openStatistics() {
         this.statistics = new Statistics();
         
@@ -677,6 +791,31 @@ public class Controller {
         
     }
     
+    /**
+    * Abre la vista de configuración de la aplicación, cargando los datos de la empresa y configurando los eventos y componentes visuales de la ventana `Setting`.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Inicializa la vista `Setting` y establece su ubicación en el centro de la pantalla.</li>
+    *   <li>Recupera los datos de la empresa (`Company`) desde el servicio `companyService` usando el ID `1` y rellena los campos de nombre, dirección, CIF y teléfono en la vista.</li>
+    *   <li>Configura la acción del botón de guardar (`BtnSaveSettings`), llamando al método `saveSettings()` al presionar el botón.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Botón (`JButton`): `BtnSaveSettings` para guardar los cambios realizados en la configuración de la empresa.</li>
+    *   <li>Campos de texto (`JTextField`): `SettingsName`, `SettingsAddress`, `SettingsCif`, `SettingsPhone` para capturar la información de la empresa.</li>
+    * </ul>
+    * 
+    * <b>Funcionalidades adicionales:</b>
+    * <ul>
+    *   <li>Aplica un efecto visual de "hover" en el botón de guardar, cambiando su color a verde al pasar el ratón por encima.</li>
+    *   <li>Hace visible la ventana de `Setting` como una ventana modal, bloqueando la interacción con la vista principal hasta su cierre.</li>
+    * </ul>
+    */
     public void openSettings() {
         this.setting = new Setting();
         
@@ -701,7 +840,26 @@ public class Controller {
     }
     
 
-    
+    /**
+    * Comprueba si un campo de texto ha ganado el foco y cambia su contenido y color según corresponda.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Verifica si el campo de texto (`JTextField`) contiene el texto por defecto especificado.</li>
+    *   <li>Si el texto coincide con el valor por defecto, lo elimina y cambia el color del texto a blanco.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Campo de texto (`JTextField`): `fieldName` que gana el foco y cambia su contenido según el valor del parámetro `texto`.</li>
+    * </ul>
+    * 
+    * @param fieldName Campo de texto que se está enfocando.
+    * @param texto Valor por defecto a comparar y eliminar si el campo contiene dicho texto.
+    */
     private void checkFieldFocusGained(JTextField fieldName, String texto) {
         if (fieldName.getText().equals(texto)) {
             fieldName.setText("");
@@ -709,6 +867,26 @@ public class Controller {
         }
     }  
     
+    /**
+    * Comprueba si un campo de texto ha perdido el foco y cambia su contenido y color según corresponda.
+    * <p>
+    * Este método realiza las siguientes acciones:
+    * </p>
+    * 
+    * <b>Acciones principales:</b>
+    * <ul>
+    *   <li>Verifica si el campo de texto (`JTextField`) está vacío o contiene el texto por defecto especificado.</li>
+    *   <li>Si el campo está vacío o contiene el valor por defecto, restaura el texto por defecto y cambia el color del texto a gris.</li>
+    * </ul>
+    * 
+    * <b>Componentes visuales y eventos manejados:</b>
+    * <ul>
+    *   <li>Campo de texto (`JTextField`): `fieldName` que pierde el foco y cambia su contenido según el valor del parámetro `texto`.</li>
+    * </ul>
+    * 
+    * @param fieldName Campo de texto que pierde el foco.
+    * @param texto Valor por defecto a establecer si el campo está vacío o coincide con el valor especificado.
+    */
     private void checkFieldFocusLost(JTextField fieldName, String texto) {
         if (fieldName.getText().equals(texto) || fieldName.getText().isEmpty()) {
             fieldName.setText(texto);
@@ -717,17 +895,31 @@ public class Controller {
     }
     
     
-    
-    private void setCategory() {
-        int itemCount = homepage.getCategorys().getItemCount();
+    /**
+     * Selecciona por defecto el segundo item del comboBox si hay más de uno.
+     * 
+     * <p>Agiliza el uso del programa evitando que aparezca marcado por defecto el item informativo 
+     * cuando ya hay items válidos cargados en el comboBox.</p>
+     * 
+     * @param comboBox componente visual que será modificado
+     */
+    private void selectValidItemComboBox(JComboBox comboBox) {
+        int itemCount = comboBox.getItemCount();
         if (itemCount > 1) {
-            homepage.getCategorys().setSelectedIndex(1);
+            comboBox.setSelectedIndex(1);
         } else {
-            homepage.getCategorys().setSelectedIndex(0);
-        } 
-            
+            comboBox.setSelectedIndex(0);   
+        }     
     }
     
+    /**
+     * Guarda o modifica una categoría.
+     * <p>Con este método podemos crear una nueva categoría y modificar una existente seleccionandola de la tabla</p>
+     * <b>Avisos</b>
+     * <ul>
+    *   <li>Muestra un mensaje en caso de intentar guardar una categoría sin haber escrito el nombre</li>
+    * </ul>
+     */
     private void saveOrModifyCategory() {
         JTable target = manageCategory.getCategoryTable();
         int selectedRow = target.getSelectedRow();
@@ -751,7 +943,17 @@ public class Controller {
         cleanCategory();
     }
     
-    
+    /**
+     * Elimina una categoría seleccionada de la tabla. 
+     * <p>Comprueba que se ha seleccionado una categoría y si no contiene productos la elimina y actualiza la lista de categorías 
+     * tanto en su vista como en la página principal "homepage"</p>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>Si la categoría contiene productos no se puede eliminar, hay que eliminar los productos previamente</li>
+     * </ul>
+     * 
+     * 
+     */
     private void deleteCategory() {
         JTable target = manageCategory.getCategoryTable();
         int selectedRow = target.getSelectedRow();
@@ -772,11 +974,14 @@ public class Controller {
         } finally {
             fillTableCategory();
             fillCategorys(homepage.getCategorys());
-            homepage.getCategorys().setSelectedIndex(1);
             cleanCategory();
         }
     }
     
+    /**
+     * Llena la tabla de la vista Categorías con las Categorías almacenadas en la base de datos.
+     * 
+     */
     private void fillTableCategory() {
         DefaultTableModel model = (DefaultTableModel) manageCategory.getCategoryTable().getModel();
         model.setRowCount(0);
@@ -790,7 +995,12 @@ public class Controller {
         });   
     }
     
-    
+    /**
+     * Comprueba la categoría seleccionada la usa para llenar la tabla con los productos que le pertenecen.
+     * <p>Primero comprueba que se ha seleccionado una categoría, busca la categoría en la base de datos y llama al método 
+     * {@link #fillTableProduct(lm.Gestion_pedidos.model.Category) } para mostrar los productos de esa categoría</p>
+     * @see #fillTableProduct(lm.Gestion_pedidos.model.Category) Método para mostrar los productos de una categoría concreta
+     */
     private void handleCategorySelection() {
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
         
@@ -799,7 +1009,11 @@ public class Controller {
             fillTableProduct(category);  
         }
     }
-    
+    /**
+     * Comprueba que se ha seleccionado un mes del comboBox para mostrar las estadísticas correspondientes a ese mes.
+     * <p>Pasa el mes seleccionado al método {@link #seeStatistics(java.lang.String) } y muestra las estadísticas de ese mes
+     * @see #seeStatistics(java.lang.String) 
+     */
     private void handleMonthSelection() {
         String selectedMonth = (String) statistics.getBoxMonth().getSelectedItem();
         
@@ -808,12 +1022,30 @@ public class Controller {
         }
     }
     
+    /**
+     * Configura los encabezados de la tabla y establece el modelo de datos asociado.
+     * <p>
+     * Recibe un modelo de tabla (`DefaultTableModel`) y una lista de encabezados (`headers`)
+     * para configurar los títulos de las columnas de la tabla (`JTable`) que se pasa como parámetro.
+     * Los encabezados se asignan al modelo y se establece el modelo en la tabla.
+     * </p>
+     * @param model   el modelo de datos de la tabla (`DefaultTableModel`) que se actualizará con los encabezados
+     * @param headers lista de títulos que se van a establecer como encabezados de las columnas
+     * @param table   la tabla (`JTable`) que se verá afectada por la modificación y a la que se le aplicará el modelo
+     */
     private void fillTableHeaders(DefaultTableModel model, String[] headers, JTable table) {
         model.setColumnIdentifiers(headers);
         table.setModel(model);
     }
     
     
+    /**
+     * Llena la tabla con los productos pertenecientes a la categoría recibida como parámetro.
+     * <p>Busca en la base de datos los productos pertenecientes a la categoría recibida y los muestra en la tabla de la página principal "homepage"</p>
+     * <p>También establece unas medidas fijas a la tabla de productos de la página principal</p>
+     * 
+     * @param category Objeto Categoría que se va a usar para buscar y mostrar los productos asociados a ella  
+     */
     private void fillTableProduct(Category category) {
         DefaultTableModel model = (DefaultTableModel) homepage.getTableProducts().getModel();
         model.setRowCount(0);
@@ -836,6 +1068,11 @@ public class Controller {
 
     }
     
+    /**
+     * Llena la tabla con todos los productos existentes en la base de datos.
+     * <p>Busca en la base de datos todos los productos sin distinción y los muestra en la tabla
+     * para que se puedan ver, modificar o eliminar desde la vista de productos</p>
+     */
     private void fillTableProduct() {
         DefaultTableModel model = (DefaultTableModel) manageProduct.getTableProducts().getModel();
         model.setRowCount(0);
@@ -855,6 +1092,13 @@ public class Controller {
     }
     
 
+    /**
+     * Busca y retorna la lista de ingredientes que contiene un producto.
+     * <p>Busca en la base de datos en la tabla "productIngredient" todos los ingredientes que estén asociados al id de producto 
+     * recibido por parámetro. Almacena los nombres de esos ingredientes en una lista y lo retorna
+     * @param productId id del producto del que queremos saber sus ingredientes.
+     * @return lista con los nombres de los ingredientes sin repetir que contiene un producto. 
+     */
     private HashSet<String> getIngredientsInProductById(Long productId) {
         List<Long> listIdsIngredients = productIngredientService.findIngredientIdsByProductId(productId);
         HashSet<String> listNameIngredients = new HashSet<>();
@@ -867,14 +1111,24 @@ public class Controller {
         return listNameIngredients;
     }
     
+    /**
+     * Establece unas medidas fijas para el elemento JTable recibido. 
+     * 
+     * @param table elemento que se ve afectado por los cambios
+     */
     private void columnWidthProductHomepage(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático de tamaño
-        table.getColumnModel().getColumn(0).setPreferredWidth(30); 
+        table.getColumnModel().getColumn(0).setPreferredWidth(28); 
         table.getColumnModel().getColumn(1).setPreferredWidth(90); 
-        table.getColumnModel().getColumn(2).setPreferredWidth(426); 
-        table.getColumnModel().getColumn(3).setPreferredWidth(50); 
+        table.getColumnModel().getColumn(2).setPreferredWidth(422); 
+        table.getColumnModel().getColumn(3).setPreferredWidth(41); 
     }
     
+    /**
+     * Establece unas medidas fijas para el elemento JTable recibido. 
+     * 
+     * @param table elemento que se ve afectado por los cambios
+     */
     private void columnWidthProductManageProduct(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30); 
@@ -884,15 +1138,17 @@ public class Controller {
     }
     
     
-    
+    /**
+     * Llena la tabla de ingredientes con todos los ingredientes almacenados en la base de datos.
+     * <p>Hace una petición a la base de datos para obtener todos los ingredientes almacenados y los 
+     * muestra en la tabla para que puedan ser modificados o eliminados</p>
+     */
     private void fillTableIngredients() {
         DefaultTableModel model = (DefaultTableModel) manageIngredient.getTableIngredient().getModel();
         model.setRowCount(0);
         
         List<Ingredient> listIngredients = ingredientService.getAllIngredients();
-        if (listIngredients.isEmpty()) {
-            //JOptionPane.showMessageDialog(homepage, "Añada ingredientes a la categoría");
-        } else {
+        if (!listIngredients.isEmpty()) {
             listIngredients.forEach((ingredient) -> {
                 Object[] ingredientLine = {
                     ingredient.getIngredientId(), 
@@ -901,13 +1157,20 @@ public class Controller {
                 };
                 model.addRow(ingredientLine);
             });   
-        }
+        } 
     }
     
+    /**
+     * Limpia los datos introducidos en los campos de la vista.
+     */
     private void cleanCategory(){
         manageCategory.getCategoryName().setText("");
     }
 
+    /**
+     * 
+     * @param boxCategorys 
+     */
     private void fillCategorys(JComboBox boxCategorys) {
         List<Category> listCategorys = categoryService.getAllCategorys();
         
@@ -925,8 +1188,12 @@ public class Controller {
                 boxCategorys.addItem(item);
             });
         } 
+        selectValidItemComboBox(boxCategorys);
     }
     
+    /**
+     * Llena el comboBox de la vista estadísticas con los nombres de los meses del año.
+     */
     private void fillMonth() {
         JComboBox boxMonth = statistics.getBoxMonth();
         boxMonth.removeAllItems();
@@ -941,6 +1208,11 @@ public class Controller {
         });
     }
     
+    /**
+     * 
+     * @param listIngredientsProduct
+     * @return 
+     */
     private HashSet<Long> updateIdIngredientesInProduct(HashSet<String> listIngredientsProduct) {
         for (String nameIngredient : listIngredientsProduct) {
             Ingredient i = ingredientService.findIngredientByName(nameIngredient);
@@ -1058,6 +1330,11 @@ public class Controller {
         return listId;
     }
 
+    /**
+     * Limpia los campos de la vista Product.
+     * <p>Establece a vacío o valores por defecto los campos visuales de la vista Product, 
+     * también vacía las listas auxiliares  "listIdIngredientsInProduct" y "listIngredientsProduct"</p>
+     */
     private void clearViewProduct(){
         manageProduct.getBoxCategory().setSelectedIndex(0);
         manageProduct.getEdtNameProduct().setText("");
@@ -1077,6 +1354,12 @@ public class Controller {
         manageProduct.getPriceTxt().setText(text); 
     }
 
+    /**
+     * Añade el ingrediente seleccionado de la lista de ingredientes del producto.
+     * <p>Comprueba si se ha seleccionado un ingrediente y si está en el producto</p>
+     * <b>Avisos:</b>
+     * <p>Muestra un mensaje de aviso si no se ha seleccionado un ingrediente o si el ingrediente seleccionado no está incluido en el producto.</p>
+     */
     private void addIngredientToProduct() {
         String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
         if (ingredient.equals("Seleccionar")) {
@@ -1093,9 +1376,30 @@ public class Controller {
             updateIngredientsInProduct(listIngredientsProduct);
         } else {
             JOptionPane.showMessageDialog(manageProduct, "El ingrediente ya está en la lista");
+            
         }
     }
 
+    /**
+     * Elimina el ingrediente seleccionado de la lista de ingredientes incluida en el producto.
+     * <p>
+     * Este método obtiene el ingrediente seleccionado del `ComboBox` `BoxIngredients` y lo elimina
+     * de la lista `listIngredientsProduct` si está presente. Si el ingrediente se elimina correctamente,
+     * también se elimina su identificador de `listIdIngredientsInProduct`.
+     * </p>
+     * 
+     * <b>Acciones principales:</b>
+     * <ul>
+     *   <li>Verifica que se haya seleccionado un ingrediente válido del `ComboBox`.</li>
+     *   <li>Obtiene el nombre y el identificador del ingrediente del `ComboBox` y los elimina de las listas correspondientes.</li>
+     *   <li>Si se elimina con éxito, actualiza la lista de ingredientes visualmente en la vista de producto usando el método {@link #updateIngredientsInProduct(java.util.HashSet) }.</li>
+     *   <li>Si el ingrediente no está en la lista de ingredientes del producto, muestra un mensaje de advertencia.</li>
+     * </ul>
+     * <b>Avisos:</b>
+     * <p>Muestra un mensaje de aviso si no se ha seleccionado un ingrediente o si el ingrediente seleccionado no está incluido en el producto.</p>
+     * 
+     * @see #updateIngredientsInProduct(java.util.HashSet)   Método utilizado para actualizar la lista visual de ingredientes en el producto.
+     */
     private void deleteIngredientFromProduct() {
         String ingredient = manageProduct.getBoxIngredients().getSelectedItem().toString();
         if (ingredient.equals("Seleccionar")) {
@@ -1115,6 +1419,12 @@ public class Controller {
         }
     }
     
+    /**
+     * Actualiza la lista de ingredientes en el producto.
+     * <p>Recibe la lista de ingredientes del producto, la separa por comas para mostrarla en el campo de texto 
+     * y selecciona el valor por defecto en el comboBox.</p>
+     * @param listIngredientProducts lista que se va a mostrar en el campo de texto
+     */
     private void updateIngredientsInProduct(HashSet<String> listIngredientProducts) {
         manageProduct.getIngredientsTxt().setText(String.join(", ", listIngredientProducts));
         manageProduct.getBoxIngredients().setSelectedIndex(0);
@@ -1201,11 +1511,19 @@ public class Controller {
         
     }
 
+    /**
+     * Limpia los campos de la vista Ingredient.
+     * Establece a vacío los campos de texto de la vista Ingredient
+     */
     private void cleanDataIngredient() {
         manageIngredient.getEdtNameIngredient().setText("");
         manageIngredient.getEdtPriceIngredient().setText("");  
     }
 
+    /**
+     * Coloca el texto recibido en el campo Categoría.
+     * @param string texto que va a colocar en el campo 
+     */
     private void setCategory(String string) {
         manageProduct.getCategoryTxt().setText(string);
     }
@@ -1257,6 +1575,18 @@ public class Controller {
         }
     }
 
+    /**
+     * Busca un cliente por su número de teléfono.
+     * <p>Recibe el teléfono de un cliente y busca que exista en la base de datos.</p>
+     * <b>Acciones:</b>
+     * <ul>
+     *   <li> Si no existe el cliente abre la vista ManageCustomer usando el método {@link #openManageCustomer(java.lang.String) } </li>
+     *   <li> Si existe el cliente y tiene algún tipo de estado lo muestra con un mensaje </li>
+     *   <li> Si existe el cliente y no tiene estado o se ha aceptado el mensaje se establecen los datos del cliente en los campos de texto </li>
+     * </ul>
+     * @param phone representa el teléfono del cliete. Se usa para buscar un cliente o para enviarlo a la vista para crear un cliente nuevo.  
+     * @see #openManageCustomer(java.lang.String) Método utilizado para abrir la vista para gestionar los clientes.
+     */
     private void lookForCustomer(String phone) {
         if(!phone.isEmpty()){
             Customer customer = customerService.findCustomerByPhone(phone);
@@ -2180,6 +2510,8 @@ public class Controller {
         System.exit(0);
         
     }
+
+    
 
   
  
