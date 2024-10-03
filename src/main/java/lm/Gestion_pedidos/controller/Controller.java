@@ -2049,6 +2049,16 @@ public class Controller {
         }
     }
 
+    /**
+     * Guarda los datos de la empresa proporcionados. 
+     * <p>Comprueba que todos los datos se han introducido y los guarda en la base de datos, si ya existen los actualiza</p>
+     * <p>Actualiza el nombre de la compañia en la pantalla principal "homepage"</p>
+     * <b>Aviso:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si no se ha introducido algún dato de la empresa.</li>
+     *   <li>Muestra un mensaje de confirmación al guardar los datos.</li>
+     * </ul>
+     */
     private void saveSettings() {
         Long id = 1l;
         String name = setting.getSettingsName().getText();
@@ -2056,8 +2066,6 @@ public class Controller {
         String cif = setting.getSettingsCif().getText();
         String phone = setting.getSettingsPhone().getText();
         
-        String userName = setting.getUserName().getText();
-        char[] password = setting.getPassword().getPassword();
         
         if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || cif.isEmpty()) {
             JOptionPane.showMessageDialog(setting, "Introduzca todos los datos de la empresa y la conexión");
@@ -2071,34 +2079,19 @@ public class Controller {
         setting.dispose();  
     }
     
-    // Sigue sin funcionar, preguntar si hace falta esto o no 
-    private void updateBdConn(String userName, char[] password) throws Exception {
-        
-         String propertiesPath = "src/main/resources/application.properties";
-         try (FileOutputStream output = new FileOutputStream(propertiesPath)) {
-            Properties properties = new Properties();
 
-            // Cargar las propiedades existentes
-            properties.load(getClass().getClassLoader().getResourceAsStream("application.properties"));
-            
-            String passwordStr = new String(password);
-
-            // Modificar las propiedades
-            properties.setProperty("spring.datasource.username", userName);
-            properties.setProperty("spring.datasource.password", passwordStr);
-
-            // Guardar las propiedades
-            properties.store(output, null);
-            
-            // Reinicia el contexto de la aplicación
-            SpringApplication.exit(context, () -> 0);
-            main(new String[]{});
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Recibe el nombre de un mes y muestra los datos estadísticos de ese mes.
+     * <p>Busca todos los pedidos y los va filtrando para ir calculando las estadisticas</p>
+     * <b>Acciones principales:</b>
+     * <ul>
+     *   <li>Filtra los pedido por año y muestra el Nº total de pedidos y el importe acumulado de todos ellos.</li>
+     *   <li>Filtra los pedidos por año y mes, también muestra el total de pedidos en el mes, el importe acumulado y los clientes que realizaron pedidos .</li>
+     *   <li>Almacena los pedidos por cliente para ver el cliente que más pedidos ha realizado en un mes concreto.</li>
+     *   <li>Muestra los datos obtenidos en los resultados</li>
+     * </ul>
+     * @param month el mes para el cual se van a calcular las estadísticas.
+     */
     private void seeStatistics(String month) {
         List<Order> orders = orderService.findAllOrders();
         
@@ -2156,16 +2149,18 @@ public class Controller {
         statistics.getTotalIncomeForYear().setText(totalIncomeForYear.toString());
         if (topCustomer != null) {
             String bestCustomer = String.format("%s, tlf. %s (%d pedidos).", topCustomer.getName(), topCustomer.getPhone(), maxOrders);
-            //statistics.getBestCustomer().setText(topCustomer.getName() + ", " + topCustomer.getPhone());
+            
             statistics.getBestCustomer().setText(bestCustomer);
         } else {
             statistics.getBestCustomer().setText("No hay pedidos en el mes seleccionado");
         }
-        
-        
-        
     }
     
+    /**
+     * Método para convertir el nombre del mes a su número correspondiente en el calendario.
+     * @param month nombre del mes a convertir 
+     * @return El número que ocupa el mes recibido en el calendario 
+     */
     private int getMonthNumber(String month) {
         List<String> months = List.of(
             "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", 
@@ -2174,7 +2169,12 @@ public class Controller {
 
         return months.indexOf(month.toUpperCase()) + 1;
     }
-
+    
+    /**
+     * Método para limitar la entrada a sólo 9 números en el campo de texto recibido como parámetro.
+     * 
+     * @param edtPhone campo sobre el que se realizará la limitación 
+     */
     private void limitPhoneCharacters(JTextField edtPhone) {
         edtPhone.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
@@ -2191,7 +2191,12 @@ public class Controller {
         });
     }
     
-    
+    /**
+     * Método para activar el efecto hover en el botón recibido como parámetro con el color indicado.
+     * Cuando el ratón entra en el campo de acción del botón cambia las letras de color y cuando sale las vuelve a su color por defecto
+     * @param button Botón sobre el que se va a activar el efecto 
+     * @param color Color al que se va a cambiar las letras
+     */
     private void activateHoverEffect(JButton button, java.awt.Color color) {
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -2207,8 +2212,19 @@ public class Controller {
         });
     }
     
-        private void activateFocusEfect(JTextField field, String text) {
-            field.addFocusListener(new FocusAdapter() {
+    /**
+     * Método para activar el efecto Foco en el editText recibido como parámetro.
+     *<p> Recibe un campo de texto y un texto cuando el campo recibe el foco lo comprueba con {@link #checkFieldFocusGained(javax.swing.JTextField, java.lang.String) }</p>
+     * <p> Cuando el campo pierde el foco lo comprueba con {@link #checkFieldFocusLost(javax.swing.JTextField, java.lang.String) }
+     * 
+     * @param field campo editText sobre el que realizar las acciones
+     * @param text texto informativo para comprobar 
+     * 
+     * @see #checkFieldFocusGained(javax.swing.JTextField, java.lang.String) 
+     * @see #checkFieldFocusLost(javax.swing.JTextField, java.lang.String) 
+     */
+    private void activateFocusEfect(JTextField field, String text) {
+        field.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 String texto = text;
@@ -2220,14 +2236,16 @@ public class Controller {
                 String texto = text;
                 checkFieldFocusLost(field, texto);
             }
-            
-            
         });
         
     }
     
     
-    // Para cargar datos de demostración
+    /**
+     * Método controlador para centralizar la carga de todos los datos de demostración.
+     * <b>Aviso:</b>
+     * <p>Si ya hay categorías cargadas muestra un mensaje y no carga los datos</p>
+     */
     public void loadDemoData(){
 
         List<Category> categorys = categoryService.getAllCategorys();
@@ -2252,6 +2270,9 @@ public class Controller {
         
     }
     
+    /**
+     * Método para almacenar las categorías demo
+     */
     private void loadCategorys() {
         String[] categorys = {"Pizzas", "Platos preparados", "Tortillas", "Bocadillos", "Aperitivos", "Bebidas"};
         for (String name : categorys) {
@@ -2260,6 +2281,9 @@ public class Controller {
         }
     }
     
+    /**
+     * Método para almacenar ingredientes con precios aleatorios de una lista proporcionada.
+     */
     private void loadIngredients() {
         String ingredients[] = {"mozzarella",  "york", "olivas", "champiñón", "alcaparras", "bacon", "atún",
                 "espárragos", "alcachofas", "roquefort", "pimiento", "guindilla", "pepinillos", "pepperoni",  "calamares", "gambas", "ajo", 
@@ -2279,6 +2303,9 @@ public class Controller {
         }
     }
     
+    /**
+     * Método para generar, en base a una lista de nombres proporcionada, productos con ingredientes y precios aleatorios.
+     */
     private void loadPizzas() {
         Random random = new Random();
         List<Ingredient> ingredients = ingredientService.getAllIngredients();
@@ -2318,6 +2345,9 @@ public class Controller {
 
     }
     
+    /**
+     * Método para guardar algúnos productos de una categoría conreta de ejemplo.
+     */
     private void loadDrinks() {
         //Ingredient i = ingredientService.findIngredientById(Long.MIN_VALUE) plato preparado 41, aperitivo 42, salchicha 43, queso 44, bebida 39
         Ingredient ingredient = ingredientService.findIngredientById(38l);
@@ -2329,6 +2359,9 @@ public class Controller {
         
     }
     
+    /**
+     * Método para guardar algúnos productos de una categoría conreta de ejemplo.
+     */
     private void loadSnaks() {
         Ingredient ingredient = ingredientService.findIngredientById(41l);
         Category category = categoryService.findCategoryByName("Aperitivos");
@@ -2338,6 +2371,9 @@ public class Controller {
         saveProduct(names, category, price, ingredient);
     }
     
+    /**
+     * Método para guardar algúnos productos de una categoría conreta de ejemplo.
+     */
     private void loadTortillas() {
         Ingredient ingredient = ingredientService.findIngredientById(44l);
         Category category = categoryService.findCategoryByName("Tortillas");
@@ -2347,6 +2383,9 @@ public class Controller {
         saveProduct(names, category, price, ingredient);
     }
     
+    /**
+     * Método para guardar algúnos productos de una categoría conreta de ejemplo.
+     */
     private void loadPreparedDishes() {
         //Ingredient i = ingredientService.findIngredientById(Long.MIN_VALUE) plato preparado 41, aperitivo 42, salchicha 43, queso 44, bebida 39
         Ingredient ingredient = ingredientService.findIngredientById(40l);
@@ -2357,6 +2396,9 @@ public class Controller {
         saveProduct(names, category, price, ingredient);
     }
     
+    /**
+     * Método para guardar algúnos productos de una categoría conreta de ejemplo.
+     */
     private void loadSandwichs() {
         Ingredient ingredient = ingredientService.findIngredientById(42l);
         Category category = categoryService.findCategoryByName("Bocadillos");
@@ -2368,6 +2410,13 @@ public class Controller {
     }
     
  
+    /**
+     * Método para guardar los productos generados con unas características fijas
+     * @param names lista de nombres de los productos a guardar
+     * @param category Categoría en la que se van a incluir los productos
+     * @param price Precio fijo para todos los productos igual
+     * @param ingredient  Ingrediente fijo para todos los productos igual
+     */
     private void saveProduct(String[] names, Category category, BigDecimal price, Ingredient ingredient) {
         for (String name : names) {
             Product product = new Product();
@@ -2381,6 +2430,12 @@ public class Controller {
     }
     
 
+    /**
+     * Genera 1000 clientes de manera aleatoria mezclando los datos de las listas proporcionadas.
+     * He introducido listas de nombres, apellidos, calles y pisos para generar de manera aleatorio y ficticia clientes y almacenarlos en 
+     * la base de datos para realizar pruebas.
+     * @see #generatePhone() para cada cliente se genera un número de teléfono único
+     */
     private void loadCustomers() {
         List<String> names = Arrays.asList(
             "Antonio", "María", "Manuel", "Carmen", "José", "Ana", "Francisco", "Laura", "David", "Isabel", 
@@ -2446,7 +2501,11 @@ public class Controller {
         
         
     }
-    
+    /**
+     * Genera números aleatorios simulando teléfonos.
+     * 
+     * @return String con el valor aleatorio obtenido 
+     */
     private String generatePhone() {
         int n = 600000000;
         int m = 699999999;
