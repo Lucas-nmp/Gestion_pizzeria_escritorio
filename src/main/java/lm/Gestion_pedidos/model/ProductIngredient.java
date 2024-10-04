@@ -11,8 +11,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- *
- * @author Lucas
+ * Entidad {@code ProductIngredient} que representa la relación entre un producto y los ingredientes que contien dentro de la aplicación.
+ * <p>
+ * Esta clase está anotada con {@link javax.persistence.Entity @Entity}, lo que la define como una entidad gestionada por JPA.
+ * Utiliza las anotaciones {@link lombok.Data @Data}, {@link lombok.NoArgsConstructor @NoArgsConstructor} y 
+ * {@link lombok.AllArgsConstructor @AllArgsConstructor} para generar automáticamente los métodos getter y setter, 
+ * así como los constructores con y sin argumentos.
+ * </p>
+ * <p>
+ * Los principales atributos de esta entidad son:
+ * <ul>
+ *   <li>{@code productIngredientId}: identificador único de la relación entre producto e ingrediente, generado automáticamente.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Relacionada con otras entidades mediante:
+ * <ul>
+ *   <li>{@code @ManyToOne} con la entidad {@link Product} para indicar el producto al que pertenece esta relación. 
+ *   Utiliza {@code @JoinColumn(name = "product_id", nullable = false)} para establecer la columna `product_id` en la base de datos como 
+ *   clave foránea y evitar valores nulos.</li>
+ *   <li>{@code @ManyToOne} con la entidad {@link Ingredient} para indicar el ingrediente específico que forma parte del producto. 
+ *   Utiliza {@code @JoinColumn(name = "ingredient_id", nullable = false)} para establecer la columna `ingredient_id` en la base de datos como 
+ *   clave foránea y evitar valores nulos.</li>
+ * </ul>
+ * </p>
+ * 
+ * @author Lucas Morandeira Parejo
  */
 @Entity
 @Data

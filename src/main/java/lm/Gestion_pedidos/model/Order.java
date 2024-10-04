@@ -17,11 +17,37 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- *
- * @author Lucas
+ * Entidad {@code Order} que representa un pedido dentro de la aplicación.
+ * <p>
+ * Esta clase está anotada con {@link javax.persistence.Entity @Entity} y {@link javax.persistence.Table @Table}, 
+ * lo que la define como una entidad gestionada por JPA. La anotación {@code @Table(name = "orders")} se utiliza 
+ * para especificar el nombre de la tabla en la base de datos, debido a que "order" es una palabra reservada en SQL.
+ * Utiliza las anotaciones {@link lombok.Data @Data}, {@link lombok.NoArgsConstructor @NoArgsConstructor} y 
+ * {@link lombok.AllArgsConstructor @AllArgsConstructor} para generar automáticamente los métodos getter y setter, 
+ * así como los constructores con y sin argumentos.
+ * </p>
+ * <p>
+ * Los principales atributos de esta entidad son:
+ * <ul>
+ *   <li>{@code orderId}: identificador único del pedido, generado automáticamente.</li>
+ *   <li>{@code date}: fecha en que se realizó el pedido, representada como un {@link java.time.LocalDate}.</li>
+ *   <li>{@code totalPrice}: precio total del pedido, representado como un {@link java.math.BigDecimal}.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Relacionada con otras entidades mediante:
+ * <ul>
+ *   <li>{@code @ManyToOne} con la entidad {@link Customer} para representar el cliente que realizó el pedido.</li>
+ *   <li>{@code @OneToMany} con la entidad {@link OrderProduct} para representar los productos asociados a este pedido. 
+ *   Utiliza {@code cascade = CascadeType.ALL} para propagar todas las operaciones (persistencia, eliminación, etc.) 
+ *   desde la entidad `Order` a sus productos relacionados.</li>
+ * </ul>
+ * </p>
+ * 
+ * @author Lucas Morandeira Parejo
  */
 @Entity
-@Table(name = "orders") // Cambiar el nombre de la tabla a "orders" porque la palabra order es una palabra reservada de SQL
+@Table(name = "orders") // Cambia el nombre de la tabla a "orders" porque la palabra order es una palabra reservada de SQL
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

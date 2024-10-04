@@ -13,9 +13,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- *
- * @author Lucas
+ * Entidad {@code OrderProduct} que representa la relación entre un pedido y los productos que contiene dentro de la aplicación.
+ * <p>
+ * Esta clase está anotada con {@link javax.persistence.Entity @Entity}, lo que la define como una entidad gestionada por JPA.
+ * Utiliza las anotaciones {@link lombok.Data @Data}, {@link lombok.NoArgsConstructor @NoArgsConstructor} y 
+ * {@link lombok.AllArgsConstructor @AllArgsConstructor} para generar automáticamente los métodos getter y setter, 
+ * así como los constructores con y sin argumentos.
+ * </p>
+ * <p>
+ * Los principales atributos de esta entidad son:
+ * <ul>
+ *   <li>{@code orderProductId}: identificador único de la relación entre pedido y producto, generado automáticamente.</li>
+ *   <li>{@code amount}: cantidad de productos solicitados en el pedido.</li>
+ *   <li>{@code observations}: observaciones adicionales relacionadas con el producto en el contexto del pedido.</li>
+ *   <li>{@code priceWithModifications}: precio del producto teniendo en cuenta modificaciones o ajustes, representado como un {@link java.math.BigDecimal}.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Relacionada con otras entidades mediante:
+ * <ul>
+ *   <li>{@code @ManyToOne} con la entidad {@link Order} para indicar el pedido al que pertenece esta relación.</li>
+ *   <li>{@code @ManyToOne} con la entidad {@link Product} para indicar el producto específico que forma parte del pedido.</li>
+ * </ul>
+ * </p>
+ * 
+ * @author Lucas Morandeira Parejo
  */
+
 @Entity
 @Data
 @NoArgsConstructor
