@@ -6,8 +6,14 @@ import javax.swing.JTextField;
 
 
 /**
- *
- * @author Lucas
+ * Clase `Setting` que representa la ventana de configuración de la aplicación.
+ * <p>
+ * Esta clase extiende de `JFrame` y se encarga de inicializar los componentes visuales
+ * de la ventana de configuración mediante el método `initComponents()`.
+ * Proporciona métodos de acceso (`getters`) a todos los botones de la interfaz, 
+ * permitiendo así que el controlador pueda modificar sus propiedades o añadirles eventos.
+ * </p>
+ * @author Lucas Morandeira Parejo
  */
 
 public class Setting extends javax.swing.JDialog {

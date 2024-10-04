@@ -6,15 +6,19 @@ import javax.swing.JTextField;
 
 
 /**
- *
- * @author Lucas
+ * Clase `ManageIngredient` que representa la ventana en la que se van a modificar y crear nuevos ingredintes que compondran los productos.
+ * <p>
+ * Esta clase extiende de `JFrame` y se encarga de inicializar los componentes visuales
+ * de la ventana principal mediante el método `initComponents()`.
+ * Proporciona métodos de acceso (`getters`) a todos los botones de la interfaz, 
+ * permitiendo así que el controlador pueda modificar sus propiedades o añadirles eventos.
+ * </p>
+ * @author Lucas Morandeira Parejo
  */
 
 public class ManageIngredient extends javax.swing.JDialog {
 
-    /**
-     * Creates new form ManageIngredient
-     */
+
     
     public ManageIngredient() {
         initComponents();

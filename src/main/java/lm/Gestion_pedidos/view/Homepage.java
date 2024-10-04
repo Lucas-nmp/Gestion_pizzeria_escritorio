@@ -11,12 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
-
+/**
+ * Clase `Homepage` que representa la ventana principal de la aplicación.
+ * <p>
+ * Esta clase extiende de `JFrame` y se encarga de inicializar los componentes visuales
+ * de la ventana principal mediante el método `initComponents()`.
+ * Proporciona métodos de acceso (`getters`) a todos los botones de la interfaz, 
+ * permitiendo así que el controlador pueda modificar sus propiedades o añadirles eventos.
+ * </p>
+ * @author Lucas Morandeira Parejo
+ */
 public class Homepage extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Homepage
-     */
+
     
     public Homepage() {
         initComponents();

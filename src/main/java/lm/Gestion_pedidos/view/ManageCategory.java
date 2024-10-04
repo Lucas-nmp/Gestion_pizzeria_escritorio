@@ -8,15 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- *
- * @author Lucas
+ * Clase `ManageCategory` que representa la ventana en la que se Modifican y crean las categorías en las que se van a organizar los productos.
+ * <p>
+ * Esta clase extiende de `JFrame` y se encarga de inicializar los componentes visuales
+ * de la ventana Categoría mediante el método `initComponents()`.
+ * Proporciona métodos de acceso (`getters`) a todos los botones de la interfaz, 
+ * permitiendo así que el controlador pueda modificar sus propiedades o añadirles eventos.
+ * </p>
+ * @author Lucas Morandeira Parejo
  */
 
 public class ManageCategory extends javax.swing.JDialog {
 
-    /**
-     * Creates new form AddCategory
-     */
+  
     
     public ManageCategory() {
         
