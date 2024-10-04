@@ -65,6 +65,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import lm.Gestion_pedidos.model.Company;
 import lm.Gestion_pedidos.model.Order;
@@ -311,7 +312,9 @@ public class Controller {
         if (company != null) {
             companyName = company.getName();
         }
-        homepage.getTxtCompanyName().setText(companyName);
+        
+        setTextJLabel(homepage.getTxtCompanyName(), companyName);
+        
         
         String selectedItem = (String) homepage.getCategorys().getSelectedItem();
         Category category = categoryService.findCategoryByName(selectedItem);
@@ -381,7 +384,7 @@ public class Controller {
 
                 if (selectedRow != -1) {
                     String name = (String) target.getValueAt(selectedRow, 1);
-                    manageCategory.getCategoryName().setText(name);
+                    setTextJText(manageCategory.getCategoryName(), name);
                 
                 }
             }
@@ -456,14 +459,16 @@ public class Controller {
         this.manageProduct.getBtnSaveProduct().addActionListener(e -> saveOrModifyProduct());
         this.manageProduct.getBtnDeleteProduct().addActionListener(e -> deleteProduct());
         
-        this.manageProduct.getEdtNameProduct().addActionListener((ActionEvent e) -> {
-            setNameProduct(manageProduct.getEdtNameProduct().getText()); 
+        this.manageProduct.getEdtNameProduct().addActionListener((ActionEvent e) -> { 
+            setTextJLabel(manageProduct.getNameTxt(), manageProduct.getEdtNameProduct().getText());
+            
         });
         
         this.manageProduct.getEdtNameProduct().addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                setNameProduct(manageProduct.getEdtNameProduct().getText()); 
+                setTextJLabel(manageProduct.getNameTxt(), manageProduct.getEdtNameProduct().getText());
+                
             }
         });
         
@@ -480,13 +485,14 @@ public class Controller {
         
                 
         this.manageProduct.getEdtPriceProduct().addActionListener((ActionEvent e) -> {
-            setPriceProduct(manageProduct.getEdtPriceProduct().getText()); 
+            setTextJLabel(manageProduct.getPriceTxt(), manageProduct.getEdtPriceProduct().getText());
         });
         
         this.manageProduct.getEdtPriceProduct().addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                setPriceProduct(manageProduct.getEdtPriceProduct().getText());
+                
+                setTextJLabel(manageProduct.getPriceTxt(), manageProduct.getEdtPriceProduct().getText());
             }
         });
         
@@ -515,9 +521,9 @@ public class Controller {
                     Arrays.stream(ingredients.split(",")).map(String::trim).forEach(listIngredientsProduct::add);
                     
                     // Añadir a los campos de texto
-                    manageProduct.getCategoryTxt().setText(product.getCategory().getName());
-                    manageProduct.getNameTxt().setText(name);
-                    manageProduct.getPriceTxt().setText(price.toString());
+                    setTextJLabel(manageProduct.getCategoryTxt(), product.getCategory().getName());
+                    setTextJLabel(manageProduct.getNameTxt(), name);
+                    setTextJLabel(manageProduct.getPriceTxt(), price.toString());
                     updateIngredientsInProduct(listIngredientsProduct);
                                         
                     listIdIngredientsInProduct = updateIdIngredientesInProduct(listIngredientsProduct);
@@ -614,8 +620,8 @@ public class Controller {
                 if (e.getClickCount() != -1) {
                     String nameIngredient = (String) target.getValueAt(selectedRow, 1);
                     BigDecimal priceIngredient = (BigDecimal) target.getValueAt(selectedRow, 2);
-                    manageIngredient.getEdtNameIngredient().setText(nameIngredient);
-                    manageIngredient.getEdtPriceIngredient().setText(priceIngredient.toString());
+                    setTextJText(manageIngredient.getEdtNameIngredient(), nameIngredient);
+                    setTextJText(manageIngredient.getEdtPriceIngredient(), priceIngredient.toString());
                 }  
             }            
         });
@@ -721,13 +727,14 @@ public class Controller {
                     String phone = (String) target.getValueAt(selectedRow, 3);
                     String status = (String) target.getValueAt(selectedRow, 4);
                     
-                    manageCustomer.getEdtNameCustomer().setText(name);
+                    
+                    setTextJText(manageCustomer.getEdtNameCustomer(), name);
                     manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.WHITE);
-                    manageCustomer.getEdtAddresCustomer().setText(addres);
+                    setTextJText(manageCustomer.getEdtAddresCustomer(), addres);
                     manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.WHITE);
-                    manageCustomer.getEdtPhoneCustomer().setText(phone);
-                    manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.WHITE);
-                    manageCustomer.getEdtStatusCustomer().setText(status);   
+                    setTextJText(manageCustomer.getEdtPhoneCustomer(), phone);
+                    manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.WHITE);  
+                    setTextJText(manageCustomer.getEdtStatusCustomer(), status);
                     manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.WHITE);
                     
                 }
@@ -821,10 +828,11 @@ public class Controller {
         
         Company company = companyService.fingCompanyById(1l);
         if (company != null) {
-            setting.getSettingsName().setText(company.getName());
-            setting.getSettingsAddress().setText(company.getAddress());
-            setting.getSettingsCif().setText(company.getCif());
-            setting.getSettingsPhone().setText(company.getPhone());
+            setTextJText(setting.getSettingsName(), company.getName());
+            setTextJText(setting.getSettingsAddress(), company.getAddress());
+            setTextJText(setting.getSettingsCif(), company.getCif());
+            setTextJText(setting.getSettingsPhone(), company.getPhone());
+           
         }
         
         JButton btnSave = this.setting.getSaveSettings();
@@ -862,7 +870,7 @@ public class Controller {
     */
     private void checkFieldFocusGained(JTextField fieldName, String texto) {
         if (fieldName.getText().equals(texto)) {
-            fieldName.setText("");
+            setTextJText(fieldName, "");
             fieldName.setForeground(java.awt.Color.WHITE);
         }
     }  
@@ -889,7 +897,7 @@ public class Controller {
     */
     private void checkFieldFocusLost(JTextField fieldName, String texto) {
         if (fieldName.getText().equals(texto) || fieldName.getText().isEmpty()) {
-            fieldName.setText(texto);
+            setTextJText(fieldName, texto);
             fieldName.setForeground(java.awt.Color.GRAY);
         }
     }
@@ -1164,7 +1172,7 @@ public class Controller {
      * Limpia los datos introducidos en los campos de la vista.
      */
     private void cleanCategory(){
-        manageCategory.getCategoryName().setText("");
+        setTextJText(manageCategory.getCategoryName(), "");
     }
 
     /**
@@ -1337,15 +1345,41 @@ public class Controller {
      */
     private void clearViewProduct(){
         manageProduct.getBoxCategory().setSelectedIndex(0);
-        manageProduct.getEdtNameProduct().setText("");
-        manageProduct.getEdtPriceProduct().setText("");
-        manageProduct.getNameTxt().setText("Nombre");
-        manageProduct.getPriceTxt().setText("Precio");
-        manageProduct.getIngredientsTxt().setText("Ingredientes");
+        setTextJText(manageProduct.getEdtNameProduct(), "");
+        setTextJText(manageProduct.getEdtPriceProduct(), "");
+        setTextJLabel(manageProduct.getNameTxt(), "Nombre");
+        setTextJLabel(manageProduct.getPriceTxt(), "Precio");
+        setTextJLabel(manageProduct.getIngredientsTxt(), "Ingredientes");
         listIdIngredientsInProduct.clear();
         listIngredientsProduct.clear(); 
     }
 
+
+    /**
+     * Edita el contenido de un JTextField.
+     * @param field  campo a modificar
+     * @param text texto a colocar en el campo recibido
+     */
+    private void setTextJText(JTextField field, String text) {
+        field.setText(text);
+    }
+    
+    /**
+     * Edita el contenido de un JLabel.
+     * @param label campo a modificar
+     * @param text texto a colocar en el campo recibido 
+     */
+    private void setTextJLabel(JLabel label, String text) {
+        label.setText(text);
+    }
+    
+    
+    
+    /**
+     * Modifica el texto en el campo recibído por parámetro.
+     * 
+     * @param text 
+     
     private void setNameProduct(String text) {
         manageProduct.getNameTxt().setText(text);
     }
@@ -1353,6 +1387,7 @@ public class Controller {
     private void setPriceProduct(String text) {
         manageProduct.getPriceTxt().setText(text); 
     }
+    */
 
     /**
      * Añade el ingrediente seleccionado de la lista de ingredientes del producto.
@@ -1449,6 +1484,15 @@ public class Controller {
     *   <li>Muestra un mensaje de confirmación o error según el resultado.</li>
     *   <li>Actualiza la tabla de ingredientes y limpia datos asociados.</li>
     * </ul>
+    * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si no se ha seleccionado un ingrediente de la tabla</li>
+     * </ul>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si el producto se ha eliminado correctamente</li>
+     *   <li>Muestra un mensaje si hay algún error y no se puede eliminar el producto seleccionado</li>
+     * </ul>
     * 
     * <b>Excepciones:</b>
     * <ul>
@@ -1478,7 +1522,32 @@ public class Controller {
         }  
     }
 
-    
+    /**
+     * Crea un nuevo ingrediente o modifica uno existente si se ha seleccionado en la tabla.
+     * <p>Comprueba que los datos introducidos sean correctos y crea o modifica un ingrediente, según si 
+     * se ha seleccionado o no en la tabla.</p>
+     * <b>Acciones:</b>
+     * <ul>
+     *   <li>Convierte el precio a BigDecimal si es posible.</li>
+     *   <li>Comprueba si se ha seleccionado un ingrediente de la tabla</li>
+     *   <li>Crea o modifica el ingrediente</li>
+     *   <li>Limpia los campos de la vista</li>
+     *   <li>Actualiza las tablas de ingredientes en la vista de ingredientes y el comboBox en la página principal</li>
+     * </ul>
+     * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si el nombre del ingrediente está vacío</li>
+     * </ul>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si el precio introducido no está en el formato correcto</li>
+     *   <li>Muestra un mensaje si hay algún error y no se puede eliminar el producto seleccionado</li>
+     * </ul>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si el producto se ha eliminado correctamente</li>
+     * </ul>
+     */
     private void saveOrModifyIngredient() {
         JTable target = manageIngredient.getTableIngredient();
         int selectedRow = target.getSelectedRow();
@@ -1525,10 +1594,23 @@ public class Controller {
      * @param string texto que va a colocar en el campo 
      */
     private void setCategory(String string) {
-        manageProduct.getCategoryTxt().setText(string);
+        setTextJLabel(manageProduct.getCategoryTxt(), string);
     }
     
-    
+    /**
+     * Elimina un producto de la base de datos.
+     * <p>Comprueba que se haya seleccionado un producto en la tabla, lo elimina, limpia los campos y actualiza la tabla de productos</p>
+     * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si no se ha seleccionado un producto</li>
+     * </ul>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si el producto se ha eliminado correctamente</li>
+     *   <li>Muestra un mensaje si hay algún error y no se puede eliminar el producto seleccionado</li>
+     * </ul>
+     * 
+     */
     private void deleteProduct() {
         JTable target = manageProduct.getTableProducts();
         int selectedRow = target.getSelectedRow();
@@ -1549,9 +1631,24 @@ public class Controller {
             
         } else {
             JOptionPane.showMessageDialog(manageProduct, "Seleccione un producto para eliminar");
+            
         }
     }
 
+    /**
+     * Elimina un cliente de la base de datos.
+     * <p>Comprueba que se haya seleccionado un cliente en la tabla, lo elimina, limpia los campos y actualiza la tabla de clientes</p>
+     * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si no se ha seleccionado un cliente</li>
+     * </ul>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si el cliente se ha eliminado correctamente</li>
+     *   <li>Muestra un mensaje si hay algún error y no se puede eliminar el cliente seleccionado</li>
+     * </ul>
+     * 
+     */
     private void deleteCustomer() {
         JTable target = manageCustomer.getTableCustomer();
         int selectedRow = target.getSelectedRow();
@@ -1597,18 +1694,28 @@ public class Controller {
                 if (status != null && !status.isEmpty()) {
                     JOptionPane.showMessageDialog(homepage, status);
                 } 
-                homepage.getTxtAddresCustomer().setText(customer.getAddress());
-                homepage.getTxtNameCustomer().setText(customer.getName());
                 
-                homepage.getTxtOrderNameCustomer().setText(customer.getName());
-                homepage.getTxtOrderAddresCustomer().setText(customer.getAddress());
-                homepage.getTxtOrderPhoneCustomer().setText(customer.getPhone());
+                setTextJLabel(homepage.getTxtAddresCustomer(), customer.getAddress());
+                setTextJLabel(homepage.getTxtNameCustomer(), customer.getName());
+                setTextJLabel(homepage.getTxtOrderNameCustomer(), customer.getName());
+                setTextJLabel(homepage.getTxtOrderAddresCustomer(), customer.getAddress());
+                setTextJLabel(homepage.getTxtOrderPhoneCustomer(), customer.getPhone());
                 
             }
         } 
         
     }
     
+    /**
+     * Busca un cliente por su teléfono.
+     * <p>Comprueba que se ha escrito un teléfono y busca coincidencias en la base de datos, si lo encuentra coloca los datos en los campos
+     * para su modificación o eliminación.</p>
+     * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si no se ha escrito un número de teléfono en el campo indicado</li>
+     *   <li>Muestra un mensaje si no se encuentra un cliente con ese teléfono</li>
+     * </ul>
+     */
     private void lookForCustomer() {
         
         String phone = manageCustomer.getEdtPhoneCustomer().getText();
@@ -1619,13 +1726,24 @@ public class Controller {
             if (customer == null) {
                 JOptionPane.showMessageDialog(manageCustomer, "Cliente no encontrado");
             } else {
-                manageCustomer.getEdtNameCustomer().setText(customer.getName());
-                manageCustomer.getEdtAddresCustomer().setText(customer.getAddress());
-                manageCustomer.getEdtStatusCustomer().setText(customer.getStatus());  
+                setTextJText(manageCustomer.getEdtNameCustomer(), customer.getName());
+                setTextJText(manageCustomer.getEdtAddresCustomer(), customer.getAddress()); 
+                setTextJText(manageCustomer.getEdtStatusCustomer(), customer.getStatus());
             }
         }   
     }
 
+    /**
+     * Guarda o modifica un cliente.
+     * <p>Comprueba si se ha seleccionado un cliente de la tabla
+     * para su modificación o crea uno nuevo si no se ha seleccionado ninguno en la tabla de clientes.</p>
+     * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un mensaje si se ha creado un cliente nuevo</li>
+     *   <li>Muestra un mensaje si se ha modificado un cliente existente</li>
+     *   <li>Muestra un mensaje si existe un cliente con el mismo número de teléfono y no crea el clente en ese caso</li>
+     * </ul>
+     */
     private void saveOrModifyCustomer() {
         JTable target = manageCustomer.getTableCustomer();
         int selectedRow = target.getSelectedRow();
@@ -1674,23 +1792,36 @@ public class Controller {
         //manageCustomer.dispose();
     }
         
+    /**
+     * Limpia los campos de la vista de Clientes.
+     * <p>Establece a color gris los campos para mostrar el mensaje informativo en ellos</p>
+     * <p>Si recibe un String que no esté vacío, significa que la llamada se ha realizado para crear un nuevo cliente y 
+     * asegurarnos que no haya campos rellenos con datos antiguos y coloca el teléfono del nuevo cliente en su campo"</p>
+     * @param phone 
+     */
     private void clearViewCustomer(String phone) {
         manageCustomer.getEdtNameCustomer().setForeground(java.awt.Color.GRAY);
         manageCustomer.getEdtAddresCustomer().setForeground(java.awt.Color.GRAY);
         manageCustomer.getEdtStatusCustomer().setForeground(java.awt.Color.GRAY);
         manageCustomer.getEdtPhoneCustomer().setForeground(java.awt.Color.GRAY);
-        manageCustomer.getEdtNameCustomer().setText("Nombre");
-        manageCustomer.getEdtAddresCustomer().setText("Dirección");
-        manageCustomer.getEdtStatusCustomer().setText("Observaciones");
+        
+        setTextJText(manageCustomer.getEdtNameCustomer(), "Nombre");
+        setTextJText(manageCustomer.getEdtAddresCustomer(), "Dirección");
+        setTextJText(manageCustomer.getEdtStatusCustomer(), "Observaciones");
+        
+        
         if (phone.isEmpty()) {
-            manageCustomer.getEdtPhoneCustomer().setText("Teléfono");
+            setTextJText(manageCustomer.getEdtPhoneCustomer(), "Teléfono");
         } else {
-            manageCustomer.getEdtPhoneCustomer().setText(phone);
+            setTextJText(manageCustomer.getEdtPhoneCustomer(), phone);
         }
         
         
     }
 
+    /**
+     * Busca todos los clientes existentes en la base de datos y llena la tabla con sus datos.
+     */
     private void fillTableCustomer() {
         DefaultTableModel model = (DefaultTableModel) manageCustomer.getTableCustomer().getModel();
         model.setRowCount(0);
@@ -1711,6 +1842,14 @@ public class Controller {
     
     
 
+    /**
+     * Comprueba que los datos introducidos sean correctos y no sean los mensajes informativos.
+     * 
+     * @param name texto correspondiente al nombre
+     * @param phone texto correspondiente al teléfono
+     * @param addres texto correspondiente a la dirección
+     * @return verdadero si los datos no son el texto informativo ni los campos están vacíos.
+     */
     private boolean validateInputsCustomer(String name, String phone, String addres) {
         if (name.equals("Nombre") || name.isEmpty()) {
             JOptionPane.showMessageDialog(manageCustomer, "El nombre no puede estar vacío");
@@ -1727,7 +1866,10 @@ public class Controller {
         
     }
     
-    
+    /**
+     * Establece unas medidas fijas a la tabla indicada.
+     * @param table tabla a la que se van a establecer estas medidas
+     */
     private void columnWidthOrderTable(JTable table) {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
         table.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -1737,6 +1879,7 @@ public class Controller {
         table.getColumnModel().getColumn(4).setPreferredWidth(40);  
     }
 
+    
     private void addForTheOrder() {
         
         checkOptions();
@@ -2569,6 +2712,10 @@ public class Controller {
         System.exit(0);
         
     }
+
+
+
+    
 
     
 
