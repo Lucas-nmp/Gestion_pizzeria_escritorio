@@ -436,6 +436,7 @@ public class Homepage extends javax.swing.JFrame {
         edtObservations.setColumns(20);
         edtObservations.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         edtObservations.setRows(5);
+        edtObservations.setToolTipText("Para realizar un descuento escribe primero el importe a descontar en el producto");
         jScrollPane2.setViewportView(edtObservations);
 
         checkVeryCooked.setBackground(new java.awt.Color(120, 168, 252));
@@ -538,7 +539,6 @@ public class Homepage extends javax.swing.JFrame {
         btnConfirmOrder.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnConfirmOrder.setForeground(new java.awt.Color(255, 255, 255));
         btnConfirmOrder.setText("Confirmar");
-        btnConfirmOrder.setActionCommand("Confirmar");
         btnConfirmOrder.setBorder(null);
 
         boxAmount.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N

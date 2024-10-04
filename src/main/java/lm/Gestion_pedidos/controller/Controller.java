@@ -1879,7 +1879,19 @@ public class Controller {
         table.getColumnModel().getColumn(4).setPreferredWidth(40);  
     }
 
-    
+    /**
+     * Método para añadir al pedido el producto seleccionado con sus opciones y modificaciones.
+     * <b>Acciones:</b>
+     * <ul>
+     *   <li>Comprueba que se ha seleciconado un producto</li>
+     *   <li>Calcula el precio sumando el del producto, la cantidad y el precio de los ingredientes adicionales si los hay</li>
+     *   <li>Muestra los datos del producto con sus opciones y el precio total en la tabla del pedido</li>
+     *   <li>Restablece los campos de las opciones y las variables auxiliares a su estado inicial</li>
+     * </ul>
+     * 
+     * @see #checkOptions() Método para comprobar las opciones seleccionadas
+     * @see #checkObservations() Método para comprobar las observaciones escritas
+     */
     private void addForTheOrder() {
         
         checkOptions();
@@ -1906,7 +1918,7 @@ public class Controller {
                 totalPriceForItem
             };
             total = total.add(totalPriceForItem);
-            homepage.getTxtTotalPrice().setText(total.toString());
+            setTextJLabel(homepage.getTxtTotalPrice(), total.toString());
             
             model.addRow(rowData);
 
@@ -1923,7 +1935,12 @@ public class Controller {
     }
     
     
-    
+    /**
+     * Comprueba si se ha seleccionado alguna opción. 
+     * <p>Añade a la variable auxiliar modifications para añadir al pedido las opciones que se hayan seleccionado, si está opción 
+     * modifica el precio final del producto también lo modifica para mostrarlo en el precio final del producto y sumarlo al precio 
+     * final del pedido</p>. 
+     */
     private void checkOptions() {
         if (homepage.getCheckDoubleCheese().isSelected()) {
             modifications.add("Doble de queso");
@@ -1940,9 +1957,25 @@ public class Controller {
         
         if (homepage.getCheckWithoutCheese().isSelected()) {
             modifications.add("Sin queso");
+            
         }
     }
     
+    /**
+     * Comprueba si se han escrito observaciones en el recuadro y las muestra en el pedido.
+     * <br>
+     * <b>Acciones:</b>
+     * <ul>
+     *   <li>comprueba que el recuadro no esté vacío</li>
+     *   <li>Separa lo escrito en el recuadro por espacios, previamente ha eliminado los espacios al principio para evitar errores</li>
+     *   <li>Intenta convertir el primer elemento a BigDecimal para realizar un descuento</li>
+     *   <li>Añade a la bariable modifications el texto escrito en el recuadro</li>
+     * </ul>
+     * <b>Excepciones:</b>
+     * <ul>
+     *   <li>No hace nada si el primer elemento no es un número válido como descuento</li>
+     * </ul>
+     */
     private void checkObservations() {
         String observations = homepage.getEdtObservations().getText().trim();  // Elimina espacios en blanco al principio y al final
 
@@ -1956,21 +1989,34 @@ public class Controller {
                     modificationsPrice = modificationsPrice.subtract(descuento);
                 }
             } catch (NumberFormatException e) {
-                // Manejar excepciones si el primer elemento no es un número
+                
             }
 
             modifications.add(observations);  // Solo se agrega si no está vacío
         }
     }
     
+    /**
+     * Restablece los checkBox a su estado por defecto, (no seleccionado) y borra el cuadro de observaciones.
+     */
     private void clearChecks() {
         homepage.getCheckDoubleCheese().setSelected(false);
         homepage.getCheckUndercooked().setSelected(false);
         homepage.getCheckVeryCooked().setSelected(false);
         homepage.getCheckWithoutCheese().setSelected(false);
         homepage.getEdtObservations().setText("");
+        
     }
 
+    /**
+     * Añade el comentario "Sin + nombre del ingrediente" a las observaciones del producto en el pedido.
+     * <p> No comprueba que el ingrediente seleccionado esté o no en el producto, simpremente añade el 
+     * texto "sin + nombre ingrediente" a las observaciones.</p>
+     * <b>Aviso:</b>
+     * <ul>
+     *   <li>Muestra un aviso si no se ha seleccioado ningún ingrediente</li>
+     * </ul>
+     */
     private void removeIngredient() {
         String ingredient = homepage.getIngredientModify().getSelectedItem().toString();
         if (ingredient.equals("Seleccionar")) {
@@ -1985,6 +2031,16 @@ public class Controller {
         homepage.getIngredientModify().setSelectedIndex(0);
     }
 
+    /**
+     * Añade el texto "Con + nombre ingrediente" seleccionado a las observaciones del producto seleccionado.
+     * <p>Modifica el precio del producto sumando el importe del ingrediente que se le va a añadir</p>
+     * <p> No comprueba que el ingrediente seleccionado esté o no en el producto, simpremente añade el 
+     * texto "Con + nombre ingrediente" a las observaciones.</p>
+     * <b>Aviso:</b>
+     * <ul>
+     *   <li>Muestra un aviso si no se ha seleccioado ningún ingrediente</li>
+     * </ul>
+     */ 
     private void addIngredient() {
         String ingredient = homepage.getIngredientModify().getSelectedItem().toString();
         if (ingredient.equals("Seleccionar")) {
@@ -2001,26 +2057,52 @@ public class Controller {
         homepage.getIngredientModify().setSelectedIndex(0);
         
         modifications.add("Con " + nameIngredient);
-
+        
     }
 
-    
+    /**
+     * Limpia todos los campos, la variable auxiliar total, la tabla y las opciones de la zona de pedido.
+     * 
+     * @see #clearChecks() 
+     */
     private void clearOrderData() {
         DefaultTableModel model = (DefaultTableModel) homepage.getTableOrder().getModel();
         model.setRowCount(0);
         
         total = BigDecimal.ZERO;
-        homepage.getTxtTotalPrice().setText(total.toString());
-        homepage.getEdtPhoneCustomer().setText("Teléfono");
-        homepage.getTxtAddresCustomer().setText("Dirección");
-        homepage.getTxtNameCustomer().setText("Nombre");
-        homepage.getEdtAlternativeAddres().setText("Dirección alternativa");
-        homepage.getTxtOrderNameCustomer().setText("Nombre");
-        homepage.getTxtOrderPhoneCustomer().setText("Teléfono");
-        homepage.getTxtOrderAddresCustomer().setText("Dirección");
+        setTextJLabel(homepage.getTxtTotalPrice(), total.toString());
+        setTextJText(homepage.getEdtPhoneCustomer(), "Teléfono");
+        setTextJLabel(homepage.getTxtAddresCustomer(), "Dirección");
+        setTextJLabel(homepage.getTxtNameCustomer(), "Nombre");
+        setTextJText(homepage.getEdtAlternativeAddres(), "Dirección alternativa");
+        setTextJLabel(homepage.getTxtOrderNameCustomer(), "Nombre");
+        setTextJLabel(homepage.getTxtOrderPhoneCustomer(), "Teléfono");
+        setTextJLabel(homepage.getTxtOrderAddresCustomer(), "Dirección");
         clearChecks();
     }
 
+    /**
+     * Confirma el pedido y lo almacena en la base de datos.
+     * <br>
+     * <b>Acciones:</b>
+     * <ul>
+     *   <li>Comprueba que se hayan configurado los datos de la empresa en Configuración</li>
+     *   <li>Comprueba que se ha introducido un cliente</li>
+     *   <li>Comprueba si se ha añadido una dirección alternativa y se establece para el pedido actual</li>
+     *   <li>Comprueba que se ha introducido al menos un producto al pedido</li>
+     *   <li>Crea un pedido nuevo y lo guarda en la base de datos</li>
+     *   <li>Guarda todos los productos asociados al pedido en la tabla orderProduct con sus datos adicionales</li>
+     *   <li>Genera el PDF llamando a {@link #printOrder(java.lang.String, java.math.BigDecimal, lm.Gestion_pedidos.model.Order) }</li>
+     *   <li>Limpia los campos para poder realizar un nuevo pedido</li>
+     * </ul>
+     * <b>Avisos:</b>
+     * <ul>
+     *   <li>Muestra un aviso si no se han introducido los datos de la empresa para crear la factura</li>
+     *   <li>Avisa si no se ha introducido un cliente</li>
+     *   <li>Avisa si no hay productos en el pedido</li>
+     * </ul>
+     * @see #printOrder(java.lang.String, java.math.BigDecimal, lm.Gestion_pedidos.model.Order) 
+     */
     private void confirmOrder() {
         Company company = companyService.fingCompanyById(1l);
         if (company != null) {
@@ -2074,7 +2156,16 @@ public class Controller {
   
     }
 
-    
+    /**
+     * Elimina un producto del pedido en curso.
+     * <p>Comprueba que se ha seleccionado un producto de la tabla de pedido y se elimina, resta también el importe del 
+     * producto al totoal del pedido</p>
+     * <b>Abiso:</b>
+     * <ul>
+     *  <li> Muestra un mensaje si no se ha seleccionado ningún producto</li>
+     * </ul>
+     * 
+     */
     private void removeFromOrder() {
         
         JTable target = homepage.getTableOrder();
@@ -2087,11 +2178,18 @@ public class Controller {
             DefaultTableModel model = (DefaultTableModel) target.getModel();
             model.removeRow(selectedRow); 
         } else {
-            JOptionPane.showMessageDialog(homepage, "Seleccione una fila para eliminar");
+            JOptionPane.showMessageDialog(homepage, "Seleccione un producto para eliminar");
         }
         
     }   
 
+    /**
+     * Crea una factura con los datos del cliente, de la empresa y del pedido.
+     * 
+     * @param address Recibe la dirección por si es una alternativa
+     * @param total El total del pedido a mostrar
+     * @param order Pedido, contiene los datos del cliente y de los productos 
+     */
     private void printOrder(String address, BigDecimal total, Order order) {
         try {
             String fileName = order.getOrderId() + "-" + order.getDate().getYear() + "-" + order.getCustomer().getCustomerId();
