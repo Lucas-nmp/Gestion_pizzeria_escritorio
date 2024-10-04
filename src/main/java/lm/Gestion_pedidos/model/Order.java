@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 /**
  * Entidad {@code Order} que representa un pedido dentro de la aplicación.
  * <p>
- * Esta clase está anotada con {@link javax.persistence.Entity @Entity} y {@link javax.persistence.Table @Table}, 
- * lo que la define como una entidad gestionada por JPA. La anotación {@code @Table(name = "orders")} se utiliza 
+ * Esta clase está anotada con Entity y Table, 
+ * lo que la define como una entidad gestionada por JPA. La anotación Table(name = "orders") se utiliza 
  * para especificar el nombre de la tabla en la base de datos, debido a que "order" es una palabra reservada en SQL.
- * Utiliza las anotaciones {@link lombok.Data @Data}, {@link lombok.NoArgsConstructor @NoArgsConstructor} y 
- * {@link lombok.AllArgsConstructor @AllArgsConstructor} para generar automáticamente los métodos getter y setter, 
+ * Utiliza las anotaciones Data, NoArgsConstructor y 
+ * AllArgsConstructor para generar automáticamente los métodos getter y setter, 
  * así como los constructores con y sin argumentos.
  * </p>
  * <p>

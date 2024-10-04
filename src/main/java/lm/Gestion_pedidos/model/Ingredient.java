@@ -17,19 +17,19 @@ import lombok.NoArgsConstructor;
 /**
  * Entidad {@code Ingredient} que representa un Ingrediente dentro de la aplicación.
  * <p>
- * Esta clase está anotada con {@link javax.persistence.Entity @Entity}, lo que la define como una entidad gestionada por JPA.
- * Utiliza las anotaciones {@link lombok.Data @Data}, {@link lombok.NoArgsConstructor @NoArgsConstructor} y 
- * {@link lombok.AllArgsConstructor @AllArgsConstructor} para generar automáticamente los métodos getter y setter, así como
+ * Esta clase está anotada con Entity, lo que la define como una entidad gestionada por JPA.
+ * Utiliza las anotaciones Data, NoArgsConstructor y 
+ * AllArgsConstructor para generar automáticamente los métodos getter y setter, así como
  * los constructores con y sin argumentos.
  * </p>
- * <p>
+ * 
  * Los atributos de esta entidad son:
  * <ul>
  *   <li>{@code ingredientId}: identificador único, generado automáticamente.</li>
  *   <li>{@code name}: nombre del ingrediente.</li>
  *   <li>{@code price}: precio individual del ingrediente representado como un {@link java.math.BigDecimal}.</li>
  * </ul>
- * </p>
+ * 
  * <p>
  * Relacionada con otras entidades mediante:
  * <ul>
