@@ -77,6 +77,7 @@ import lm.Gestion_pedidos.view.Setting;
 import lm.Gestion_pedidos.view.Statistics;
 import org.springframework.boot.SpringApplication;
 import static org.springframework.boot.SpringApplication.main;
+import javax.swing.SwingWorker;
 
 /**
  * Esta clase gestiona la lógica principal de la aplicación, encargándose de
@@ -2197,6 +2198,7 @@ public class Controller {
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
             
+            
             Customer customer = order.getCustomer();
             
             // Título y datos de la empresa
@@ -2218,6 +2220,7 @@ public class Controller {
                     .add("CIF: " + company.getCif() + "\n")
                     .add("Teléfono: " + company.getPhone() + "\n")
                     .setTextAlignment(TextAlignment.RIGHT);
+                    
 
             document.add(title);
             document.add(companyDetails);
@@ -2484,32 +2487,54 @@ public class Controller {
     
     /**
      * Método controlador para centralizar la carga de todos los datos de demostración.
+     * <p>Se ejecuta en segundo plano para evitar la congelación de la interfaz de usuario</p>
      * <b>Aviso:</b>
      * <p>Si ya hay categorías cargadas muestra un mensaje y no carga los datos</p>
      */
-    public void loadDemoData(){
+    public void loadDemoData() {
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                // Esta parte se ejecuta en un hilo en segundo plano
+                List<Category> categorys = categoryService.getAllCategorys();
+                if (categorys.isEmpty()) {
+                    loadCategorys();
+                    loadIngredients();
+                    loadPizzas();
+                    loadDrinks();
+                    loadCustomers();
+                    loadSnaks();
+                    loadSandwichs();
+                    loadPreparedDishes();
+                    loadTortillas();
+                    generateRandomOrders(10000);
+                }
+                return null;
+            }
 
-        List<Category> categorys = categoryService.getAllCategorys();
-        if (categorys.isEmpty()) {
-            loadCategorys();
-            loadIngredients();
-            loadPizzas();
-            loadDrinks();
-            loadCustomers();
-            loadSnaks();
-            loadSandwichs();
-            loadPreparedDishes();
-            loadTortillas();
-            generateRandomOrders(10000);
-            fillCategorys(homepage.getCategorys());
-            fillIngredients(homepage.getIngredientModify());
-        } else {
-            JOptionPane.showMessageDialog(homepage, "Ya hay datos en la base de datos");
-        }
-        
-        
-        
+            @Override
+            protected void done() {
+                // Esta parte se ejecuta en el hilo de la interfaz gráfica
+                try {
+                    if (categoryService.getAllCategorys().isEmpty()) {
+                        fillCategorys(homepage.getCategorys());
+                        fillIngredients(homepage.getIngredientModify());
+                        JOptionPane.showMessageDialog(homepage, "Datos de demostración cargados correctamente.");
+                    } else {
+                        JOptionPane.showMessageDialog(homepage, "Ya hay datos en la base de datos");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(homepage, "Ocurrió un error al cargar los datos de demostración.");
+                }
+            }
+        };
+
+        // Ejecuta el SwingWorker en segundo plano
+        worker.execute();
     }
+
+    
     
     /**
      * Método para almacenar las categorías demo

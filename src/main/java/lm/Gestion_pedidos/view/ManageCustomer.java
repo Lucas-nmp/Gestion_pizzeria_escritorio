@@ -18,8 +18,6 @@ import javax.swing.JTextField;
 
 public class ManageCustomer extends javax.swing.JDialog {
 
-    
-    
     public ManageCustomer() {
         initComponents();
     }
