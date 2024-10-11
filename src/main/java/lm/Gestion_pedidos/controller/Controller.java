@@ -2516,15 +2516,11 @@ public class Controller {
             protected void done() {
                 // Esta parte se ejecuta en el hilo de la interfaz gráfica
                 try {
-                    if (categoryService.getAllCategorys().isEmpty()) {
-                        fillCategorys(homepage.getCategorys());
-                        fillIngredients(homepage.getIngredientModify());
-                        JOptionPane.showMessageDialog(homepage, "Datos de demostración cargados correctamente.");
-                    } else {
-                        JOptionPane.showMessageDialog(homepage, "Ya hay datos en la base de datos");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    fillIngredients(homepage.getIngredientModify());
+                    JOptionPane.showMessageDialog(homepage, "Datos de demostración cargados correctamente.");
+                    fillCategorys(homepage.getCategorys());
+                } catch (HeadlessException e) {
+                   
                     JOptionPane.showMessageDialog(homepage, "Ocurrió un error al cargar los datos de demostración.");
                 }
             }
@@ -2545,6 +2541,7 @@ public class Controller {
             Category category = new Category(null, name);
             categoryService.addCategory(category);
         }
+        //fillCategorys(homepage.getCategorys());
     }
     
     /**
